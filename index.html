@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MUT ICT Department</title>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    :root {
+      --crimson: #7b1e2b;
+      --crimson-dark: #5a1320;
+      --crimson-light: #a3243a;
+      --gold: #f5c842;
+      --gold-light: #fde68a;
+      --white: #ffffff;
+      --off-white: #faf9f7;
+      --gray-100: #f4f3f0;
+      --gray-200: #e8e6e1;
+      --gray-400: #9ca3af;
+      --gray-600: #6b7280;
+      --gray-800: #1f2937;
+      --black: #0d0d0d;
+      --glass: rgba(255,255,255,0.08);
+      --glass-border: rgba(255,255,255,0.15);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--off-white);
+      color: var(--gray-800);
+      overflow-x: hidden;
+    }
+    h1,h2,h3,h4,h5 { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 1000;
+      backdrop-filter: blur(20px);
+      background: rgba(90,19,32,0.97);
+      border-bottom: 1px solid rgba(245,200,66,0.2);
+      padding: 0 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+    .nav-logo-img { height: 38px; width: auto; filter: brightness(0) invert(1); }
+    .nav-logo-fallback {
+      display: none; width: 38px; height: 38px; background: var(--gold);
+      border-radius: 8px; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 13px; color: var(--crimson-dark); font-family:'Syne',sans-serif;
+    }
+    .nav-logo-text strong { display: block; font-size: 15px; font-weight: 700; color: white; font-family:'Syne',sans-serif; }
+    .nav-logo-text span { font-size: 11px; color: rgba(255,255,255,0.5); }
+    .nav-links { display: flex; gap: 2px; align-items: center; }
+    .nav-links a {
+      color: rgba(255,255,255,0.75); text-decoration: none;
+      font-size: 13px; font-weight: 500; padding: 6px 11px; border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { background: rgba(255,255,255,0.12); color: white; }
+    .nav-links .btn-apply {
+      background: var(--gold); color: var(--crimson-dark);
+      font-weight: 700; padding: 7px 16px; border-radius: 8px; margin-left: 6px;
+    }
+    .nav-links .btn-apply:hover { background: var(--gold-light); transform: translateY(-1px); color: var(--crimson-dark); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 22px; height: 2px; background: white; border-radius: 2px; display: block; }
+
+    /* ─── HERO (compact) ─── */
+    .hero {
+      min-height: 100vh;
+      background: var(--crimson-dark);
+      position: relative; overflow: hidden;
+      display: flex; align-items: center;
+      padding: 100px 40px 60px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 50%, rgba(245,200,66,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 80% at 10% 80%, rgba(163,36,58,0.4) 0%, transparent 60%),
+        url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2070&q=60') center/cover no-repeat;
+      opacity: 0.22;
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-content { position: relative; max-width: 1200px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(245,200,66,0.15); border: 1px solid rgba(245,200,66,0.3);
+      color: var(--gold); padding: 5px 14px; border-radius: 100px;
+      font-size: 11px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+    .hero-eyebrow span { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; }
+    .hero h1 {
+      font-size: clamp(2.4rem, 4.5vw, 4rem); font-weight: 800;
+      color: white; line-height: 1.05; letter-spacing: -1px;
+      margin-bottom: 18px;
+    }
+    .hero h1 em { font-style: normal; color: var(--gold); }
+    .hero-sub { font-size: 1rem; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 32px; font-weight: 300; }
+    .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-hero-primary {
+      background: var(--gold); color: var(--crimson-dark);
+      font-weight: 700; font-size: 14px;
+      padding: 12px 28px; border-radius: 10px; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: all 0.25s; border: none; cursor: pointer; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    .btn-hero-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,200,66,0.3); }
+    .btn-hero-secondary {
+      background: transparent; color: white;
+      font-weight: 600; font-size: 14px;
+      padding: 12px 28px; border-radius: 10px; text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      transition: all 0.25s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-hero-secondary:hover { border-color: white; background: rgba(255,255,255,0.06); }
+
+    /* Hero right: stats card */
+    .hero-stats-card {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px; padding: 32px; backdrop-filter: blur(10px);
+    }
+    .hero-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .hero-stat {
+      padding: 20px; text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero-stat:nth-child(2n) { border-right: none; }
+    .hero-stat:nth-child(3), .hero-stat:nth-child(4) { border-bottom: none; }
+    .hero-stat .big { font-size: 2.4rem; font-weight: 800; color: var(--gold); line-height: 1; font-family:'Syne',sans-serif; }
+    .hero-stat .lbl { color: rgba(255,255,255,0.55); font-size: 12px; margin-top: 6px; }
+    .hero-partners-row { margin-top: 24px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .hero-partners-label { font-size: 11px; color: rgba(255,255,255,0.35); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+    .hero-partner-logos { display: flex; gap: 10px; flex-wrap: wrap; }
+    .hero-partner-logo {
+      width: 36px; height: 36px; border-radius: 8px;
+      object-fit: contain;
+    }
+
+    /* ─── PANEL SECTIONS ─── */
+    .panel-section { padding: 0 40px 0; }
+    .panel-wrap { max-width: 1200px; margin: 0 auto; }
+
+    /* ─── TABS SYSTEM ─── */
+    .tab-block { background: white; border-radius: 20px; border: 1px solid var(--gray-200); overflow: hidden; margin: 32px 0; }
+    .tab-block.dark { background: var(--crimson-dark); border-color: rgba(255,255,255,0.1); }
+    .tab-nav {
+      display: flex; border-bottom: 1px solid var(--gray-200);
+      background: var(--gray-100); padding: 6px 6px 0; gap: 2px;
+    }
+    .tab-block.dark .tab-nav { background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.1); }
+    .tab-btn {
+      padding: 10px 20px; border: none; background: none; cursor: pointer;
+      font-size: 13px; font-weight: 600; color: var(--gray-400);
+      border-radius: 8px 8px 0 0; transition: all 0.2s; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex; align-items: center; gap: 7px; white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--gray-800); background: rgba(0,0,0,0.05); }
+    .tab-btn.active { background: white; color: var(--crimson); box-shadow: 0 -1px 0 0 white inset; }
+    .tab-block.dark .tab-btn { color: rgba(255,255,255,0.4); }
+    .tab-block.dark .tab-btn:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.06); }
+    .tab-block.dark .tab-btn.active { background: rgba(255,255,255,0.1); color: var(--gold); box-shadow: none; }
+    .tab-pane { display: none; padding: 32px; }
+    .tab-pane.active { display: block; }
+
+    /* ─── ABOUT INSIDE TAB ─── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: center; }
+    .about-visual { border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; position: relative; }
+    .about-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .about-visual-inner {
+      position: absolute; inset: 0;
+      background: linear-gradient(0deg, rgba(90,19,32,0.85) 0%, transparent 50%);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 20px;
+    }
+    .about-img-label { color: white; font-size: 1rem; font-weight: 700; font-family:'Syne',sans-serif; }
+    .about-img-sub { color: rgba(255,255,255,0.6); font-size: 12px; }
+    .about-badge {
+      position: absolute; top: 14px; right: 14px;
+      background: var(--gold); border-radius: 10px; padding: 8px 14px; text-align: center;
+    }
+    .about-badge .badge-num { font-weight: 800; font-size: 1.3rem; color: var(--crimson-dark); line-height: 1; font-family:'Syne',sans-serif; }
+    .about-badge .badge-lbl { font-size: 9px; font-weight: 700; color: var(--crimson-dark); letter-spacing: 0.5px; }
+    .about-text p { color: var(--gray-600); line-height: 1.8; margin-bottom: 16px; font-size: 14px; }
+    .about-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .pill { padding: 6px 14px; border-radius: 100px; background: var(--gray-100); color: var(--gray-800); font-size: 12px; font-weight: 500; border: 1px solid var(--gray-200); }
+
+    /* ─── PROGRAMMES ─── */
+    .programmes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .prog-card { background: var(--off-white); border-radius: 24px; overflow: hidden; border: 1px solid rgba(123,30,43,0.12); transition: transform 0.3s, box-shadow 0.3s; }
+    .prog-card:hover { transform: translateY(-5px); box-shadow: 0 18px 50px rgba(0,0,0,0.12); }
+    .prog-card-top { padding: 28px 24px 20px; position: relative; border-bottom: 1px solid rgba(123,30,43,0.08); }
+    .prog-card-header { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 18px; }
+    .prog-code { font-size: 10px; font-weight: 700; color: var(--crimson-dark); letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.75; border: 1px solid rgba(123,30,43,0.12); padding: 4px 10px; border-radius: 999px; }
+    .prog-badge { padding: 6px 12px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+    .prog-badge.extended { background: rgba(245,200,66,0.16); color: #b45309; }
+    .prog-badge.popular { background: rgba(123,30,43,0.12); color: #7b1e2b; }
+    .prog-badge.advanced { background: rgba(245,200,66,0.22); color: #78350f; }
+    .prog-icon { width: 48px; height: 48px; border-radius: 14px; background: rgba(123,30,43,0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; color: var(--crimson); }
+    .prog-title { font-size: 1.35rem; font-weight: 800; color: var(--crimson-dark); margin-bottom: 6px; font-family:'Syne',sans-serif; }
+    .prog-subtitle { font-size: 0.95rem; color: var(--crimson); font-weight: 600; margin-bottom: 10px; }
+    .prog-duration { font-size: 0.9rem; color: var(--gray-600); margin-bottom: 16px; display: inline-flex; align-items: center; gap: 8px; }
+    .prog-desc { font-size: 0.95rem; color: var(--gray-600); line-height: 1.75; margin-bottom: 20px; }
+    .prog-meta { display: flex; gap: 16px; flex-wrap: wrap; padding: 0 24px 20px; color: var(--gray-600); font-size: 0.9rem; }
+    .prog-meta span { display: inline-flex; gap: 8px; align-items: center; }
+    .prog-card-bottom { padding: 0 24px 24px; display: flex; gap: 12px; }
+    .prog-card-bottom button { flex: 1; cursor: pointer; }
+    .btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1; padding: 12px 14px; text-align: center; border-radius: 12px; font-size: 13px; font-weight: 700; text-decoration: none; border: 1.5px solid var(--crimson); color: var(--crimson); background: white; transition: all 0.2s; }
+    .btn-outline:hover { background: var(--crimson); color: white; }
+    .btn-solid { display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: 1; padding: 12px 14px; text-align: center; border-radius: 12px; font-size: 13px; font-weight: 700; text-decoration: none; background: var(--crimson); color: white; border: 1.5px solid var(--crimson); transition: all 0.2s; }
+    .btn-solid:hover { background: var(--crimson-dark); }
+    .prog-details { display: none; padding: 0 24px 24px; background: rgba(255,242,220,0.8); border-top: 1px solid rgba(245,200,66,0.3); }
+    .prog-details.open { display: block; }
+    .prog-details-inner { padding-top: 16px; }
+    .prog-details h4 { font-size: 1rem; margin-bottom: 10px; color: var(--crimson-dark); font-family:'Syne',sans-serif; }
+    .prog-details p { font-size: 0.92rem; color: var(--gray-700); line-height: 1.8; margin-bottom: 14px; }
+    .prog-details strong { color: var(--crimson-dark); }
+
+    /* ─── SKILLS GRID ─── */
+    .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .skill-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 24px 22px; transition: background 0.3s, transform 0.3s; }
+    .skill-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); }
+    .skill-icon-wrap { width: 46px; height: 46px; background: rgba(245,200,66,0.15); border: 1px solid rgba(245,200,66,0.25); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--gold); margin-bottom: 16px; }
+    .skill-title { font-size: 1rem; font-weight: 700; color: white; margin-bottom: 8px; font-family:'Syne',sans-serif; }
+    .skill-desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+    /* ─── PROJECTS ─── */
+    .projects-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .project-card { background: var(--off-white); border-radius: 14px; border: 1px solid var(--gray-200); overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
+    .project-card:hover { transform: translateY(-5px); box-shadow: 0 14px 36px rgba(0,0,0,0.1); }
+    .project-thumb { height: 100px; display: flex; align-items: center; justify-content: center; color: white; }
+    .project-body { padding: 16px; }
+    .project-cat { display: inline-block; padding: 2px 9px; border-radius: 100px; background: var(--gray-100); color: var(--gray-600); font-size: 10px; font-weight: 600; margin-bottom: 8px; }
+    .project-title { font-size: 0.95rem; font-weight: 700; color: var(--crimson-dark); margin-bottom: 6px; font-family:'Syne',sans-serif; }
+    .project-desc { font-size: 12px; color: var(--gray-600); line-height: 1.5; margin-bottom: 8px; }
+    .project-students { font-size: 11px; color: var(--crimson); font-weight: 500; }
+
+    /* ─── LECTURERS ─── */
+    .lecturers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .lecturer-card { border: 1px solid var(--gray-200); border-radius: 14px; padding: 28px 22px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; }
+    .lecturer-card:hover { transform: translateY(-4px); box-shadow: 0 14px 36px rgba(0,0,0,0.08); }
+    .lecturer-avatar-wrap { width: 80px; height: 80px; margin: 0 auto 16px; border-radius: 50%; background: linear-gradient(135deg, var(--crimson-dark), var(--crimson-light)); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.4rem; color: white; border: 3px solid var(--gold); overflow: hidden; font-family:'Syne',sans-serif; }
+    .lecturer-avatar-wrap img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .lecturer-name { font-size: 1.05rem; font-weight: 700; color: var(--crimson-dark); margin-bottom: 4px; font-family:'Syne',sans-serif; }
+    .lecturer-qual { font-size: 12px; color: var(--gray-400); margin-bottom: 3px; }
+    .lecturer-spec { font-size: 12px; color: var(--crimson); font-weight: 500; margin-bottom: 12px; }
+    .lecturer-email { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--crimson); text-decoration: none; padding: 7px 14px; border-radius: 8px; background: var(--gray-100); }
+    .lecturer-email:hover { background: var(--crimson); color: white; }
+
+    /* ─── TESTIMONIALS ─── */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .testimonial-card { background: var(--off-white); border-radius: 14px; border: 1px solid var(--gray-200); padding: 26px 22px; }
+    .testimonial-quote-mark { font-size: 2.5rem; color: var(--gold); line-height: 1; margin-bottom: 6px; font-family: Georgia, serif; }
+    .testimonial-text { font-size: 13px; color: var(--gray-600); line-height: 1.8; font-style: italic; margin-bottom: 20px; }
+    .testimonial-author { display: flex; align-items: center; gap: 12px; }
+    .testimonial-avi { width: 48px; height: 48px; border-radius: 50%; background: var(--crimson); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; font-family:'Syne',sans-serif; overflow: hidden; }
+    .testimonial-avi img { width: 100%; height: 100%; object-fit: cover; }
+    .testimonial-name { font-weight: 700; color: var(--crimson-dark); font-size: 13px; font-family:'Syne',sans-serif; }
+    .testimonial-role { font-size: 11px; color: var(--gray-400); }
+
+    /* ─── EVENTS ─── */
+    .events-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .event-card { background: rgba(255,255,255,0.95); border: 1px solid rgba(255,255,255,0.2); border-radius: 14px; padding: 22px; display: flex; gap: 20px; align-items: flex-start; transition: box-shadow 0.3s, transform 0.3s; }
+    .event-card:hover { box-shadow: 0 10px 28px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .event-date-box { min-width: 64px; height: 70px; background: var(--crimson); border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; }
+    .event-date-box .day { font-size: 1.6rem; font-weight: 800; line-height: 1; font-family:'Syne',sans-serif; }
+    .event-date-box .month { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; opacity: 0.7; }
+    .event-title { font-size: 1rem; font-weight: 700; color: var(--crimson-dark); margin-bottom: 6px; font-family:'Syne',sans-serif; }
+    .event-meta { font-size: 12px; color: var(--gray-400); display: flex; align-items: center; gap: 5px; margin-bottom: 3px; }
+    .event-tag { display: inline-block; margin-top: 10px; padding: 3px 10px; border-radius: 100px; font-size: 10px; font-weight: 600; background: var(--gray-100); color: var(--gray-600); }
+
+    /* ─── PARTNERS ─── */
+    .partners-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+    .partner-card { border: 1px solid var(--gray-200); border-radius: 12px; padding: 18px 10px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 7px; transition: all 0.25s; cursor: default; }
+    .partner-card:hover { border-color: var(--crimson); box-shadow: 0 6px 20px rgba(123,30,43,0.1); transform: translateY(-3px); }
+    .partner-logo { width: 42px; height: 42px; border-radius: 9px; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .partner-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .partner-name { font-size: 12px; font-weight: 600; color: var(--gray-600); }
+    .partner-card:hover .partner-name { color: var(--crimson); }
+
+    /* ─── FAQ ─── */
+    .faq-list { max-width: 100%; }
+    .faq-item { background: var(--off-white); border: 1px solid var(--gray-200); border-radius: 10px; margin-bottom: 8px; overflow: hidden; }
+    .faq-q { padding: 18px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: var(--crimson-dark); font-size: 14px; user-select: none; }
+    .faq-q:hover { background: var(--gray-100); }
+    .faq-toggle { transition: transform 0.3s; color: var(--crimson); flex-shrink: 0; margin-left: 10px; }
+    .faq-a { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease; font-size: 13px; color: var(--gray-600); line-height: 1.7; }
+    .faq-a.open { max-height: 300px; padding: 0 20px 16px; }
+
+    /* ─── CONTACT ─── */
+    .contact-section { background: var(--crimson-dark); padding: 48px 40px; }
+    .contact-inner { max-width: 1200px; margin: 0 auto; }
+    .contact-header { margin-bottom: 32px; }
+    .contact-header .section-label { color: var(--gold); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 8px; }
+    .contact-header h2 { font-size: 2rem; font-weight: 800; color: white; margin-bottom: 8px; font-family:'Syne',sans-serif; }
+    .contact-header p { color: rgba(255,255,255,0.5); font-size: 14px; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 48px; align-items: start; }
+    .contact-info-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 22px; }
+    .contact-info-icon { width: 40px; height: 40px; background: rgba(245,200,66,0.15); border: 1px solid rgba(245,200,66,0.25); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--gold); flex-shrink: 0; }
+    .contact-info-label { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+    .contact-info-value { color: white; font-size: 14px; }
+    .contact-info-value a { color: var(--gold); text-decoration: none; }
+    .contact-info-value a:hover { text-decoration: underline; }
+    .contact-form input, .contact-form textarea {
+      width: 100%; padding: 12px 14px;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px; color: white; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px;
+      margin-bottom: 12px; outline: none; transition: border-color 0.2s;
+    }
+    .contact-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .contact-form .form-row input { margin-bottom: 0; }
+    .contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(255,255,255,0.3); }
+    .contact-form input:focus, .contact-form textarea:focus { border-color: var(--gold); }
+    .contact-form textarea { height: 100px; resize: vertical; }
+    .contact-form .btn-submit { width: 100%; padding: 13px; background: var(--gold); color: var(--crimson-dark); font-weight: 700; font-size: 14px; border: none; border-radius: 10px; cursor: pointer; transition: all 0.25s; font-family:'DM Sans',sans-serif; }
+    .contact-form .btn-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .form-note { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 8px; text-align: center; }
+    .form-note a { color: rgba(245,200,66,0.6); }
+
+    /* ─── FOOTER ─── */
+    footer { background: var(--black); color: rgba(255,255,255,0.45); padding: 36px 40px 24px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 36px; margin-bottom: 32px; }
+    .footer-brand p { font-size: 13px; line-height: 1.7; margin-top: 12px; }
+    .footer-logo { display: flex; align-items: center; gap: 10px; }
+    .footer-logo img { height: 32px; filter: brightness(0) invert(0.6); }
+    .footer-logo-text { color: rgba(255,255,255,0.75); font-weight: 700; font-size: 13px; font-family:'Syne',sans-serif; }
+    .footer-col h5 { color: white; font-size: 13px; font-weight: 700; margin-bottom: 12px; font-family:'Syne',sans-serif; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 8px; }
+    .footer-col ul li a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .footer-bottom { padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.07); display: flex; justify-content: space-between; align-items: center; font-size: 12px; flex-wrap: wrap; gap: 8px; }
+    .footer-bottom span { color: var(--gold); }
+
+    /* ─── SECTION LABEL reuse ─── */
+    .section-label { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--crimson); margin-bottom: 10px; }
+    .section-title { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; color: var(--crimson-dark); line-height: 1.1; margin-bottom: 12px; font-family:'Syne',sans-serif; }
+    .section-sub { font-size: 14px; color: var(--gray-600); line-height: 1.7; margin-bottom: 24px; }
+
+    /* Panel wrapper with section title */
+    .panel-header { padding: 36px 40px 0; max-width: 1200px; margin: 0 auto; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .projects-grid { grid-template-columns: repeat(2,1fr); }
+      .partners-grid { grid-template-columns: repeat(3,1fr); }
+      .footer-top { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; width: 100%; background: var(--crimson-dark); padding: 14px 20px; gap: 4px; border-bottom: 1px solid rgba(245,200,66,0.2); }
+      .hero { padding: 90px 20px 48px; }
+      .hero-content { grid-template-columns: 1fr; }
+      .hero-stats-card { display: none; }
+      .panel-section { padding: 0 16px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .programmes-grid { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .lecturers-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .events-grid { grid-template-columns: 1fr; }
+      .partners-grid { grid-template-columns: repeat(2,1fr); }
+      .contact-grid { grid-template-columns: 1fr; }
+      .contact-section { padding: 40px 20px; }
+      .tab-pane { padding: 20px; }
+      .tab-btn { padding: 8px 12px; font-size: 12px; }
+      .footer-top { grid-template-columns: 1fr; }
+      footer { padding: 28px 20px 20px; }
+      .contact-form .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* ─── CHATBOT ─── */
+    .chatbot-btn {
+      position: fixed; bottom: 20px; right: 20px; z-index: 999;
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-dark) 100%);
+      border: 2px solid rgba(245,200,66,0.65); border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 24px; box-shadow: 0 12px 24px rgba(123,30,43,0.24);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .chatbot-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 16px 30px rgba(123,30,43,0.32);
+    }
+    .bot-emoji { display: block; line-height: 1; }
+
+    .chatbot-widget {
+      position: fixed; bottom: 96px; right: 20px; z-index: 999;
+      width: 360px; height: 520px;
+      background: white; border-radius: 24px;
+      border: 1px solid rgba(123,30,43,0.12);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.18);
+      display: none; flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chatbot-header {
+      background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-dark) 100%);
+      color: white; padding: 18px; display: flex;
+      gap: 12px; align-items: center; position: relative;
+    }
+    .chatbot-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(255,255,255,0.16); display: flex; align-items: center;
+      justify-content: center; font-size: 22px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+    }
+    .chatbot-header h3 { margin: 0; font-size: 16px; font-weight: 700; color: white; line-height: 1.2; }
+    .chatbot-status { margin: 2px 0 0; font-size: 12px; opacity: 0.95; color: rgba(255,255,255,0.85); }
+    .chatbot-header button {
+      background: rgba(255,255,255,0.16); border: none; color: white;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      padding: 8px; border-radius: 14px; transition: background 0.25s;
+      position: absolute; top: 14px; right: 14px;
+    }
+    .chatbot-header button:hover { background: rgba(255,255,255,0.28); }
+
+    .chatbot-messages {
+      flex: 1; overflow-y: auto; padding: 18px;
+      display: flex; flex-direction: column; gap: 14px;
+      background: #fff7ed;
+    }
+    .chatbot-messages::-webkit-scrollbar { width: 6px; }
+    .chatbot-messages::-webkit-scrollbar-track { background: transparent; }
+    .chatbot-messages::-webkit-scrollbar-thumb { background: rgba(123,30,43,0.3); border-radius: 3px; }
+
+    .chatbot-msg { display: flex; gap: 10px; align-items: flex-end; max-width: 290px; word-wrap: break-word; animation: slideIn 0.25s ease; }
+    .chatbot-msg span { word-break: break-word; white-space: pre-wrap; }
+    .chatbot-msg-user { align-self: flex-end; flex-direction: row-reverse; }
+    .chatbot-msg-user span {
+      background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-dark) 100%);
+      color: white; padding: 12px 16px; border-radius: 18px;
+      border-bottom-right-radius: 6px; box-shadow: 0 4px 12px rgba(123,30,43,0.15);
+    }
+    .chatbot-msg-bot span {
+      background: white; color: var(--gray-800); padding: 12px 16px; border-radius: 18px;
+      border-bottom-left-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .msg-voice-btn {
+      background: none; border: none; cursor: pointer; color: var(--gold);
+      padding: 4px 6px; display: flex; align-items: center; justify-content: center;
+      opacity: 0.92; transition: transform 0.25s;
+    }
+    .chatbot-msg-bot:hover .msg-voice-btn { opacity: 1; }
+    .msg-voice-btn:hover { transform: scale(1.1); }
+
+    .chatbot-input-area {
+      padding: 14px; border-top: 1px solid rgba(123,30,43,0.08);
+      display: flex; gap: 10px; background: white;
+    }
+    .chatbot-input-area input {
+      flex: 1; border: 1.5px solid rgba(123,30,43,0.14); border-radius: 999px;
+      padding: 12px 16px; font-size: 14px; background: #fff;
+      transition: all 0.25s;
+    }
+    .chatbot-input-area input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 8px rgba(245,200,66,0.2); }
+    .chatbot-input-area button {
+      width: 44px; height: 44px; background: var(--crimson); color: white;
+      border: none; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .chatbot-input-area button:hover { transform: scale(1.05); background: var(--crimson-dark); }
+    .chatbot-input-area button:active { transform: scale(0.96); }
+
+    @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 480px) { .chatbot-widget { width: calc(100vw - 40px); right: 16px; } .chatbot-btn { width: 56px; height: 56px; font-size: 28px; } }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">
+    <img class="nav-logo-img"
+      src="https://www.mut.ac.za/wp-content/uploads/2023/05/mutlogo-ignite2030.png"
+      alt="MUT Logo"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="nav-logo-fallback">ICT</div>
+    <div class="nav-logo-text">
+      <strong>MUT ICT</strong>
+      <span>Department</span>
+    </div>
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="#home">Home</a>
+    <a href="#about-tab">About</a>
+    <a href="#programmes-tab">Programmes</a>
+    <a href="#people-tab">People</a>
+    <a href="#campus-tab">Campus</a>
+    <a href="#contact-section">Contact</a>
+    <a href="https://www.cao.ac.za" target="_blank" class="btn-apply">Apply Now</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-eyebrow"><span></span>Mangosuthu University of Technology</div>
+      <h1>Department of <em>Information &amp;</em> Communication Technology</h1>
+      <p class="hero-sub">Shape and own the future. Empowering the next generation of technology innovators and leaders through world-class education.</p>
+      <div class="hero-cta">
+        <a href="#programmes-tab" class="btn-hero-primary">
+          <i data-lucide="graduation-cap" style="width:16px;height:16px;"></i>
+          Explore Programmes
+        </a>
+        <a href="#contact-section" class="btn-hero-secondary">
+          <i data-lucide="mail" style="width:16px;height:16px;"></i>
+          Get In Touch
+        </a>
+      </div>
+    </div>
+    <div class="hero-stats-card">
+      <div class="hero-stats-grid">
+        <div class="hero-stat"><div class="big">8+</div><div class="lbl">Computer Labs</div></div>
+        <div class="hero-stat"><div class="big">600+</div><div class="lbl">Students</div></div>
+        <div class="hero-stat"><div class="big">20+</div><div class="lbl">Years</div></div>
+        <div class="hero-stat"><div class="big">85%</div><div class="lbl">Employment Rate</div></div>
+      </div>
+      <div class="hero-partners-row">
+        <div class="hero-partners-label">Industry Partners</div>
+        <div class="hero-partner-logos">
+          <img class="hero-partner-logo" src="https://tse3.mm.bing.net/th/id/OIP.7IgX6OczyQrC3djWBE8xnwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Microsoft" />
+          <img class="hero-partner-logo" src="https://1000logos.net/wp-content/uploads/2016/11/Colors-Cisco-Logo.jpg" alt="Cisco" />
+          <img class="hero-partner-logo" src="https://media.licdn.com/dms/image/v2/C4E22AQFxweEqVCHeeA/feedshare-shrink_800/feedshare-shrink_800/0/1610390462030?e=2147483647&v=beta&t=63l2A8p8LxelKEOMDzU-vnuZQgn069qoTCoDxCsnfAg" alt="Oracle" />
+          <img class="hero-partner-logo" src="https://tse2.mm.bing.net/th/id/OIP.Rz5RGwG8iwyb0S0rUhTV7wHaC8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="SAP" />
+          <img class="hero-partner-logo" src="https://static.vecteezy.com/system/resources/previews/020/190/713/original/huawei-logo-huawei-icon-free-free-vector.jpg" alt="Huawei" />
+          <img class="hero-partner-logo" src="https://www.pngplay.com/wp-content/uploads/3/Amazon-Web-Services-AWS-Logo-Transparent-PNG.png" alt="AWS" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT & PROGRAMMES TAB BLOCK -->
+<div class="panel-section" style="padding-top:36px;" id="about-tab">
+  <div class="panel-wrap">
+    <div class="tab-block" id="tab-about">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-about" data-pane="about-about">
+          <i data-lucide="info" style="width:14px;height:14px;"></i> About
+        </button>
+        <button class="tab-btn" data-tab="tab-about" data-pane="about-programmes" id="programmes-tab">
+          <i data-lucide="graduation-cap" style="width:14px;height:14px;"></i> Programmes
+        </button>
+        <button class="tab-btn" data-tab="tab-about" data-pane="about-skills">
+          <i data-lucide="code-2" style="width:14px;height:14px;"></i> WIL
+        </button>
+      </div>
+      <!-- About Pane -->
+      <div class="tab-pane active" id="about-about">
+        <div class="about-grid">
+          <div class="about-visual">
+            <img
+              src="https://tse4.mm.bing.net/th/id/OIP.4R2alKzXohfpGCztwL6ckQHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3"
+              alt="MUT ICT Department"
+            />
+            <div class="about-visual-inner">
+              <div class="about-img-label">Faculty of Applied &amp; Health Sciences</div>
+              <div class="about-img-sub">511 Mangosuthu Highway, Umlazi, Durban</div>
+            </div>
+            <div class="about-badge">
+              <div class="badge-num">20+</div>
+              <div class="badge-lbl">Years</div>
+            </div>
+          </div>
+          <div class="about-text">
+            <div class="section-label">About the Department</div>
+            <h2 class="section-title">Shaping Tomorrow's Tech Innovators</h2>
+            <p>The Department of Information &amp; Communication Technology at Mangosuthu University of Technology is committed to delivering high-quality, industry-relevant education in ICT — rooted in community, driven by innovation.</p>
+            <p>Our programmes combine rigorous theoretical foundations with immersive practical training, preparing graduates who are immediately workforce-ready. Students gain expertise across the full spectrum of modern technology disciplines.</p>
+            <p>Located in the heart of Umlazi, MUT has a proud legacy of producing graduates who serve and uplift their communities. Our ICT graduates are found across South Africa's most prominent tech companies, banks, telecoms, and government institutions.</p>
+            <div class="about-pills">
+              <span class="pill">SAQA Accredited</span>
+              <span class="pill">Work Integrated Learning</span>
+              <span class="pill">Industry Partnerships</span>
+              <span class="pill">Research Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Programmes Pane -->
+      <div class="tab-pane" id="about-programmes">
+        <div class="section-label">Academic Offerings</div>
+        <h2 class="section-title">Programmes Offered</h2>
+        <p class="section-sub">Three distinct pathways designed to meet students at their level and carry them to their full potential.</p>
+        <div class="programmes-grid">
+          <div class="prog-card" data-program="standard">
+            <div class="prog-card-top">
+              <div class="prog-card-header">
+                <span class="prog-badge popular">Popular</span>
+                <span class="prog-code">DICT</span>
+              </div>
+              <div class="prog-icon"><i data-lucide="laptop" style="width:20px;height:20px;"></i></div>
+              <h3 class="prog-title">Diploma in ICT</h3>
+              <div class="prog-subtitle">Standard Programme</div>
+              <div class="prog-duration">3 Years • Full-time</div>
+              <p class="prog-desc">A comprehensive programme covering programming, networking, databases, web development, cybersecurity, and mobile platforms. Includes a Work Integrated Learning placement to connect theory with industry.</p>
+            </div>
+            <div class="prog-meta">
+              <span><i data-lucide="clock" style="width:16px;height:16px;"></i> 3 Years</span>
+              <span><i data-lucide="book-open" style="width:16px;height:16px;"></i> Full-time</span>
+            </div>
+            <div class="prog-card-bottom">
+              <button type="button" class="btn-outline prog-requirements-toggle" data-target="standard">Entry Requirements</button>
+              <button type="button" class="btn-solid download-brochure" data-program="standard">Download Brochure</button>
+            </div>
+            <div class="prog-details" id="requirements-standard">
+              <div class="prog-details-inner">
+                <h4>Diploma in Information Technology</h4>
+                <p><strong>NQF Level:</strong> 6<br>
+                <strong>HEQSF Qualification Type:</strong> 63<br>
+                <strong>SAQA Credits:</strong> 360<br>
+                <strong>SAQA Qualification ID:</strong> 96862<br>
+                <strong>CESM Code:</strong> 06</p>
+                <p><strong>Rationale for Qualification</strong><br>
+                This qualification has been re-aligned to the new HEQSF and takes into account the latest ICT industry requirements. It reflects current workplace trends in ICT and ensures graduates have access to industry employment. The inclusion of a Work Integrated Learning component at NQF-6 is a unique feature that prepares students with workplace-applicable competencies.</p>
+                <p><strong>Statement of Purpose</strong><br>
+                The purpose of the Diploma in Information Technology is to provide a career-focused professional qualification with industry-referenced knowledge, skills, and attitudes. Learners will be competent in IT systems development in distributed computing environments and choose electives in Software Development or Communications Networks.</p>
+                <p><strong>Admission Requirements</strong><br>
+                National Senior Certificate (Diploma or higher) with:<br>
+                • English First Additional Language (3) OR English Home Language (3)<br>
+                • Mathematics (3) OR Mathematical Literacy (5)<br>
+                • Minimum 24 points in the best six subjects excluding Life Orientation, including English and Mathematics/Mathematical Literacy.</p>
+                <p><strong>Duration of Study</strong><br>3-years full-time</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="prog-card" data-program="extended">
+            <div class="prog-card-top">
+              <div class="prog-card-header">
+                <span class="prog-badge extended">Extended</span>
+                <span class="prog-code">DICT</span>
+              </div>
+              <div class="prog-icon"><i data-lucide="book" style="width:20px;height:20px;"></i></div>
+              <h3 class="prog-title">Diploma in ICT (Extended)</h3>
+              <div class="prog-subtitle">Extended Curriculum Programme</div>
+              <div class="prog-duration">4 Years • Full-time</div>
+              <p class="prog-desc">A foundational programme designed for students who need additional academic support. The first year strengthens core skills before advancing into the standard ICT curriculum.</p>
+            </div>
+            <div class="prog-meta">
+              <span><i data-lucide="clock" style="width:16px;height:16px;"></i> 4 Years</span>
+              <span><i data-lucide="book-open" style="width:16px;height:16px;"></i> Full-time</span>
+            </div>
+            <div class="prog-card-bottom">
+              <button type="button" class="btn-outline prog-requirements-toggle" data-target="extended">Entry Requirements</button>
+              <button type="button" class="btn-solid download-brochure" data-program="extended">Download Brochure</button>
+            </div>
+            <div class="prog-details" id="requirements-extended">
+              <div class="prog-details-inner">
+                <h4>Diploma in Information Technology: Extended Curriculum Programme</h4>
+                <p><strong>NQF Level:</strong> 6<br>
+                <strong>HEQSF Qualification Type:</strong> 63<br>
+                <strong>SAQA Qualification ID:</strong> 96862<br>
+                <strong>SAQA Credits:</strong> Minimum 480<br>
+                <strong>CESM Code:</strong> 06</p>
+                <p><strong>Rationale for Qualification</strong><br>
+                This programme expands access to IT qualifications for students who may not meet the cut-off criteria but demonstrate aptitude. The first year prepares learners for the diploma programme before they join the mainstream diploma in year 2.</p>
+                <p><strong>Statement of Purpose</strong><br>
+                The objective is to expand access to IT qualifications and prepare learners for the mainstream diploma. After the first year, the purpose aligns with the Diploma in ICT programme, while providing additional academic support.</p>
+                <p><strong>Admission Requirements</strong><br>
+                National Senior Certificate (Diploma or higher) with:<br>
+                • English First Additional Language (3) OR English Home Language (3)<br>
+                • Mathematics (2) OR Mathematical Literacy (3)<br>
+                • Minimum 23 points in the best six subjects excluding Life Orientation, including English and Mathematics/Mathematical Literacy.</p>
+                <p><strong>Duration of Study</strong><br>4-years full-time</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="prog-card" data-program="advanced">
+            <div class="prog-card-top">
+              <div class="prog-card-header">
+                <span class="prog-badge advanced">Advanced</span>
+                <span class="prog-code">ADICT</span>
+              </div>
+              <div class="prog-icon"><i data-lucide="award" style="width:20px;height:20px;"></i></div>
+              <h3 class="prog-title">Advanced Diploma in ICT</h3>
+              <div class="prog-subtitle">Applications Development</div>
+              <div class="prog-duration">1 Year • Full-time</div>
+              <p class="prog-desc">An advanced qualification for Diploma holders seeking specialization in software engineering, network security, or applications development. Ideal for career growth or postgraduate entry.</p>
+            </div>
+            <div class="prog-meta">
+              <span><i data-lucide="clock" style="width:16px;height:16px;"></i> 1 Year</span>
+              <span><i data-lucide="book-open" style="width:16px;height:16px;"></i> Full-time</span>
+            </div>
+            <div class="prog-card-bottom">
+              <button type="button" class="btn-outline prog-requirements-toggle" data-target="advanced">Entry Requirements</button>
+              <button type="button" class="btn-solid download-brochure" data-program="advanced">Download Brochure</button>
+            </div>
+            <div class="prog-details" id="requirements-advanced">
+              <div class="prog-details-inner">
+                <h4>Advanced Diploma in Information and Communication Technology in Applications Development</h4>
+                <p><strong>NQF Level:</strong> 7<br>
+                <strong>SAQA ID:</strong> 117974<br>
+                <strong>SAQA Credits:</strong> 120</p>
+                <p><strong>Rationale for Qualification</strong><br>
+                This qualification is formulated to the HEQSF and reflects current ICT industry needs. It prepares graduates for employment and further postgraduate study while deepening knowledge in Applications Development.</p>
+                <p><strong>Statement of Purpose</strong><br>
+                The programme develops ICT practitioners with a deep understanding of theories, methodologies, and practices in Applications Development. Graduates are prepared to manage software development environments and pursue postgraduate opportunities.</p>
+                <p><strong>Minimum Admission Requirements</strong><br>
+                Candidates may enter with:<br>
+                • A 360-credit Diploma or National Diploma in ICT or comparable Level 6 qualification<br>
+                • A Bachelor's Degree in a related IT specialisation<br>
+                • A completed IT/ICT qualification evaluated to NQF level 6 by SAQA<br>
+                • Or via the institution's RPL process.</p>
+                <p><strong>Minimum Duration of Study</strong><br>Full-time: 1 year | Part-time: 2 years</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skills Pane -->
+      <div class="tab-pane" id="about-skills">
+        <div class="tab-block dark" style="margin:0; padding: 32px;">
+          <div class="section-label" style="color:var(--gold);">Work Integrated Learning</div>
+          <h2 class="section-title" style="color:white; margin-bottom:20px;">Six-Month Final-Year In-Service Training</h2>
+          <div class="skills-grid">
+            <div class="skill-card">
+              <div class="skill-icon-wrap"><i data-lucide="briefcase" style="width:22px;height:22px;"></i></div>
+              <div class="skill-title">WIL Placement</div>
+              <div class="skill-desc">Students complete a compulsory six-month in-service placement during the final semester of their final year. This placement is assessed for credit and helps students translate classroom learning into real workplace performance.</div>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon-wrap"><i data-lucide="users" style="width:22px;height:22px;"></i></div>
+              <div class="skill-title">Industry Mentorship</div>
+              <div class="skill-desc">Learners are paired with industry supervisors who guide project work, professional communication, and workplace standards while building a network of ICT contacts.</div>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon-wrap"><i data-lucide="award" style="width:22px;height:22px;"></i></div>
+              <div class="skill-title">Practical Experience</div>
+              <div class="skill-desc">The training emphasizes real projects, problem-solving, teamwork, and exposure to tools and processes used in software development, networking, cybersecurity, and systems support.</div>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon-wrap"><i data-lucide="check-circle" style="width:22px;height:22px;"></i></div>
+              <div class="skill-title">Professional Readiness</div>
+              <div class="skill-desc">WIL builds career-ready skills like workplace communication, time management, ethical conduct, reporting, and the ability to contribute to ICT teams from day one.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PEOPLE TAB BLOCK -->
+    <div id="people-tab"></div>
+    <div class="tab-block" id="tab-people">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-people" data-pane="people-lecturers">
+          <i data-lucide="users" style="width:14px;height:14px;"></i> Lecturers
+        </button>
+        <button class="tab-btn" data-tab="tab-people" data-pane="people-testimonials">
+          <i data-lucide="message-square" style="width:14px;height:14px;"></i> Alumni Voices
+        </button>
+        <button class="tab-btn" data-tab="tab-people" data-pane="people-projects">
+          <i data-lucide="layers" style="width:14px;height:14px;"></i> Student Projects
+        </button>
+      </div>
+
+      <!-- Lecturers -->
+      <div class="tab-pane active" id="people-lecturers">
+        <div class="section-label">Our Team</div>
+        <h2 class="section-title">Meet Our Lecturers</h2>
+        <div class="lecturers-grid">
+          <div class="lecturer-card">
+            <div class="lecturer-avatar-wrap">M</div>
+            <div class="lecturer-name">Dr. Mutanga</div>
+            <div class="lecturer-qual">PhD in Computer Science</div>
+            <div class="lecturer-spec">Specialisation: Artificial Intelligence</div>
+            <a href="mailto:mutanga@mut.ac.za" class="lecturer-email"><i data-lucide="mail" style="width:12px;height:12px;"></i> mutanga@mut.ac.za</a>
+          </div>
+          <div class="lecturer-card">
+            <div class="lecturer-avatar-wrap">N</div>
+            <div class="lecturer-name">Mrs. Naidoo</div>
+            <div class="lecturer-qual">MSc in Information Technology</div>
+            <div class="lecturer-spec">Specialisation: Cybersecurity</div>
+            <a href="mailto:naidoo@mut.ac.za" class="lecturer-email"><i data-lucide="mail" style="width:12px;height:12px;"></i> naidoo@mut.ac.za</a>
+          </div>
+          <div class="lecturer-card">
+            <div class="lecturer-avatar-wrap">J</div>
+            <div class="lecturer-name">Dr. Jugoo</div>
+            <div class="lecturer-qual">PhD in Software Engineering</div>
+            <div class="lecturer-spec">Specialisation: Web Development</div>
+            <a href="mailto:jugoo@mut.ac.za" class="lecturer-email"><i data-lucide="mail" style="width:12px;height:12px;"></i> jugoo@mut.ac.za</a>
+          </div>
+        </div>
+        <p style="margin-top:20px;font-size:13px;color:var(--gray-400);text-align:center;">To add real lecturer photos, replace the letter inside <code>.lecturer-avatar-wrap</code> with <code>&lt;img src="images/name.jpg"&gt;</code>.</p>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="tab-pane" id="people-testimonials">
+        <div class="section-label">Alumni Voices</div>
+        <h2 class="section-title">What Our Graduates Say</h2>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="testimonial-quote-mark">"</div>
+            <p class="testimonial-text">The ICT programme at MUT gave me practical skills that landed me a junior developer role at FNB right after graduation. The lecturers are genuinely invested in your success.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avi"><img src="https://scontent.fdur5-1.fna.fbcdn.net/v/t51.82787-15/673781142_18584349793041443_9039122720554242490_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=13d280&_nc_ohc=Sj5ma4zvKbgQ7kNvwEAOZni&_nc_oc=AdqHlwJ51qjKtdpBHWQT7yiO_dyc4j7FemOKG1fLZqe9s3nbFbqO8Ms4ZkkyoH0ZDtY&_nc_zt=23&_nc_ht=scontent.fdur5-1.fna&_nc_gid=xzR8LVNP4zlEvq8XnLpzuA&_nc_ss=7b2a8&oh=00_Af0kkpYTCaKdFKuMxJgIyV9Jff8MLnHyr7CXWGdnKsh4sQ&oe=69F2BD57" alt="Sipho Nkosi" /></div>
+              <div><div class="testimonial-name">Sipho Nkosi</div><div class="testimonial-role">Junior Developer, FNB · Class of 2023</div></div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-quote-mark">"</div>
+            <p class="testimonial-text">Hands-on cybersecurity projects prepared me for real-world threats. MUT's ICT department is ahead of the curve — I came into my job ready on day one.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avi"><img src="https://scontent.fdur5-1.fna.fbcdn.net/v/t51.82787-15/681717158_18584525422041443_8886310914264002886_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=13d280&_nc_ohc=HRcGeoB6e9AQ7kNvwFSDhOT&_nc_oc=Ado_R2xwgP_LXKcZ5BrWhZXUqIxT4Y-j6ORMSZpuPwhoPXphn6hO9g4OpXelAWKBtV4&_nc_zt=23&_nc_ht=scontent.fdur5-1.fna&_nc_gid=pt1CM_Plx4W4lww9zNTrYw&_nc_ss=7b2a8&oh=00_Af3U5aes_8Z-XC_7kvbQbcR7bBkivdbg394trzOzSdjafg&oe=69F2B56D" alt="Thandi Mthembu" /></div>
+              <div><div class="testimonial-name">Thandi Mthembu</div><div class="testimonial-role">Security Analyst, MTN · Class of 2022</div></div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-quote-mark">"</div>
+            <p class="testimonial-text">The networking courses opened doors I didn't know existed. Three years later, I'm managing infrastructure for one of South Africa's largest telecoms.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avi"><img src="https://scontent.fdur5-1.fna.fbcdn.net/v/t51.82787-15/658834790_18584525410041443_3142635129853663890_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=13d280&_nc_ohc=reZFOIfuhesQ7kNvwGM3nI_&_nc_oc=AdqR_eCINNzMiiZ07LSgBQYMiUw6IAulM57U80JuQu6EvxtkT9EKjn6YLISS96Q_YLM&_nc_zt=23&_nc_ht=scontent.fdur5-1.fna&_nc_gid=h1WVMyxjCm1MNohoUlP-bw&_nc_ss=7b2a8&oh=00_Af3RCAR2L2F93r_xToYSozUh2OeiwALPh-wqO9kaQYm7Gw&oe=69F2B95E" alt="Zanele Dlamini" /></div>
+              <div><div class="testimonial-name">Zanele Dlamini</div><div class="testimonial-role">Network Engineer, Telkom · Class of 2021</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Projects -->
+      <div class="tab-pane" id="people-projects">
+        <div class="section-label">Final Year Work</div>
+        <h2 class="section-title">Student Projects</h2>
+        <div class="projects-grid">
+          <div class="project-card">
+            <div class="project-thumb" style="background:linear-gradient(135deg,var(--crimson-dark),var(--crimson-light));">
+              <i data-lucide="smartphone" style="width:36px;height:36px;opacity:0.6;"></i>
+            </div>
+            <div class="project-body">
+              <span class="project-cat">Mobile App</span>
+              <div class="project-title">MUT Connect App</div>
+              <div class="project-desc">Social platform for MUT students to share resources and form study groups across departments.</div>
+              <div class="project-students">Sipho Nkosi &amp; Thandi Mthembu</div>
+            </div>
+          </div>
+          <div class="project-card">
+            <div class="project-thumb" style="background:linear-gradient(135deg,#1e3a5f,#2563eb);">
+              <i data-lucide="activity" style="width:36px;height:36px;opacity:0.6;"></i>
+            </div>
+            <div class="project-body">
+              <span class="project-cat">Network Tool</span>
+              <div class="project-title">NetMonitor</div>
+              <div class="project-desc">Real-time network diagnostics dashboard with traffic analysis and automated alerting.</div>
+              <div class="project-students">Zanele Dlamini &amp; Lungelo Zulu</div>
+            </div>
+          </div>
+          <div class="project-card">
+            <div class="project-thumb" style="background:linear-gradient(135deg,#064e3b,#10b981);">
+              <i data-lucide="book" style="width:36px;height:36px;opacity:0.6;"></i>
+            </div>
+            <div class="project-body">
+              <span class="project-cat">Web App</span>
+              <div class="project-title">SmartLib</div>
+              <div class="project-desc">Digital library system with AI-powered recommendations and QR-code borrowing.</div>
+              <div class="project-students">Nomsa Khumalo &amp; Bheki Mkhize</div>
+            </div>
+          </div>
+          <div class="project-card">
+            <div class="project-thumb" style="background:linear-gradient(135deg,#4c1d95,#7c3aed);">
+              <i data-lucide="vote" style="width:36px;height:36px;opacity:0.6;"></i>
+            </div>
+            <div class="project-body">
+              <span class="project-cat">Web App</span>
+              <div class="project-title">UniVote</div>
+              <div class="project-desc">Secure blockchain-backed online voting for SRC elections with full audit trails.</div>
+              <div class="project-students">Thabo Molefe &amp; Lerato Ndlovu</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAMPUS LIFE TAB BLOCK -->
+    <div id="campus-tab"></div>
+    <div class="tab-block" id="tab-campus">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-campus" data-pane="campus-events">
+          <i data-lucide="calendar" style="width:14px;height:14px;"></i> Events
+        </button>
+        <button class="tab-btn" data-tab="tab-campus" data-pane="campus-partners">
+          <i data-lucide="handshake" style="width:14px;height:14px;"></i> Partners
+        </button>
+        <button class="tab-btn" data-tab="tab-campus" data-pane="campus-faq">
+          <i data-lucide="help-circle" style="width:14px;height:14px;"></i> FAQ
+        </button>
+      </div>
+
+      <!-- Events -->
+      <div class="tab-pane active" id="campus-events" style="background-image: url('https://talloiresnetwork.tufts.edu/wp-content/uploads/Screen-Shot-2023-04-11-at-4.14.43-PM-570x352.png'); background-size: cover; background-position: center; background-attachment: fixed; padding: 32px; border-radius: 20px;">
+        <div class="section-label" style="color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.7);">Calendar</div>
+        <h2 class="section-title" style="color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.7);">Upcoming Events</h2>
+        <div class="events-grid">
+          <div class="event-card">
+            <div class="event-date-box"><div class="day">15</div><div class="month">May</div></div>
+            <div>
+              <div class="event-title">Final Year Project Expo</div>
+              <div class="event-meta"><i data-lucide="clock" style="width:12px;height:12px;"></i> 10:00 AM – 4:00 PM</div>
+              <div class="event-meta"><i data-lucide="map-pin" style="width:12px;height:12px;"></i> ICT Building Auditorium</div>
+              <span class="event-tag">Annual Showcase</span>
+            </div>
+          </div>
+          <div class="event-card">
+            <div class="event-date-box"><div class="day">22</div><div class="month">May</div></div>
+            <div>
+              <div class="event-title">Industry Partnership Day</div>
+              <div class="event-meta"><i data-lucide="clock" style="width:12px;height:12px;"></i> 9:00 AM – 1:00 PM</div>
+              <div class="event-meta"><i data-lucide="map-pin" style="width:12px;height:12px;"></i> MUT Conference Centre</div>
+              <span class="event-tag">Networking</span>
+            </div>
+          </div>
+          <div class="event-card">
+            <div class="event-date-box" style="background:var(--gold);">
+              <div class="day" style="color:var(--crimson-dark);">3</div>
+              <div class="month" style="color:var(--crimson-dark);opacity:0.8;">Jun</div>
+            </div>
+            <div>
+              <div class="event-title">Cybersecurity Awareness Workshop</div>
+              <div class="event-meta"><i data-lucide="clock" style="width:12px;height:12px;"></i> 2:00 PM – 5:00 PM</div>
+              <div class="event-meta"><i data-lucide="map-pin" style="width:12px;height:12px;"></i> Lab B, ICT Block</div>
+              <span class="event-tag">Workshop</span>
+            </div>
+          </div>
+          <div class="event-card">
+            <div class="event-date-box"><div class="day">18</div><div class="month">Jul</div></div>
+            <div>
+              <div class="event-title">Hackathon 2026 — ICT vs Engineering</div>
+              <div class="event-meta"><i data-lucide="clock" style="width:12px;height:12px;"></i> All Day</div>
+              <div class="event-meta"><i data-lucide="map-pin" style="width:12px;height:12px;"></i> Main Campus</div>
+              <span class="event-tag">Competition</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Partners -->
+      <div class="tab-pane" id="campus-partners">
+        <div class="section-label">Industry Partners</div>
+        <h2 class="section-title">Our Partners &amp; Sponsors</h2>
+        <p class="section-sub">We collaborate with leading technology companies to ensure our students are equipped for the industry they'll enter.</p>
+        <div class="partners-grid">
+          <div class="partner-card"><div class="partner-logo"><img src="https://tse3.mm.bing.net/th/id/OIP.7IgX6OczyQrC3djWBE8xnwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Microsoft" /></div><div class="partner-name">Microsoft</div></div>
+          <div class="partner-card"><div class="partner-logo"><img src="https://1000logos.net/wp-content/uploads/2016/11/Colors-Cisco-Logo.jpg" alt="Cisco" /></div><div class="partner-name">Cisco</div></div>
+          <div class="partner-card"><div class="partner-logo"><img src="https://media.licdn.com/dms/image/v2/C4E22AQFxweEqVCHeeA/feedshare-shrink_800/feedshare-shrink_800/0/1610390462030?e=2147483647&v=beta&t=63l2A8p8LxelKEOMDzU-vnuZQgn069qoTCoDxCsnfAg" alt="Oracle" /></div><div class="partner-name">Oracle</div></div>
+          <div class="partner-card"><div class="partner-logo"><img src="https://tse2.mm.bing.net/th/id/OIP.Rz5RGwG8iwyb0S0rUhTV7wHaC8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="SAP" /></div><div class="partner-name">SAP</div></div>
+          <div class="partner-card"><div class="partner-logo"><img src="https://static.vecteezy.com/system/resources/previews/020/190/713/original/huawei-logo-huawei-icon-free-free-vector.jpg" alt="Huawei" /></div><div class="partner-name">Huawei</div></div>
+          <div class="partner-card"><div class="partner-logo"><img src="https://www.pngplay.com/wp-content/uploads/3/Amazon-Web-Services-AWS-Logo-Transparent-PNG.png" alt="AWS" /></div><div class="partner-name">AWS</div></div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="tab-pane" id="campus-faq">
+        <div style="text-align:center; margin-bottom:24px;">
+          <div class="section-label" style="display:block;">Support</div>
+          <h2 class="section-title">Frequently Asked Questions</h2>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-q">What are the entry requirements for the Diploma in ICT? <i data-lucide="chevron-down" class="faq-toggle" style="width:16px;height:16px;"></i></div>
+            <div class="faq-a">A National Senior Certificate (NSC) with Mathematics and English at a minimum of 50%. Specific APS requirements are on the MUT website. Extended programme applicants may have slightly different criteria.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">What is the difference between Extended and Standard programmes? <i data-lucide="chevron-down" class="faq-toggle" style="width:16px;height:16px;"></i></div>
+            <div class="faq-a">The Extended programme spans 4 years with additional academic support, extra tutorials, and bridging modules. The Standard programme is 3 years. Both lead to the same Diploma qualification.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">Which programming languages are taught? <i data-lucide="chevron-down" class="faq-toggle" style="width:16px;height:16px;"></i></div>
+            <div class="faq-a">We cover Java, Python, C#, JavaScript, PHP, and SQL. Specific languages depend on the year of study and module. Students gain broad exposure across multiple paradigms.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">Is Work Integrated Learning (WIL) included? <i data-lucide="chevron-down" class="faq-toggle" style="width:16px;height:16px;"></i></div>
+            <div class="faq-a">Yes. In the final year, students complete a six-month in-service placement during their last semester with a trusted industry partner. The training develops workplace skills, professional communication, project execution, industry standards, and mentorship. It is assessed as a compulsory, credit-bearing part of the qualification, ensuring students transition confidently into ICT careers.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">What career paths are available after graduation? <i data-lucide="chevron-down" class="faq-toggle" style="width:16px;height:16px;"></i></div>
+            <div class="faq-a">Graduates pursue roles as software developers, network administrators, cybersecurity specialists, database administrators, web developers, IT project managers, and systems analysts across banking, telecoms, government, and tech startups.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">How do I apply? <i data-lucide="chevron-down" class="faq-toggle" style="width:16px;height:16px;"></i></div>
+            <div class="faq-a">Applications are submitted through the CAO (Central Applications Office) at <a href="https://www.cao.ac.za" target="_blank" style="color:var(--crimson);">cao.ac.za</a>. Applications typically open in April each year for the following academic year.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact-section" id="contact-section">
+  <div class="contact-inner">
+    <div class="contact-header">
+      <span class="section-label">Reach Out</span>
+      <h2>Contact Us</h2>
+      <p>Have questions? Our department is happy to assist prospective and current students alike.</p>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i data-lucide="mail" style="width:18px;height:18px;"></i></div>
+          <div><div class="contact-info-label">Email</div><div class="contact-info-value"><a href="mailto:ict@mut.ac.za">ict@mut.ac.za</a></div></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i data-lucide="phone" style="width:18px;height:18px;"></i></div>
+          <div><div class="contact-info-label">Phone</div><div class="contact-info-value"><a href="tel:+27319077111">+27 31 907 7111</a></div></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i data-lucide="map-pin" style="width:18px;height:18px;"></i></div>
+          <div><div class="contact-info-label">Address</div><div class="contact-info-value">511 Mangosuthu Highway, Umlazi, Durban, 4031</div></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i data-lucide="clock" style="width:18px;height:18px;"></i></div>
+          <div><div class="contact-info-label">Office Hours</div><div class="contact-info-value">Mon–Fri, 08:00–16:30</div></div>
+        </div>
+      </div>
+      <div>
+        <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <input type="text" id="cf-name" placeholder="Full Name" required />
+            <input type="email" id="cf-email" placeholder="Email Address" required />
+          </div>
+          <input type="text" id="cf-subject" placeholder="Subject" required style="margin-top:12px;" />
+          <textarea id="cf-message" placeholder="Your Message" required></textarea>
+          <button type="submit" class="btn-submit">Send Message</button>
+        </form>
+        <p class="form-note">Prefer direct email? Write to <a href="mailto:ict@mut.ac.za">ict@mut.ac.za</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="https://www.mut.ac.za/wp-content/uploads/2023/05/mutlogo-ignite2030.png" alt="MUT Logo" onerror="this.style.display='none';" />
+          <div class="footer-logo-text">MUT ICT Department</div>
+        </div>
+        <p>Empowering the next generation of technology leaders through innovative education, research, and community engagement.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about-tab">About</a></li>
+          <li><a href="#programmes-tab">Programmes</a></li>
+          <li><a href="#campus-tab">Events</a></li>
+          <li><a href="#contact-section">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Student Resources</h5>
+        <ul>
+          <li><a href="https://mutelearn.mut.ac.za/" target="_blank">Blackboard</a></li>
+          <li><a href="https://ienabler1.mut.ac.za/pls/prodi41/w99pkg.mi_login" target="_blank">iEnabler</a></li>
+          <li><a href="https://www.mut.ac.za/library-services/" target="_blank">Library</a></li>
+          <li><a href="https://www.mut.ac.za/fees-and-funding/bursaries/" target="_blank">Bursaries</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>MUT</h5>
+        <ul>
+          <li><a href="https://www.mut.ac.za/" target="_blank">Main Website</a></li>
+          <li><a href="https://www.cao.ac.za" target="_blank">Apply via CAO</a></li>
+          <li><a href="https://www.mut.ac.za/vacancies/" target="_blank">Vacancies</a></li>
+          <li><a href="https://www.mut.ac.za/alumni/" target="_blank">Alumni</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 <span>Mangosuthu University of Technology</span> — ICT Department. All rights reserved.</div>
+      <div>511 Mangosuthu Highway, Umlazi, Durban</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  // ── Mobile nav ──
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // ── Tab system ──
+  // Each .tab-btn has data-tab (the tab-block id) and data-pane (the pane id to show)
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const blockId = btn.getAttribute('data-tab');
+      const paneId  = btn.getAttribute('data-pane');
+      if (!blockId || !paneId) return;
+
+      const block = document.getElementById(blockId);
+      if (!block) return;
+
+      // Deactivate all tabs + panes in this block only
+      block.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      block.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+      // Activate clicked
+      btn.classList.add('active');
+      const pane = document.getElementById(paneId);
+      if (pane) pane.classList.add('active');
+
+      // Re-init lucide icons in newly revealed pane
+      lucide.createIcons();
+    });
+  });
+
+  // ── Nav anchor → tab auto-switch ──
+  // If you click a nav link with a tab hash, open that tab
+  const tabMap = {
+    '#programmes-tab': { block: 'tab-about', pane: 'about-programmes' },
+    '#people-tab':    { block: 'tab-people', pane: 'people-lecturers' },
+    '#campus-tab':    { block: 'tab-campus', pane: 'campus-events' },
+  };
+  document.querySelectorAll('a[href]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (tabMap[href]) {
+        const { block, pane } = tabMap[href];
+        const blockEl = document.getElementById(block);
+        if (blockEl) {
+          blockEl.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+          blockEl.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+          const targetBtn = blockEl.querySelector(`[data-pane="${pane}"]`);
+          const targetPane = document.getElementById(pane);
+          if (targetBtn) targetBtn.classList.add('active');
+          if (targetPane) targetPane.classList.add('active');
+          lucide.createIcons();
+        }
+      }
+    });
+  });
+
+  // ── Smooth scroll ──
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href === '#') return;
+      const t = document.querySelector(href);
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+
+  // ── FAQ accordion ──
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const ans = q.nextElementSibling;
+      const tog = q.querySelector('.faq-toggle');
+      const isOpen = ans.classList.contains('open');
+      document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-toggle').forEach(t => t.style.transform = '');
+      if (!isOpen) { ans.classList.add('open'); tog.style.transform = 'rotate(180deg)'; }
+    });
+  });
+
+  // ── Contact form ──
+  function handleSubmit(e) {
+    e.preventDefault();
+    const name    = document.getElementById('cf-name').value.trim();
+    const email   = document.getElementById('cf-email').value.trim();
+    const subject = document.getElementById('cf-subject').value.trim();
+    const message = document.getElementById('cf-message').value.trim();
+    window.location.href = `mailto:ict@mut.ac.za`
+      + `?subject=${encodeURIComponent(subject + ' — from ' + name)}`
+      + `&body=${encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message)}`;
+    document.getElementById('contactForm').reset();
+  }
+
+  // ─── PROGRAMME REQUIREMENTS / BROCHURE DOWNLOAD ───
+  function initProgrammeCards() {
+    const brochures = {
+      standard: `Diploma in Information Technology\nNQF Level: 6\nHEQSF Qualification Type: 63\nSAQA Credits: 360\nSAQA Qualification ID: 96862\nCESM Code: 06\n\nRationale for Qualification\nThis qualification has been re-aligned to the new HEQSF and takes into account the latest ICT industry requirements. The qualification has also been formulated to reflect the latest workplace-based trends within the ICT industry, to ensure that qualifying learners will have accessibility to employment within the industry. The inclusion of a work integrated learning component as part of a credit-bearing module at NQF-6 is a unique concept within the University of Technology ICT sector in SA. This, together with the project-based and problem-solving approach embedded in the qualification, will have the defined purpose of capacitating the student with workplace-applicable competencies.\n\nThe qualification was established through extensive research, international comparisons, and national discussions between representatives of the ICT industry and academic institutions. The qualification prepares students for entry-level positions in the ICT or related industries in either the software development or the communication networks sub-domains. Students are provided with a general all-round working knowledge of the ICT industry and are required to choose electives at second- and third year levels to follow a specified career path. The skills shortage within the software development and the communication networks fields, particularly in KZN, led to MUT offering these two specialization streams. The objective of the qualification is to satisfy the industry needs, locally, regionally, and nationally for ICT with specific reference to the areas of Software Development and Communication Networks.\n\nStatement of Purpose\nThe purpose of the Diploma in Information Technology is to provide a career-focused professional qualification featuring industry-referenced knowledge, skills, and attitudes. A learner will be knowledgeable and competent in the discourse and practice of the Information Technology (IT) discipline, will have specialist knowledge of a particular sub-discipline of IT (depending on chosen electives), and will be subjected to a range of professional and personal development initiatives relevant to the IT industry. Accordingly, the main purpose of the qualification may be stated as follow: a qualifying learner at this level is competent in the development of IT systems in a distributed computing environment, and depending on the chosen electives, will be competent in:\nSoftware Development: Designing and producing software products and systems to meet specified needs so that they work reliably, and their production and maintenance is cost effective; or\nCommunications Networks: Designing, developing, implementing and managing of networks by integrating knowledge of modern network topologies and protocols to create an appropriate and adequate environment of communication and information sharing.\n\nAdmission Requirements\nThe Department uses a ranking system based on Grade 12 results and/or results of an entrance test. The minimum requirements to be considered for entry into the programme is as follows: National Senior Certificate (Diploma or higher) with the following minimum scores:\nEnglish First Additional Language (3) OR\nEnglish Home Language (3) AND\nMathematics (3) OR\nMathematical Literacy (5)\nA minimum of 24 points in the best six subjects excluding Life Orientation and including English and Mathematics / Mathematical Literacy is required. Senior certificate or equivalent with a minimum of 27 points in the six best performed subjects and a pass in Mathematics and English. A level 4 national certificate (vocational), with the following minimum requirements:\nAt least 50% in three fundamental subjects including English;\nAt least 60% in three compulsory vocational subjects.\nThe above requirements DO NOT guarantee a seat for the programme. Final selection and placement of applicants may be based on an aptitude test, and /or other selection and placement criteria determined, from time to time, by the department depending on demand and available resources. A limited number of students will be offered a seat based on a ranking system and/or passing Grade 12 Physical Science.\n\nDuration of Study\n3-years full-time`,
+      extended: `Diploma in Information Technology: Extended Curriculum Programme\nNQF Level: 6\nHEQSF Qualification Type: 63\nSAQA Qualification ID: 96862\nSAQA Credits: Minimum 480\nCESM Code: 06\n\nAs part of the department’s access programme, the 3-year IT Diploma qualification is also offered as an Extended Curriculum Programme (ECP) which includes an additional year of study during which students are prepared for the diploma programme. This programme is offered to a limited number of prospective students who do not meet the cut-off criteria for entry into the diploma but demonstrate an aptitude for study in the ICT field. This section explains how the ECP is implemented.\n\nRationale for Qualification\nIn line with its mission of expanding access to IT qualifications, the Department also offers an extended curriculum programme (4-years minimum duration) intended for those students who are ranked just outside of the cut-off point for the mainstream programme. In their first year of study, students take introductory courses intended to prepare them for study towards the Diploma. After successfully completing all four introductory subjects, students proceed into the first year of the diploma programme. Students who do not pass all subjects may be allowed to take a limited number of diploma subjects in their second year of study, provided special permission is granted by the department and provided that the prerequisites indicated in the curriculum compilation table below are met. The rationale for the mainstream diploma programme has relevance to this qualification as years 2, 3, 4 of the access programme correspond to years 1, 2, 3 of the mainstream programme.\n\nStatement of Purpose\nThis programme is intended for students who meet the minimum entry criteria, but may not be sufficiently prepared for entry into the 3-year diploma programme. The primary objective of this programme is to expand access to IT qualifications to those students who have demonstrated the aptitude but have not been exposed to opportunities to further prepare them for study in the ICT field. After the first year of study in this programme, the purpose aligns to the mainstream diploma programme.\n\nAdmission Requirements\nThe Department uses a ranking system based on Grade 12 results and/or results of an entrance test. The minimum requirements to be considered for entry into the programme is as follows: National Senior Certificate (Diploma or higher) with the following minimum scores:\nEnglish First Additional Language (3) OR\nEnglish Home Language (3) AND\nMathematics (2) OR\nMathematical Literacy (3)\nA minimum of 23 points in the best six subjects excluding Life Orientation and including English And Mathematics / Mathematical Literacy is required. Senior certificate or equivalent with a minimum of 25 points in the six best performed subjects and a pass in Mathematics and English. A level 4 national certificate (vocational), with the following minimum requirements:\nAt least 50% in three fundamental subjects including English;\nAt least 60% in three compulsory vocational subjects.\nFinal selection and placement of applicants may be based on an aptitude test or making use of a ranking system. The above requirements do NOT guarantee a seat for the programme – a limited number of students will be offered a seat based on a ranking system.\n\nDuration of Study\n4-years full-time`,
+      advanced: `Advanced Diploma in Information and Communication Technology in Applications Development\nNQF Level: 7\nSAQA ID: 117974\nSAQA Credits: 120\n\nThe department offers this undergraduate advanced diploma qualification on both a full-time and part-time basis, depending inter-alia on demand and available resources. The modules offered per semester are determined on a two-year cycle and this section refers to the module offerings for the period 2022-2023.\n\nRationale for Qualification\nThis qualification is a new Advanced Diploma in Information and Communication Technology (ICT), which has been formulated according to the new HEQSF(2013). The qualification incorporates the latest ICT industry requirements and has been developed in a manner aimed to ensure that qualifying learners will be employable within the ICT industry or are able to operate in other industries where ICT is a key component. This qualification is an advanced undergraduate specialisation qualification that enhances readiness for further research-based study in ICT and related fields at postgraduate levels, as well as providing for employment in the industry.\n\nStatement of Purpose\nThis programme provides for the continuing professional development of ICT practitioners through the inculcation of a deep and systematic understanding of current thinking, practice, theory, and methodology in the Applications Development domain. The qualification also prepares students for postgraduate study through the deepening of their knowledge and understanding of theories, methodologies, and practices in ICT, as well as the development of their ability to formulate, undertake and resolve more complex theoretical and practice-related problems and tasks through the selection and use of appropriate applications development methods and techniques. A qualifying learner will have specialized knowledge of the ICT industry in Applications Development and will be able to manage a software/applications development or other ICT-related environment.\n\nMinimum Admission Requirements\nAccess to the qualification may be obtained via the following routes:\nA 360-Credit Diploma or National Diploma in Information and Communication Technology (ICT) or comparable qualification at Level 6 in the field of study, OR\nA Bachelor’s Degree in a related Information Technology specialisation area; OR\nA completed IT/ICT qualification evaluated to NQF level 6 by SAQA may also be considered for entry into this qualification; OR\nEntry may also be gained through the Institution’s RPL process, for which the procedures are contained in the MUT RPL policy.\n\nMinimum Duration of Study\nFull-time: 1 year \nPart-time: 2 years`,
+    };
+
+    document.querySelectorAll('.prog-requirements-toggle').forEach(button => {
+      button.addEventListener('click', () => {
+        const target = button.dataset.target;
+        const details = document.getElementById(`requirements-${target}`);
+        if (!details) return;
+        const open = details.classList.toggle('open');
+        button.textContent = open ? 'Hide Requirements' : 'Entry Requirements';
+      });
+    });
+
+    document.querySelectorAll('.download-brochure').forEach(button => {
+      button.addEventListener('click', () => {
+        const program = button.dataset.program;
+        const content = brochures[program] || 'Brochure content not available.';
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = `${program}-brochure.txt`;
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+        URL.revokeObjectURL(url);
+      });
+    });
+  }
+
+  initProgrammeCards();
+
+  // ─── CHATBOT ───
+  const chatbot = {
+    isOpen: false,
+    messages: [],
+    isSpeaking: false,
+    
+    init() {
+      const btn = document.getElementById('chatbot-btn');
+      const close = document.getElementById('chatbot-close');
+      const input = document.getElementById('chatbot-input');
+      const send = document.getElementById('chatbot-send');
+      const voiceBtn = document.getElementById('chatbot-voice');
+
+      btn.addEventListener('click', () => this.toggle());
+      close.addEventListener('click', () => this.toggle());
+      send.addEventListener('click', () => this.sendMessage());
+      voiceBtn?.addEventListener('click', () => this.toggleVoiceInput());
+      input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') this.sendMessage();
+      });
+
+      this.addMessage('bot', 'Hi there! 🎓 I\'m MUT Bot! Ask me anything about our ICT programs. ✨');
+    },
+
+    toggle() {
+      this.isOpen = !this.isOpen;
+      document.getElementById('chatbot-widget').style.display = this.isOpen ? 'flex' : 'none';
+      if (this.isOpen) {
+        document.getElementById('chatbot-input').focus();
+      }
+    },
+
+    sendMessage() {
+      const input = document.getElementById('chatbot-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      this.addMessage('user', msg);
+      input.value = '';
+
+      setTimeout(() => {
+        const response = this.getResponse(msg.toLowerCase());
+        this.addMessage('bot', response);
+      }, 600);
+    },
+
+    addMessage(sender, text) {
+      this.messages.push({ sender, text });
+      const container = document.getElementById('chatbot-messages');
+      const msgEl = document.createElement('div');
+      msgEl.className = `chatbot-msg chatbot-msg-${sender}`;
+      
+      if (sender === 'bot') {
+        const voiceBtn = document.createElement('button');
+        voiceBtn.className = 'msg-voice-btn';
+        voiceBtn.title = 'Listen';
+        voiceBtn.innerHTML = '<i data-lucide="volume-2" style="width:14px;height:14px;"></i>';
+        voiceBtn.addEventListener('click', () => this.speak(text));
+        
+        const textSpan = document.createElement('span');
+        textSpan.textContent = text;
+        msgEl.appendChild(textSpan);
+        msgEl.appendChild(voiceBtn);
+      } else {
+        msgEl.textContent = text;
+      }
+      
+      container.appendChild(msgEl);
+      container.scrollTop = container.scrollHeight;
+      lucide.createIcons();
+    },
+
+    speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.95;
+      utterance.pitch = 1.1;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    },
+
+    toggleVoiceInput() {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.start();
+      
+      recognition.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map(r => r[0].transcript)
+          .join('');
+        document.getElementById('chatbot-input').value = transcript;
+      };
+    },
+
+    getResponse(msg) {
+      // Keywords for better matching
+      const keywords = {
+        program: ['program', 'diploma', 'course', 'study', 'offer', 'degree'],
+        admission: ['admission', 'apply', 'entry', 'requirement', 'qualify', 'enroll', 'register'],
+        contact: ['contact', 'phone', 'email', 'address', 'reach', 'location', 'where'],
+        skills: ['skill', 'learn', 'teach', 'subject', 'module', 'training'],
+        lecturer: ['lecturer', 'professor', 'instructor', 'teacher', 'staff', 'faculty'],
+        employment: ['employment', 'job', 'career', 'graduate', 'work', 'recruit'],
+        fee: ['fee', 'cost', 'price', 'tuition', 'afford', 'payment'],
+        duration: ['duration', 'how long', 'years', 'time'],
+        facilities: ['facility', 'lab', 'facility', 'equipment', 'resource', 'computer'],
+        wil: ['wil', 'work integrated', 'internship', 'practical', 'industry']
+      };
+
+      const responses = {
+        program: [
+          '📚 We offer three amazing programs:\n• Diploma in ICT (Extended) - 4 years with extra support\n• Diploma in ICT (Standard) - 3 years main program\n• Advanced Diploma - 1 year specialization\n\nAll are SAQA accredited! Which interests you? 🎯'
+        ],
+        admission: [
+          '🎓 To join us, you\'ll need:\n• National Senior Certificate\n• Mathematics & English\n• Depending on the program above 40% avg\n\nReady to apply? 🚀 Visit the CAO website!',
+          '📋 Entry requirements vary slightly by program. Generally:\n✓ Grade 12 with Math & English\n✓ Valid NSC\n✓ 40%+ average\n\nContact us for specific details! 📧'
+        ],
+        contact: [
+          '📞 Reach out anytime!\n📧 ict@mut.ac.za\n☎️ +27 31 907 7111\n📍 511 Mangosuthu Highway, Umlazi, Durban 4031\n\nWe\'re here to help! 😊',
+          '💌 Let\'s connect!\nEmail: ict@mut.ac.za\nCall: +27 31 907 7111\nVisit: ICT Building, MUT Campus\n\nHappy to assist! 🤝'
+        ],
+        skills: [
+          '💻 You\'ll master these awesome skills:\n✨ Programming (Java, Python, C#)\n✨ Web Development\n✨ Networking & Security\n✨ Database Management\n✨ Mobile App Development\n✨ Cloud Computing\n\nExcited? 🔥'
+        ],
+        lecturer: [
+          '👨‍🏫 Our lecturers are phenomenal!\nThey have PhDs, Masters, and tons of industry experience. Check them out in the "People" section! 🌟'
+        ],
+        employment: [
+          '🎉 Amazing news! We have 85% employment rate! 🏆\nOur grads work at: FNB, MTN, Telkom, AWS, Microsoft & more!\n\nYou\'ll be market-ready! 💼'
+        ],
+        fee: [
+          '💰 Fees are competitive & affordable.\nWe have financial aid & bursaries available!\nContact our admissions team for detailed breakdown. 📊'
+        ],
+        duration: [
+          '⏱️ Program durations:\n• Extended: 4 years\n• Standard: 3 years  \n• Advanced: 1 year\n\nFlexible to fit your pace! 🎯'
+        ],
+        facilities: [
+          '🖥️ Our state-of-the-art facilities include:\n✓ 8+ Modern Computer Labs\n✓ High-speed Internet\n✓ Linux & Windows servers\n✓ Networking equipment\n✓ Collaborative spaces\n\nTop-notch infrastructure! 🏗️'
+        ],
+        wil: [
+          '🤝 Our WIL component is a six-month in-service training placement in the final semester of the final year. Students work with industry partners to apply ICT skills, gain workplace confidence, execute real projects, and receive mentorship. It is a credit-bearing, compulsory part of the qualification that bridges study and career success. 💼'
+        ]
+      };
+
+      // Match keywords to find category
+      for (const [category, words] of Object.entries(keywords)) {
+        if (words.some(word => msg.includes(word))) {
+          const categoryResponses = responses[category];
+          if (categoryResponses) {
+            return categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
+          }
+        }
+      }
+
+      // Default responses for general greetings
+      const greetings = [
+        "That's a great question! 🤔 Try asking about programs, admissions, skills, or contact info!",
+        "Hmm, interesting! 🧠 I'm best at answering Qs about our ICT programs. Ask away!",
+        "I love your curiosity! 🌟 Ask me about our degree programs, fees, or opportunities!"
+      ];
+
+      const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+      return greeting;
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', () => chatbot.init());
+</script>
+
+  <!-- CHATBOT WIDGET -->
+  <div id="chatbot-btn" class="chatbot-btn" title="Chat with us">
+    <span class="bot-emoji">🤖</span>
+  </div>
+
+  <div id="chatbot-widget" class="chatbot-widget">
+    <div class="chatbot-header">
+      <div class="chatbot-avatar">🤖</div>
+      <div>
+        <h3>MUT Bot</h3>
+        <p class="chatbot-status">Always here to help! 💙</p>
+      </div>
+      <button id="chatbot-close">
+        <i data-lucide="x" style="width:20px;height:20px;"></i>
+      </button>
+    </div>
+    <div id="chatbot-messages" class="chatbot-messages"></div>
+    <div class="chatbot-input-area">
+      <input id="chatbot-input" type="text" placeholder="Ask me anything..." />
+      <button id="chatbot-voice" title="Speak">
+        <i data-lucide="mic" style="width:18px;height:18px;"></i>
+      </button>
+      <button id="chatbot-send" title="Send">
+        <i data-lucide="send" style="width:18px;height:18px;"></i>
+      </button>
+    </div>
+  </div>
+</body>
+</html>
