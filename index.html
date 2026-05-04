@@ -65,6 +65,59 @@
       font-weight: 700; padding: 7px 16px; border-radius: 8px; margin-left: 6px;
     }
     .nav-links .btn-apply:hover { background: var(--gold-light); transform: translateY(-1px); color: var(--crimson-dark); }
+    .nav-search-wrapper {
+      position: relative;
+      flex: 0 0 280px;
+      max-width: 320px;
+      margin-left: 18px;
+    }
+    .nav-search-wrapper input {
+      width: 100%; min-width: 180px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .nav-search-wrapper input::placeholder { color: rgba(255,255,255,0.65); }
+    .nav-search-wrapper input:focus { border-color: rgba(245,200,66,0.55); background: rgba(255,255,255,0.12); }
+    .nav-search-results {
+      position: absolute;
+      top: 100%; right: 0; left: 0;
+      margin-top: 10px;
+      padding: 8px 0;
+      background: white;
+      border: 1px solid rgba(0,0,0,0.12);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      overflow: hidden;
+      max-height: 380px;
+      overflow-y: auto;
+      z-index: 1001;
+    }
+    .nav-search-results.hidden { display: none; }
+    .nav-search-result {
+      padding: 14px 16px;
+      color: #1f2937;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .nav-search-result:last-child { border-bottom: none; }
+    .nav-search-result:hover { background: #f3f4f6; }
+    .nav-search-result .result-label { color: #6b7280; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; }
+    .nav-search-result .result-title { font-weight: 700; color: #1f2937; }
+    .nav-search-result .result-meta { color: #6b7280; font-size: 12px; }
+    .nav-search-result .result-snippet { color: #4b5563; font-size: 12px; line-height: 1.4; margin-top: 4px; }
+    .nav-search-result .highlight { background: rgba(245,200,66,0.3); color: #1f2937; border-radius: 3px; padding: 0 3px; font-weight: 600; }
     .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
     .hamburger span { width: 22px; height: 2px; background: white; border-radius: 2px; display: block; }
 
@@ -243,6 +296,8 @@
     .project-title { font-size: 0.95rem; font-weight: 700; color: var(--crimson-dark); margin-bottom: 6px; font-family:'Syne',sans-serif; }
     .project-desc { font-size: 12px; color: var(--gray-600); line-height: 1.5; margin-bottom: 8px; }
     .project-students { font-size: 11px; color: var(--crimson); font-weight: 500; }
+    .project-demo-link { font-size: 12px; color: var(--crimson); font-weight: 600; margin-top: 8px; cursor: pointer; transition: color 0.2s; }
+    .project-demo-link:hover { color: var(--crimson-dark); }
 
     /* ─── LECTURERS ─── */
     .lecturers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
@@ -358,6 +413,8 @@
     }
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
+      .nav-search-wrapper { display: flex; flex: 1; margin-left: 8px; }
+      .nav-search-wrapper input { min-width: 0; width: 100%; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; width: 100%; background: var(--crimson-dark); padding: 14px 20px; gap: 4px; border-bottom: 1px solid rgba(245,200,66,0.2); }
@@ -427,6 +484,21 @@
       position: absolute; top: 14px; right: 14px;
     }
     .chatbot-header button:hover { background: rgba(255,255,255,0.28); }
+    .chatbot-voice-toggle {
+      border: none;
+      background: rgba(255,255,255,0.12);
+      color: white;
+      font-size: 14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s ease, background 0.25s ease;
+    }
+    .chatbot-voice-toggle:hover { transform: scale(1.05); background: rgba(255,255,255,0.22); }
 
     .chatbot-messages {
       flex: 1; overflow-y: auto; padding: 18px;
@@ -478,6 +550,46 @@
 
     @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     @media (max-width: 480px) { .chatbot-widget { width: calc(100vw - 40px); right: 16px; } .chatbot-btn { width: 56px; height: 56px; font-size: 28px; } }
+
+    /* ─── NEWS ─── */
+    .news-section { padding: 64px 40px; background: var(--off-white); opacity: 0; transform: translateY(20px); transition: opacity 0.6s, transform 0.6s; }
+    .news-section.animate { opacity: 1; transform: translateY(0); }
+    .news-inner { max-width: 1200px; margin: 0 auto; }
+    .news-header { text-align: center; margin-bottom: 48px; }
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 32px; }
+    .news-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; opacity: 0; transform: translateY(20px); }
+    .news-card.animate { opacity: 1; transform: translateY(0); }
+    .news-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
+    .news-card-img { width: 100%; height: 200px; background: var(--gray-200); display: flex; align-items: center; justify-content: center; color: var(--gray-400); font-size: 48px; }
+    .news-card-body { padding: 24px; }
+    .news-card-title { font-size: 18px; font-weight: 700; color: var(--crimson-dark); margin-bottom: 8px; }
+    .news-card-desc { color: var(--gray-600); line-height: 1.6; margin-bottom: 16px; }
+    .news-card-date { font-size: 12px; color: var(--gold); font-weight: 600; }
+    .news-card-read-more { font-size: 13px; color: var(--crimson); font-weight: 600; margin-top: 12px; cursor: pointer; transition: color 0.2s; }
+    .news-card-read-more:hover { color: var(--crimson-dark); }
+
+    /* ─── NEWS MODAL ─── */
+    .news-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .news-modal.show { display: flex; }
+    .news-modal-content { background: white; border-radius: 20px; max-width: 600px; width: 100%; max-height: 80vh; overflow-y: auto; position: relative; }
+    .news-modal-header { padding: 24px 32px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; }
+    .news-modal-title { font-size: 1.5rem; font-weight: 800; color: var(--crimson-dark); margin: 0; font-family:'Syne',sans-serif; }
+    .news-modal-close { background: none; border: none; font-size: 24px; color: var(--gray-400); cursor: pointer; padding: 4px; border-radius: 50%; transition: all 0.2s; }
+    .news-modal-close:hover { background: var(--gray-100); color: var(--gray-600); }
+    .news-modal-body { padding: 32px; }
+    .news-modal-meta { display: flex; gap: 20px; margin-bottom: 20px; font-size: 14px; color: var(--gray-600); }
+    .news-modal-meta span { display: flex; align-items: center; gap: 6px; }
+    .news-modal-text { line-height: 1.7; color: var(--gray-700); margin-bottom: 24px; }
+    .news-modal-text p { margin-bottom: 16px; }
+    .news-modal-text strong { color: var(--crimson-dark); }
+
+    @media (max-width: 768px) {
+      .news-section { padding: 48px 20px; }
+      .news-grid { grid-template-columns: 1fr; }
+      .news-modal { padding: 10px; }
+      .news-modal-content { max-height: 90vh; }
+      .news-modal-header, .news-modal-body { padding: 20px; }
+    }
   </style>
 </head>
 <body>
@@ -495,6 +607,10 @@
       <span>Department</span>
     </div>
   </a>
+  <div class="nav-search-wrapper">
+    <input id="nav-search-input" type="search" placeholder="Search programmes, skills, projects..." autocomplete="off" />
+    <div id="nav-search-results" class="nav-search-results hidden" aria-live="polite"></div>
+  </div>
   <div class="nav-links" id="navLinks">
     <a href="#home">Home</a>
     <a href="#about-tab">About</a>
@@ -749,6 +865,11 @@
               <div class="skill-desc">Learners are paired with industry supervisors who guide project work, professional communication, and workplace standards while building a network of ICT contacts.</div>
             </div>
             <div class="skill-card">
+              <div class="skill-icon-wrap"><i data-lucide="wifi" style="width:22px;height:22px;"></i></div>
+              <div class="skill-title">Networking</div>
+              <div class="skill-desc">Students build strong networking foundations covering routing, switching, protocols and secure communication for modern enterprise and campus environments.</div>
+            </div>
+            <div class="skill-card">
               <div class="skill-icon-wrap"><i data-lucide="award" style="width:22px;height:22px;"></i></div>
               <div class="skill-title">Practical Experience</div>
               <div class="skill-desc">The training emphasizes real projects, problem-solving, teamwork, and exposure to tools and processes used in software development, networking, cybersecurity, and systems support.</div>
@@ -845,7 +966,7 @@
         <div class="section-label">Final Year Work</div>
         <h2 class="section-title">Student Projects</h2>
         <div class="projects-grid">
-          <div class="project-card">
+          <div class="project-card" data-project-demo="https://mut-ict-connect.vercel.app">
             <div class="project-thumb" style="background:linear-gradient(135deg,var(--crimson-dark),var(--crimson-light));">
               <i data-lucide="smartphone" style="width:36px;height:36px;opacity:0.6;"></i>
             </div>
@@ -854,9 +975,10 @@
               <div class="project-title">MUT Connect App</div>
               <div class="project-desc">Social platform for MUT students to share resources and form study groups across departments.</div>
               <div class="project-students">Sipho Nkosi &amp; Thandi Mthembu</div>
+              <div class="project-demo-link">View Live Demo →</div>
             </div>
           </div>
-          <div class="project-card">
+          <div class="project-card" data-project-demo="https://netmonitor-demo.vercel.app">
             <div class="project-thumb" style="background:linear-gradient(135deg,#1e3a5f,#2563eb);">
               <i data-lucide="activity" style="width:36px;height:36px;opacity:0.6;"></i>
             </div>
@@ -865,9 +987,10 @@
               <div class="project-title">NetMonitor</div>
               <div class="project-desc">Real-time network diagnostics dashboard with traffic analysis and automated alerting.</div>
               <div class="project-students">Zanele Dlamini &amp; Lungelo Zulu</div>
+              <div class="project-demo-link">View Live Demo →</div>
             </div>
           </div>
-          <div class="project-card">
+          <div class="project-card" data-project-demo="https://smartlib-demo.vercel.app">
             <div class="project-thumb" style="background:linear-gradient(135deg,#064e3b,#10b981);">
               <i data-lucide="book" style="width:36px;height:36px;opacity:0.6;"></i>
             </div>
@@ -876,9 +999,10 @@
               <div class="project-title">SmartLib</div>
               <div class="project-desc">Digital library system with AI-powered recommendations and QR-code borrowing.</div>
               <div class="project-students">Nomsa Khumalo &amp; Bheki Mkhize</div>
+              <div class="project-demo-link">View Live Demo →</div>
             </div>
           </div>
-          <div class="project-card">
+          <div class="project-card" data-project-demo="https://univote-demo.vercel.app">
             <div class="project-thumb" style="background:linear-gradient(135deg,#4c1d95,#7c3aed);">
               <i data-lucide="vote" style="width:36px;height:36px;opacity:0.6;"></i>
             </div>
@@ -887,6 +1011,7 @@
               <div class="project-title">UniVote</div>
               <div class="project-desc">Secure blockchain-backed online voting for SRC elections with full audit trails.</div>
               <div class="project-students">Thabo Molefe &amp; Lerato Ndlovu</div>
+              <div class="project-demo-link">View Live Demo →</div>
             </div>
           </div>
         </div>
@@ -897,60 +1022,90 @@
     <div id="campus-tab"></div>
     <div class="tab-block" id="tab-campus">
       <div class="tab-nav">
-        <button class="tab-btn active" data-tab="tab-campus" data-pane="campus-events">
-          <i data-lucide="calendar" style="width:14px;height:14px;"></i> Events
+        <button class="tab-btn active" data-tab="tab-campus" data-pane="campus-news">
+          <i data-lucide="newspaper" style="width:14px;height:14px;"></i> Departmental News
         </button>
         <button class="tab-btn" data-tab="tab-campus" data-pane="campus-partners">
           <i data-lucide="handshake" style="width:14px;height:14px;"></i> Partners
         </button>
-        <button class="tab-btn" data-tab="tab-campus" data-pane="campus-faq">
-          <i data-lucide="help-circle" style="width:14px;height:14px;"></i> FAQ
-        </button>
       </div>
 
-      <!-- Events -->
-      <div class="tab-pane active" id="campus-events" style="background-image: url('https://talloiresnetwork.tufts.edu/wp-content/uploads/Screen-Shot-2023-04-11-at-4.14.43-PM-570x352.png'); background-size: cover; background-position: center; background-attachment: fixed; padding: 32px; border-radius: 20px;">
-        <div class="section-label" style="color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.7);">Calendar</div>
-        <h2 class="section-title" style="color: white; text-shadow: 0 2px 4px rgba(0,0,0,0.7);">Upcoming Events</h2>
-        <div class="events-grid">
-          <div class="event-card">
-            <div class="event-date-box"><div class="day">15</div><div class="month">May</div></div>
-            <div>
-              <div class="event-title">Final Year Project Expo</div>
-              <div class="event-meta"><i data-lucide="clock" style="width:12px;height:12px;"></i> 10:00 AM – 4:00 PM</div>
-              <div class="event-meta"><i data-lucide="map-pin" style="width:12px;height:12px;"></i> ICT Building Auditorium</div>
-              <span class="event-tag">Annual Showcase</span>
+      <!-- Departmental News -->
+      <div class="tab-pane active" id="campus-news">
+        <div class="section-label">Updates & Events</div>
+        <h2 class="section-title">Departmental News</h2>
+        <p class="section-sub">Stay informed with the latest happenings, news, and upcoming events in our ICT department.</p>
+
+        <!-- News Articles -->
+        <div class="news-grid">
+          <div class="news-card" data-news-id="lab-upgrade">
+            <div class="news-card-img">
+              <i data-lucide="cpu" style="width:64px;height:64px;"></i>
+            </div>
+            <div class="news-card-body">
+              <div class="news-card-title">ICT Lab Upgrade</div>
+              <div class="news-card-desc">Our computer labs have been fully upgraded with the latest hardware and software, including new servers and high-speed internet connections.</div>
+              <div class="news-card-date">April 15, 2026</div>
+              <div class="news-card-read-more">Read More →</div>
             </div>
           </div>
-          <div class="event-card">
-            <div class="event-date-box"><div class="day">22</div><div class="month">May</div></div>
-            <div>
-              <div class="event-title">Industry Partnership Day</div>
-              <div class="event-meta"><i data-lucide="clock" style="width:12px;height:12px;"></i> 9:00 AM – 1:00 PM</div>
-              <div class="event-meta"><i data-lucide="map-pin" style="width:12px;height:12px;"></i> MUT Conference Centre</div>
-              <span class="event-tag">Networking</span>
+
+          <!-- Upcoming Events as News Cards -->
+          <div class="news-card" data-news-id="project-expo">
+            <div class="news-card-img" style="background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-dark) 100%); color: white;">
+              <div style="text-align: center;">
+                <div style="font-size: 2rem; font-weight: 800; line-height: 1; font-family:'Syne',sans-serif;">15</div>
+                <div style="font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; opacity: 0.8;">May</div>
+              </div>
+            </div>
+            <div class="news-card-body">
+              <div class="news-card-title">Final Year Project Expo</div>
+              <div class="news-card-desc">Annual showcase of student projects featuring innovative ICT solutions. Join us to see the future of technology!</div>
+              <div class="news-card-date">10:00 AM – 4:00 PM • ICT Building Auditorium</div>
+              <div class="news-card-read-more">Learn More →</div>
             </div>
           </div>
-          <div class="event-card">
-            <div class="event-date-box" style="background:var(--gold);">
-              <div class="day" style="color:var(--crimson-dark);">3</div>
-              <div class="month" style="color:var(--crimson-dark);opacity:0.8;">Jun</div>
+          <div class="news-card" data-news-id="partnership-day">
+            <div class="news-card-img" style="background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-dark) 100%); color: white;">
+              <div style="text-align: center;">
+                <div style="font-size: 2rem; font-weight: 800; line-height: 1; font-family:'Syne',sans-serif;">22</div>
+                <div style="font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; opacity: 0.8;">May</div>
+              </div>
             </div>
-            <div>
-              <div class="event-title">Cybersecurity Awareness Workshop</div>
-              <div class="event-meta"><i data-lucide="clock" style="width:12px;height:12px;"></i> 2:00 PM – 5:00 PM</div>
-              <div class="event-meta"><i data-lucide="map-pin" style="width:12px;height:12px;"></i> Lab B, ICT Block</div>
-              <span class="event-tag">Workshop</span>
+            <div class="news-card-body">
+              <div class="news-card-title">Industry Partnership Day</div>
+              <div class="news-card-desc">Connect with leading tech companies and explore internship and job opportunities in the ICT industry.</div>
+              <div class="news-card-date">9:00 AM – 1:00 PM • MUT Conference Centre</div>
+              <div class="news-card-read-more">Learn More →</div>
             </div>
           </div>
-          <div class="event-card">
-            <div class="event-date-box"><div class="day">18</div><div class="month">Jul</div></div>
-            <div>
-              <div class="event-title">Hackathon 2026 — ICT vs Engineering</div>
-              <div class="event-meta"><i data-lucide="clock" style="width:12px;height:12px;"></i> All Day</div>
-              <div class="event-meta"><i data-lucide="map-pin" style="width:12px;height:12px;"></i> Main Campus</div>
-              <span class="event-tag">Competition</span>
+          <div class="news-card" data-news-id="cyber-workshop">
+            <div class="news-card-img" style="background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%); color: var(--crimson-dark);">
+              <div style="text-align: center;">
+                <div style="font-size: 2rem; font-weight: 800; line-height: 1; font-family:'Syne',sans-serif;">3</div>
+                <div style="font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; opacity: 0.8;">Jun</div>
+              </div>
             </div>
+            <div class="news-card-body">
+              <div class="news-card-title">Cybersecurity Awareness Workshop</div>
+              <div class="news-card-desc">Learn essential cybersecurity practices and protect yourself from digital threats in today's connected world.</div>
+              <div class="news-card-date">2:00 PM – 5:00 PM • Lab B, ICT Block</div>
+              <div class="news-card-read-more">Learn More →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Modal -->
+      <div class="news-modal" id="news-modal">
+        <div class="news-modal-content">
+          <div class="news-modal-header">
+            <h3 class="news-modal-title" id="modal-title"></h3>
+            <button class="news-modal-close" id="modal-close">&times;</button>
+          </div>
+          <div class="news-modal-body">
+            <div class="news-modal-meta" id="modal-meta"></div>
+            <div class="news-modal-text" id="modal-content"></div>
           </div>
         </div>
       </div>
@@ -970,42 +1125,8 @@
         </div>
       </div>
 
-      <!-- FAQ -->
-      <div class="tab-pane" id="campus-faq">
-        <div style="text-align:center; margin-bottom:24px;">
-          <div class="section-label" style="display:block;">Support</div>
-          <h2 class="section-title">Frequently Asked Questions</h2>
-        </div>
-        <div class="faq-list">
-          <div class="faq-item">
-            <div class="faq-q">What are the entry requirements for the Diploma in ICT? <i data-lucide="chevron-down" class="faq-toggle" style="width:16px;height:16px;"></i></div>
-            <div class="faq-a">A National Senior Certificate (NSC) with Mathematics and English at a minimum of 50%. Specific APS requirements are on the MUT website. Extended programme applicants may have slightly different criteria.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-q">What is the difference between Extended and Standard programmes? <i data-lucide="chevron-down" class="faq-toggle" style="width:16px;height:16px;"></i></div>
-            <div class="faq-a">The Extended programme spans 4 years with additional academic support, extra tutorials, and bridging modules. The Standard programme is 3 years. Both lead to the same Diploma qualification.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-q">Which programming languages are taught? <i data-lucide="chevron-down" class="faq-toggle" style="width:16px;height:16px;"></i></div>
-            <div class="faq-a">We cover Java, Python, C#, JavaScript, PHP, and SQL. Specific languages depend on the year of study and module. Students gain broad exposure across multiple paradigms.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-q">Is Work Integrated Learning (WIL) included? <i data-lucide="chevron-down" class="faq-toggle" style="width:16px;height:16px;"></i></div>
-            <div class="faq-a">Yes. In the final year, students complete a six-month in-service placement during their last semester with a trusted industry partner. The training develops workplace skills, professional communication, project execution, industry standards, and mentorship. It is assessed as a compulsory, credit-bearing part of the qualification, ensuring students transition confidently into ICT careers.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-q">What career paths are available after graduation? <i data-lucide="chevron-down" class="faq-toggle" style="width:16px;height:16px;"></i></div>
-            <div class="faq-a">Graduates pursue roles as software developers, network administrators, cybersecurity specialists, database administrators, web developers, IT project managers, and systems analysts across banking, telecoms, government, and tech startups.</div>
-          </div>
-          <div class="faq-item">
-            <div class="faq-q">How do I apply? <i data-lucide="chevron-down" class="faq-toggle" style="width:16px;height:16px;"></i></div>
-            <div class="faq-a">Applications are submitted through the CAO (Central Applications Office) at <a href="https://www.cao.ac.za" target="_blank" style="color:var(--crimson);">cao.ac.za</a>. Applications typically open in April each year for the following academic year.</div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
-</div>
 
 <!-- CONTACT -->
 <div class="contact-section" id="contact-section">
@@ -1067,7 +1188,7 @@
           <li><a href="#home">Home</a></li>
           <li><a href="#about-tab">About</a></li>
           <li><a href="#programmes-tab">Programmes</a></li>
-          <li><a href="#campus-tab">Events</a></li>
+          <li><a href="#campus-tab">Departmental News</a></li>
           <li><a href="#contact-section">Contact</a></li>
         </ul>
       </div>
@@ -1103,8 +1224,233 @@
   // ── Mobile nav ──
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
+  const navSearchInput = document.getElementById('nav-search-input');
+  const navSearchResults = document.getElementById('nav-search-results');
+  let navSearchIndex = [];
+
   hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
   navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  function activateTabForElement(el) {
+    const pane = el.closest('.tab-pane');
+    if (!pane || pane.classList.contains('active')) return;
+    const block = pane.closest('.tab-block');
+    if (!block) return;
+    block.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    block.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    pane.classList.add('active');
+    const targetBtn = block.querySelector(`[data-pane="${pane.id}"]`);
+    if (targetBtn) targetBtn.classList.add('active');
+    lucide.createIcons();
+  }
+
+  function escapeRegExp(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function createSnippet(text, query) {
+    if (!text) return '';
+    const lowerText = text.toLowerCase();
+    const tokens = query.toLowerCase().match(/\b[a-z0-9]+\b/g) || [];
+    let index = -1;
+    let term = query;
+    for (const token of tokens) {
+      const pos = lowerText.indexOf(token);
+      if (pos >= 0 && (index === -1 || pos < index)) {
+        index = pos;
+        term = token;
+      }
+    }
+    if (index === -1) {
+      return text.slice(0, 80).trim() + (text.length > 80 ? '…' : '');
+    }
+    const start = Math.max(0, index - 24);
+    const end = Math.min(text.length, index + term.length + 40);
+    const prefix = start > 0 ? '…' : '';
+    const suffix = end < text.length ? '…' : '';
+    return prefix + text.slice(start, end).trim() + suffix;
+  }
+
+  function highlightMatches(text, query) {
+    if (!query || !text) return text;
+    const words = Array.from(new Set(query.toLowerCase().match(/\b[a-z0-9]+\b/g) || []));
+    if (!words.length) return text;
+    const regex = new RegExp(`(${words.map(escapeRegExp).join('|')})`, 'gi');
+    return text.replace(regex, '<span class="highlight">$1</span>');
+  }
+
+  function debounce(fn, delay = 200) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), delay);
+    };
+  }
+
+  function buildSearchIndex() {
+    const items = [];
+    const seenTitles = new Set(); // Track duplicates
+
+    // Programmes - titles only
+    document.querySelectorAll('.prog-card').forEach(card => {
+      const titleEl = card.querySelector('.prog-title');
+      const title = titleEl?.textContent.trim() || '';
+      if (title && !seenTitles.has(title)) {
+        seenTitles.add(title);
+        items.push({
+          type: 'Programme',
+          title: title,
+          section: 'Programmes Offered',
+          text: title,
+          target: card
+        });
+      }
+    });
+
+    // Skills/WIL - titles only
+    document.querySelectorAll('.skill-card').forEach(card => {
+      const titleEl = card.querySelector('.skill-title');
+      const title = titleEl?.textContent.trim() || '';
+      if (title && !seenTitles.has(title)) {
+        seenTitles.add(title);
+        items.push({
+          type: titleEl?.textContent.toLowerCase().includes('wil') ? 'WIL' : 'Skill',
+          title: title,
+          section: 'Work Integrated Learning',
+          text: title,
+          target: card
+        });
+      }
+    });
+
+    // Projects - titles only
+    document.querySelectorAll('.project-card').forEach(card => {
+      const titleEl = card.querySelector('.project-title');
+      const title = titleEl?.textContent.trim() || '';
+      if (title && !seenTitles.has(title)) {
+        seenTitles.add(title);
+        items.push({
+          type: 'Project',
+          title: title,
+          section: 'Student Projects',
+          text: title,
+          target: card
+        });
+      }
+    });
+
+    // Events - titles only
+    document.querySelectorAll('.event-card').forEach(card => {
+      const titleEl = card.querySelector('.event-title');
+      const title = titleEl?.textContent.trim() || '';
+      if (title && !seenTitles.has(title)) {
+        seenTitles.add(title);
+        items.push({
+          type: 'Event',
+          title: title,
+          section: 'Departmental News',
+          text: title,
+          target: card
+        });
+      }
+    });
+
+    // Lecturers - names/titles only
+    document.querySelectorAll('.lecturer-card').forEach(card => {
+      const nameEl = card.querySelector('.lecturer-name');
+      const title = nameEl?.textContent.trim() || '';
+      if (title && !seenTitles.has(title)) {
+        seenTitles.add(title);
+        items.push({
+          type: 'Lecturer',
+          title: title,
+          section: 'Meet Our Lecturers',
+          text: title,
+          target: card
+        });
+      }
+    });
+
+    // Section headings/titles
+    const sectionTitles = document.querySelectorAll('.section-title');
+    sectionTitles.forEach(heading => {
+      const text = heading.textContent.trim();
+      if (text && !seenTitles.has(text)) {
+        seenTitles.add(text);
+        const target = heading.closest('.tab-pane') || heading.closest('section') || heading;
+        items.push({
+          type: 'Section',
+          title: text,
+          section: 'Main Sections',
+          text: text,
+          target: target
+        });
+      }
+    });
+
+    // FAQ questions (from chatbot knowledge)
+    // Note: FAQ items will be searched but not indexed here since they're in the chatbot
+    // We can add them if needed
+
+    return items;
+  }
+
+  function renderSearchResults(query) {
+    const lower = query.toLowerCase();
+    if (!lower) {
+      navSearchResults.classList.add('hidden');
+      navSearchResults.innerHTML = '';
+      return;
+    }
+
+    const filtered = navSearchIndex
+      .map((item, index) => ({ ...item, index }))
+      .filter(item => item.title.toLowerCase().includes(lower) || item.text.toLowerCase().includes(lower))
+      .slice(0, 8);
+
+    if (!filtered.length) {
+      navSearchResults.innerHTML = `<div class="nav-search-result" style="pointer-events: none;"><span class="result-title">No results found</span><span class="result-meta">Try searching for programmes, projects, events, or lecturers.</span></div>`;
+      navSearchResults.classList.remove('hidden');
+      return;
+    }
+
+    navSearchResults.innerHTML = filtered.map(item => {
+      const title = highlightMatches(item.title, query);
+      const section = item.section || item.type;
+      return `
+        <div class="nav-search-result" data-index="${item.index}">
+          <span class="result-label">${item.type}</span>
+          <span class="result-title">${title}</span>
+          <span class="result-meta">${section}</span>
+        </div>
+      `;
+    }).join('');
+    navSearchResults.classList.remove('hidden');
+  }
+
+  const debouncedSearch = debounce(query => renderSearchResults(query), 300);
+
+  navSearchInput?.addEventListener('input', (event) => {
+    debouncedSearch(event.target.value.trim());
+  });
+
+  navSearchResults?.addEventListener('click', (event) => {
+    const card = event.target.closest('.nav-search-result');
+    if (!card) return;
+    const item = navSearchIndex[Number(card.dataset.index)];
+    if (!item) return;
+    activateTabForElement(item.target);
+    item.target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    navSearchResults.classList.add('hidden');
+  });
+
+  window.addEventListener('click', (event) => {
+    if (!event.target.closest('.nav-search-wrapper')) {
+      navSearchResults?.classList.add('hidden');
+    }
+  });
+
+  navSearchIndex = buildSearchIndex();
 
   // ── Tab system ──
   // Each .tab-btn has data-tab (the tab-block id) and data-pane (the pane id to show)
@@ -1136,7 +1482,7 @@
   const tabMap = {
     '#programmes-tab': { block: 'tab-about', pane: 'about-programmes' },
     '#people-tab':    { block: 'tab-people', pane: 'people-lecturers' },
-    '#campus-tab':    { block: 'tab-campus', pane: 'campus-events' },
+    '#campus-tab':    { block: 'tab-campus', pane: 'campus-news' },
   };
   document.querySelectorAll('a[href]').forEach(a => {
     a.addEventListener('click', function(e) {
@@ -1164,18 +1510,6 @@
       if (href === '#') return;
       const t = document.querySelector(href);
       if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-    });
-  });
-
-  // ── FAQ accordion ──
-  document.querySelectorAll('.faq-q').forEach(q => {
-    q.addEventListener('click', () => {
-      const ans = q.nextElementSibling;
-      const tog = q.querySelector('.faq-toggle');
-      const isOpen = ans.classList.contains('open');
-      document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
-      document.querySelectorAll('.faq-toggle').forEach(t => t.style.transform = '');
-      if (!isOpen) { ans.classList.add('open'); tog.style.transform = 'rotate(180deg)'; }
     });
   });
 
@@ -1234,22 +1568,34 @@
     isOpen: false,
     messages: [],
     isSpeaking: false,
-    
+    voiceEnabled: true,
+    isListening: false,
+    recognition: null,
+    selectedVoice: null,
+    lastInputMode: 'text',
+    faqKnowledge: [],
+
     init() {
       const btn = document.getElementById('chatbot-btn');
       const close = document.getElementById('chatbot-close');
       const input = document.getElementById('chatbot-input');
       const send = document.getElementById('chatbot-send');
-      const voiceBtn = document.getElementById('chatbot-voice');
+      const voiceBtn = document.getElementById('chatbot-voice-toggle');
+      const micBtn = document.getElementById('chatbot-mic-toggle');
 
       btn.addEventListener('click', () => this.toggle());
       close.addEventListener('click', () => this.toggle());
       send.addEventListener('click', () => this.sendMessage());
-      voiceBtn?.addEventListener('click', () => this.toggleVoiceInput());
+      voiceBtn?.addEventListener('click', () => this.toggleVoiceOutput());
+      micBtn?.addEventListener('click', () => this.toggleMicInput());
       input.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') this.sendMessage();
       });
 
+      this.faqKnowledge = this.buildFaqKnowledge();
+      this.updateVoiceButton(voiceBtn);
+      this.updateMicButton(micBtn, false);
+      this.initSpeech();
       this.addMessage('bot', 'Hi there! 🎓 I\'m MUT Bot! Ask me anything about our ICT programs. ✨');
     },
 
@@ -1261,21 +1607,23 @@
       }
     },
 
-    sendMessage() {
+    sendMessage(mode = 'text', providedText = null) {
       const input = document.getElementById('chatbot-input');
-      const msg = input.value.trim();
+      const msg = (providedText || (input ? input.value : '')).trim();
       if (!msg) return;
 
+      if (input) input.value = '';
+      this.lastInputMode = mode;
       this.addMessage('user', msg);
-      input.value = '';
 
       setTimeout(() => {
         const response = this.getResponse(msg.toLowerCase());
-        this.addMessage('bot', response);
+        const speak = mode === 'voice' && this.voiceEnabled;
+        this.addMessage('bot', response, speak);
       }, 600);
     },
 
-    addMessage(sender, text) {
+    addMessage(sender, text, speak = false) {
       this.messages.push({ sender, text });
       const container = document.getElementById('chatbot-messages');
       const msgEl = document.createElement('div');
@@ -1299,30 +1647,158 @@
       container.appendChild(msgEl);
       container.scrollTop = container.scrollHeight;
       lucide.createIcons();
+
+      if (sender === 'bot' && speak) {
+        this.speak(text);
+      }
     },
 
     speak(text) {
+      if (!window.speechSynthesis) return;
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.95;
-      utterance.pitch = 1.1;
+      utterance.lang = 'en-ZA';
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      if (this.selectedVoice) utterance.voice = this.selectedVoice;
       window.speechSynthesis.cancel();
       window.speechSynthesis.speak(utterance);
     },
 
-    toggleVoiceInput() {
-      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-      recognition.lang = 'en-US';
-      recognition.start();
-      
-      recognition.onresult = (event) => {
+    initSpeech() {
+      if (!window.speechSynthesis) return;
+      const synth = window.speechSynthesis;
+      const chooseVoice = () => {
+        const voices = synth.getVoices();
+        if (!voices.length) return;
+        const preferred = voices.find(v => /south africa|en-za/i.test(v.lang))
+          || voices.find(v => /english/i.test(v.lang) && /female|google|zira|samantha/i.test(v.name.toLowerCase()))
+          || voices.find(v => /english/i.test(v.lang));
+        if (preferred) this.selectedVoice = preferred;
+      };
+      chooseVoice();
+      synth.onvoiceschanged = chooseVoice;
+    },
+
+    toggleVoiceOutput() {
+      this.voiceEnabled = !this.voiceEnabled;
+      if (!this.voiceEnabled && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+      const voiceBtn = document.getElementById('chatbot-voice-toggle');
+      if (voiceBtn) this.updateVoiceButton(voiceBtn);
+    },
+
+    updateVoiceButton(button) {
+      if (!button) return;
+      button.textContent = this.voiceEnabled ? '🔊' : '🔇';
+      button.title = this.voiceEnabled ? 'Disable voice output' : 'Enable voice output';
+    },
+
+    toggleMicInput() {
+      const micBtn = document.getElementById('chatbot-mic-toggle');
+      const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!Recognition) {
+        this.addMessage('bot', 'Sorry, microphone input is not supported in this browser.');
+        return;
+      }
+
+      if (this.isListening) {
+        this.recognition?.stop();
+        return;
+      }
+
+      this.recognition = new Recognition();
+      this.recognition.lang = 'en-ZA';
+      this.recognition.interimResults = false;
+      this.recognition.maxAlternatives = 1;
+      this.isListening = true;
+      this.updateMicButton(micBtn, true);
+
+      this.recognition.onresult = (event) => {
         const transcript = Array.from(event.results)
           .map(r => r[0].transcript)
           .join('');
-        document.getElementById('chatbot-input').value = transcript;
+        const input = document.getElementById('chatbot-input');
+        if (input) input.value = transcript;
+        this.sendMessage('voice', transcript);
       };
+
+      this.recognition.onend = () => {
+        this.isListening = false;
+        this.updateMicButton(micBtn, false);
+      };
+
+      this.recognition.onerror = () => {
+        this.isListening = false;
+        this.updateMicButton(micBtn, false);
+      };
+
+      this.recognition.start();
+    },
+
+    updateMicButton(button, active) {
+      if (!button) return;
+      button.style.background = active ? 'rgba(245,200,66,0.22)' : 'rgba(255,255,255,0.12)';
+      button.title = active ? 'Listening...' : 'Speak into mic';
+    },
+
+    tokenize(text) {
+      const stopWords = new Set(['what','is','the','and','are','of','in','to','for','a','an','how','do','you','our','we','on','with','at','by','your','from','that','this','will','may','can','it','they','after','see','which','does']);
+      return (text.toLowerCase().match(/\b[a-z0-9]+\b/g) || [])
+        .filter(token => !stopWords.has(token));
+    },
+
+    buildFaqKnowledge() {
+      const faqs = [
+        {
+          question: 'What are the entry requirements for the Diploma in ICT?',
+          answer: 'A National Senior Certificate (NSC) with Mathematics and English at a minimum of 50%. Specific APS requirements are on the MUT website. Extended programme applicants may have slightly different criteria.'
+        },
+        {
+          question: 'What is the difference between Extended and Standard programmes?',
+          answer: 'The Extended programme spans 4 years with additional academic support, extra tutorials, and bridging modules. The Standard programme is 3 years. Both lead to the same Diploma qualification.'
+        },
+        {
+          question: 'Which programming languages are taught?',
+          answer: 'We cover Java, Python, C#, JavaScript, PHP, and SQL. Specific languages depend on the year of study and module. Students gain broad exposure across multiple paradigms.'
+        },
+        {
+          question: 'Is Work Integrated Learning (WIL) included?',
+          answer: 'Yes. In the final year, students complete a six-month in-service placement during their last semester with a trusted industry partner. The training develops workplace skills, professional communication, project execution, industry standards, and mentorship. It is assessed as a compulsory, credit-bearing part of the qualification, ensuring students transition confidently into ICT careers.'
+        },
+        {
+          question: 'What career paths are available after graduation?',
+          answer: 'Graduates pursue roles as software developers, network administrators, cybersecurity specialists, database administrators, web developers, IT project managers, and systems analysts across banking, telecoms, government, and tech startups.'
+        },
+        {
+          question: 'How do I apply?',
+          answer: 'Applications are submitted through the CAO (Central Applications Office) at cao.ac.za. Applications typically open in April each year for the following academic year.'
+        }
+      ];
+
+      return faqs.map(faq => ({
+        ...faq,
+        tokens: this.tokenize(faq.question)
+      }));
     },
 
     getResponse(msg) {
+      const normalized = msg.toLowerCase();
+      const queryTokens = normalized.match(/\b[a-z0-9]+\b/g) || [];
+      let bestMatch = null;
+      let bestScore = 0;
+
+      for (const faq of this.faqKnowledge) {
+        const score = faq.tokens.reduce((sum, token) => sum + (queryTokens.includes(token) ? 1 : 0), 0);
+        if (score > bestScore) {
+          bestScore = score;
+          bestMatch = faq;
+        }
+      }
+      if (bestMatch && bestScore > 0) {
+        return `Here’s what I found in FAQ:\n${bestMatch.answer}`;
+      }
+
       // Keywords for better matching
       const keywords = {
         program: ['program', 'diploma', 'course', 'study', 'offer', 'degree'],
@@ -1394,6 +1870,225 @@
     }
   };
 
+  // ── News Modal ──
+  const newsModal = document.getElementById('news-modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalMeta = document.getElementById('modal-meta');
+  const modalContent = document.getElementById('modal-content');
+  const modalClose = document.getElementById('modal-close');
+
+  const newsData = {
+    'lab-upgrade': {
+      title: 'ICT Lab Upgrade',
+      type: 'News',
+      date: 'April 15, 2026',
+      content: `
+        <p>We're excited to announce the completion of a major upgrade to our ICT computer laboratories! This comprehensive modernization project has equipped our students with cutting-edge technology to prepare them for the demands of the modern workplace.</p>
+        
+        <p><strong>What was upgraded:</strong></p>
+        <ul>
+          <li>Complete replacement of all desktop computers with latest-generation processors</li>
+          <li>Installation of high-speed fiber optic internet connections (1Gbps)</li>
+          <li>New server infrastructure for cloud computing and virtualization labs</li>
+          <li>Upgraded networking equipment including managed switches and wireless access points</li>
+          <li>Installation of specialized software for cybersecurity, data science, and AI development</li>
+        </ul>
+        
+        <p><strong>Impact on students:</strong></p>
+        <p>These upgrades ensure our students graduate with hands-on experience on the same technologies they'll encounter in their professional careers. The enhanced lab facilities will support advanced coursework in areas such as:</p>
+        <ul>
+          <li>Cloud computing and DevOps</li>
+          <li>Cybersecurity and ethical hacking</li>
+          <li>Data analytics and machine learning</li>
+          <li>Network administration and IoT</li>
+        </ul>
+        
+        <p>The upgraded facilities are now fully operational and available for student use during all scheduled lab sessions.</p>
+      `
+    },
+    'project-expo': {
+      title: 'Final Year Project Expo',
+      type: 'Event',
+      date: 'May 15, 2026',
+      time: '10:00 AM – 4:00 PM',
+      venue: 'ICT Building Auditorium',
+      content: `
+        <p>Join us for our annual showcase of innovation and creativity! The Final Year Project Expo brings together our graduating ICT students to present their capstone projects that demonstrate real-world problem-solving skills.</p>
+        
+        <p><strong>Event Highlights:</strong></p>
+        <ul>
+          <li>Over 50 innovative projects on display</li>
+          <li>Live demonstrations of working applications and systems</li>
+          <li>Networking opportunities with industry professionals</li>
+          <li>Project categories including AI, cybersecurity, mobile apps, and web development</li>
+          <li>Industry judging panel with prizes for outstanding projects</li>
+        </ul>
+        
+        <p><strong>Who should attend:</strong></p>
+        <ul>
+          <li>Current ICT students (inspiration for your own projects)</li>
+          <li>Industry professionals and potential employers</li>
+          <li>Academic staff and researchers</li>
+          <li>Prospective students interested in our program</li>
+        </ul>
+        
+        <p><strong>Schedule:</strong></p>
+        <ul>
+          <li>10:00 AM: Opening ceremony and welcome</li>
+          <li>10:30 AM - 2:00 PM: Project exhibitions and demonstrations</li>
+          <li>2:00 PM - 3:00 PM: Industry networking session</li>
+          <li>3:00 PM - 4:00 PM: Awards ceremony and closing</li>
+        </ul>
+        
+        <p>Don't miss this opportunity to see the future of technology innovation at MUT!</p>
+      `
+    },
+    'partnership-day': {
+      title: 'Industry Partnership Day',
+      type: 'Event',
+      date: 'May 22, 2026',
+      time: '9:00 AM – 1:00 PM',
+      venue: 'MUT Conference Centre',
+      content: `
+        <p>Industry Partnership Day brings together our ICT students with leading technology companies for an exciting day of networking, career opportunities, and industry insights.</p>
+        
+        <p><strong>Participating Companies:</strong></p>
+        <ul>
+          <li>Microsoft - Cloud computing and AI solutions</li>
+          <li>Cisco - Networking and cybersecurity</li>
+          <li>Oracle - Enterprise software and database systems</li>
+          <li>SAP - Business software and analytics</li>
+          <li>Huawei - Telecommunications and 5G technology</li>
+          <li>AWS - Cloud infrastructure and services</li>
+        </ul>
+        
+        <p><strong>Activities Include:</strong></p>
+        <ul>
+          <li>Company presentations and technology demonstrations</li>
+          <li>CV clinics and interview preparation workshops</li>
+          <li>Informal networking sessions with industry professionals</li>
+          <li>Internship and graduate program information sessions</li>
+          <li>Live coding challenges and technical assessments</li>
+        </ul>
+        
+        <p><strong>Benefits for Students:</strong></p>
+        <ul>
+          <li>Direct access to potential employers</li>
+          <li>Insights into current industry trends and technologies</li>
+          <li>Resume review and career advice</li>
+          <li>Internship and job opportunities</li>
+          <li>Networking connections for future collaborations</li>
+        </ul>
+        
+        <p>This is a fantastic opportunity to connect classroom learning with real-world industry expectations. All ICT students are encouraged to attend!</p>
+      `
+    },
+    'cyber-workshop': {
+      title: 'Cybersecurity Awareness Workshop',
+      type: 'Event',
+      date: 'June 3, 2026',
+      time: '2:00 PM – 5:00 PM',
+      venue: 'Lab B, ICT Block',
+      content: `
+        <p>In today's digital world, cybersecurity is everyone's responsibility. Join us for this comprehensive workshop designed to equip you with essential knowledge and practical skills to protect yourself and others from cyber threats.</p>
+        
+        <p><strong>Workshop Topics:</strong></p>
+        <ul>
+          <li>Understanding common cyber threats (phishing, malware, ransomware)</li>
+          <li>Password security and multi-factor authentication</li>
+          <li>Safe browsing habits and online privacy</li>
+          <li>Social engineering awareness and prevention</li>
+          <li>Basic incident response and reporting</li>
+          <li>Legal aspects of cybersecurity in South Africa</li>
+        </ul>
+        
+        <p><strong>Who should attend:</strong></p>
+        <ul>
+          <li>ICT students at all levels</li>
+          <li>University staff and faculty</li>
+          <li>Anyone interested in improving their cybersecurity knowledge</li>
+        </ul>
+        
+        <p><strong>What you'll learn:</strong></p>
+        <ul>
+          <li>Hands-on demonstrations of cyber attacks</li>
+          <li>Practical exercises in threat identification</li>
+          <li>Tools and techniques for personal cybersecurity</li>
+          <li>Best practices for secure computing</li>
+        </ul>
+        
+        <p><strong>Facilitator:</strong> Dr. Sarah Nkosi, Head of Cybersecurity Research at MUT ICT Department</p>
+        
+        <p>This workshop is free and open to all MUT community members. Light refreshments will be provided. Space is limited, so register early!</p>
+      `
+    }
+  };
+
+  function openNewsModal(newsId) {
+    const data = newsData[newsId];
+    if (!data) return;
+
+    modalTitle.textContent = data.title;
+    
+    let metaHTML = `<span><i data-lucide="tag" style="width:14px;height:14px;"></i> ${data.type}</span>`;
+    if (data.date) metaHTML += `<span><i data-lucide="calendar" style="width:14px;height:14px;"></i> ${data.date}</span>`;
+    if (data.time) metaHTML += `<span><i data-lucide="clock" style="width:14px;height:14px;"></i> ${data.time}</span>`;
+    if (data.venue) metaHTML += `<span><i data-lucide="map-pin" style="width:14px;height:14px;"></i> ${data.venue}</span>`;
+    modalMeta.innerHTML = metaHTML;
+    
+    modalContent.innerHTML = data.content;
+    
+    newsModal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+    
+    // Re-initialize Lucide icons in modal
+    lucide.createIcons();
+  }
+
+  function closeNewsModal() {
+    newsModal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  // Event listeners for news cards
+  document.querySelectorAll('.news-card-read-more').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = link.closest('.news-card');
+      const newsId = card.getAttribute('data-news-id');
+      if (newsId) openNewsModal(newsId);
+    });
+  });
+
+  // Close modal events
+  modalClose.addEventListener('click', closeNewsModal);
+  newsModal.addEventListener('click', (e) => {
+    if (e.target === newsModal) closeNewsModal();
+  });
+
+  // Event listeners for project demo links
+  document.querySelectorAll('.project-demo-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = link.closest('.project-card');
+      const demoUrl = card.getAttribute('data-project-demo');
+      if (demoUrl) {
+        window.open(demoUrl, '_blank');
+      }
+    });
+  });
+
+  // ── News animations ──
+  const observerOptions = { threshold: 0.1 };
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate');
+      }
+    });
+  }, observerOptions);
+  document.querySelectorAll('.news-card, .news-section').forEach(el => observer.observe(el));
+
   document.addEventListener('DOMContentLoaded', () => chatbot.init());
 </script>
 
@@ -1416,7 +2111,8 @@
     <div id="chatbot-messages" class="chatbot-messages"></div>
     <div class="chatbot-input-area">
       <input id="chatbot-input" type="text" placeholder="Ask me anything..." />
-      <button id="chatbot-voice" title="Speak">
+      <button id="chatbot-voice-toggle" class="chatbot-voice-toggle" title="Disable voice output">🔊</button>
+      <button id="chatbot-mic-toggle" class="chatbot-voice-toggle" title="Speak into mic">
         <i data-lucide="mic" style="width:18px;height:18px;"></i>
       </button>
       <button id="chatbot-send" title="Send">
