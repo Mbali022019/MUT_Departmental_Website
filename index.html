@@ -618,7 +618,7 @@
     <a href="#people-tab">People</a>
     <a href="#campus-tab">Campus</a>
     <a href="#contact-section">Contact</a>
-    <a href="https://www.cao.ac.za" target="_blank" class="btn-apply">Apply Now</a>
+    <button onclick="openLoginModal()" class="btn-apply">Login</button>
   </div>
   <button class="hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -635,10 +635,10 @@
       <h1>Department of <em>Information &amp;</em> Communication Technology</h1>
       <p class="hero-sub">Shape and own the future. Empowering the next generation of technology innovators and leaders through world-class education.</p>
       <div class="hero-cta">
-        <a href="#programmes-tab" class="btn-hero-primary">
-          <i data-lucide="graduation-cap" style="width:16px;height:16px;"></i>
-          Explore Programmes
-        </a>
+        <button id="addLoginBtn" class="btn-hero-primary" onclick="openLoginModal()">
+          <i data-lucide="log-in" style="width:16px;height:16px;"></i>
+          Login
+        </button>
         <a href="#contact-section" class="btn-hero-secondary">
           <i data-lucide="mail" style="width:16px;height:16px;"></i>
           Get In Touch
@@ -1127,6 +1127,73 @@
 
     </div>
   </div>
+
+<!-- ACADEMIC CALENDAR -->
+<div class="panel-section" style="padding-top:36px; background: white; padding-bottom: 60px;">
+  <div class="panel-wrap">
+    <div class="section-label">Key Dates</div>
+    <h2 class="section-title">Academic Calendar 2026</h2>
+    <p class="section-sub">Mark your calendar with important academic dates and deadlines.</p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 32px;">
+      <!-- Semester 1 -->
+      <div style="background: rgba(123, 30, 43, 0.08); border-left: 4px solid var(--crimson); border-radius: 12px; padding: 24px;">
+        <h3 style="font-size: 1.1rem; color: var(--crimson-dark); margin-bottom: 16px; font-family: 'Syne', sans-serif;">📅 Semester 1: January - May 2026</h3>
+        <div style="display: grid; gap: 12px; font-size: 13px; color: var(--gray-700);">
+          <div><strong>First Lectures:</strong> January 19, 2026</div>
+          <div><strong>Mid-semester Break:</strong> March 16-22, 2026</div>
+          <div><strong>Study Week:</strong> April 20-24, 2026</div>
+          <div><strong>Test Week:</strong> April 27 - May 8, 2026</div>
+          <div><strong>Examination Week:</strong> May 11-22, 2026</div>
+          <div><strong>Recess:</strong> May 23 - June 4, 2026</div>
+        </div>
+      </div>
+
+      <!-- Semester 2 -->
+      <div style="background: rgba(245, 200, 66, 0.12); border-left: 4px solid var(--gold); border-radius: 12px; padding: 24px;">
+        <h3 style="font-size: 1.1rem; color: var(--crimson-dark); margin-bottom: 16px; font-family: 'Syne', sans-serif;">📅 Semester 2: June - October 2026</h3>
+        <div style="display: grid; gap: 12px; font-size: 13px; color: var(--gray-700);">
+          <div><strong>First Lectures:</strong> June 8, 2026</div>
+          <div><strong>Mid-semester Break:</strong> August 10-16, 2026</div>
+          <div><strong>Study Week:</strong> September 14-18, 2026</div>
+          <div><strong>Test Week:</strong> September 21 - October 2, 2026</div>
+          <div><strong>Examination Week:</strong> October 5-16, 2026</div>
+          <div><strong>Recess:</strong> October 17-29, 2026</div>
+        </div>
+      </div>
+
+      <!-- Important Dates -->
+      <div style="background: rgba(123, 30, 43, 0.08); border-left: 4px solid var(--crimson); border-radius: 12px; padding: 24px;">
+        <h3 style="font-size: 1.1rem; color: var(--crimson-dark); margin-bottom: 16px; font-family: 'Syne', sans-serif;">⚠️ Important Dates</h3>
+        <div style="display: grid; gap: 12px; font-size: 13px; color: var(--gray-700);">
+          <div><strong>2025 Closing:</strong> August 31, 2025</div>
+          <div><strong>Central Processing:</strong> September-October 2025</div>
+          <div><strong>Student Confirmations:</strong> November 2025</div>
+          <div><strong>Placements:</strong> December 2025</div>
+        </div>
+      </div>
+
+      <!-- Holidays -->
+      <div style="background: rgba(245, 200, 66, 0.12); border-left: 4px solid var(--gold); border-radius: 12px; padding: 24px;">
+        <h3 style="font-size: 1.1rem; color: var(--crimson-dark); margin-bottom: 16px; font-family: 'Syne', sans-serif;">🎉 Public Holidays 2026</h3>
+        <div style="display: grid; gap: 12px; font-size: 13px; color: var(--gray-700);">
+          <div><strong>New Year:</strong> January 1-3</div>
+          <div><strong>Good Friday:</strong> April 17</div>
+          <div><strong>Easter Monday:</strong> April 20</div>
+          <div><strong>Workers' Day:</strong> May 1</div>
+          <div><strong>Youth Day:</strong> June 16</div>
+          <div><strong>Heritage Day:</strong> September 24</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background: #fffbeb; border: 1px solid rgba(245, 200, 66, 0.3); border-radius: 12px; padding: 20px; margin-top: 24px; text-align: center;">
+      <p style="font-size: 13px; color: #78350f; margin: 0;">
+        <strong>📋 Download Full Academic Calendar:</strong> The complete staff-only calendar with detailed schedules is available to logged-in staff members in their portal.
+      </p>
+    </div>
+  </div>
+</div>
 
 <!-- CONTACT -->
 <div class="contact-section" id="contact-section">
@@ -2090,6 +2157,256 @@
   document.querySelectorAll('.news-card, .news-section').forEach(el => observer.observe(el));
 
   document.addEventListener('DOMContentLoaded', () => chatbot.init());
+
+  // ══════════════════════════════════════════════════════════════════
+  // LOGIN & AUTHENTICATION SYSTEM
+  // ══════════════════════════════════════════════════════════════════
+  
+  const authSystem = {
+    mockUsers: {
+      'student@mut.ac.za': { password: 'student123', role: 'student', name: 'Sipho Nkosi', studentId: 'S12345' },
+      'staff@mut.ac.za': { password: 'staff123', role: 'staff', name: 'Dr. Mutanga', position: 'Lecturer' },
+      'lecturer@mut.ac.za': { password: 'lecturer123', role: 'staff', name: 'Mrs. Naidoo', position: 'Lecturer' },
+      'hod@mut.ac.za': { password: 'hod123', role: 'staff', name: 'Prof. Themba Dlamini', position: 'Head of Department' },
+      'dean@mut.ac.za': { password: 'dean123', role: 'staff', name: 'Dr. Lungile Mthembu', position: 'Dean of Faculty' }
+    },
+    
+    isLoggedIn() {
+      return !!localStorage.getItem('currentUser');
+    },
+
+    getCurrentUser() {
+      const user = localStorage.getItem('currentUser');
+      return user ? JSON.parse(user) : null;
+    },
+
+    login(email, password) {
+      const user = this.mockUsers[email];
+      if (!user || user.password !== password) {
+        return { success: false, message: 'Invalid email or password' };
+      }
+      completeLoginData = { email, role: user.role, name: user.name, ...user };
+      localStorage.setItem('currentUser', JSON.stringify(completeLoginData));
+      return { success: true, message: 'Login successful', user: completeLoginData };
+    },
+
+    logout() {
+      localStorage.removeItem('currentUser');
+    }
+  };
+
+  function openLoginModal() {
+    if (authSystem.isLoggedIn()) {
+      showDashboard();
+      return;
+    }
+    const modal = document.getElementById('login-modal');
+    if (modal) modal.style.display = 'flex';
+  }
+
+  function closeLoginModal() {
+    const modal = document.getElementById('login-modal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  function handleLoginSubmit(event) {
+    event.preventDefault();
+    const email = document.getElementById('login-email')?.value.trim();
+    const password = document.getElementById('login-password')?.value;
+    const errorMsg = document.getElementById('login-error');
+    
+    if (!email || !password) {
+      if (errorMsg) errorMsg.textContent = 'Please fill in both fields';
+      return;
+    }
+
+    const result = authSystem.login(email, password);
+    if (!result.success) {
+      if (errorMsg) errorMsg.textContent = result.message;
+      return;
+    }
+
+    closeLoginModal();
+    showDashboard();
+  }
+
+  function showDashboard() {
+    const user = authSystem.getCurrentUser();
+    if (!user) return;
+    
+    if (user.role === 'student') {
+      window.location.href = 'student-dashboard.html';
+    } else {
+      window.location.href = 'staff-dashboard.html';
+    }
+  }
+
+  function handleLogout() {
+    authSystem.logout();
+    window.location.href = 'index.html';
+  }
+</script>
+
+<!-- LOGIN MODAL -->
+<div id="login-modal" class="login-modal">
+  <div class="login-modal-content">
+    <div class="login-modal-header">
+      <h2>Department Portal Login</h2>
+      <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
+    </div>
+    <div class="login-modal-body">
+      <form onsubmit="handleLoginSubmit(event)">
+        <div class="login-form-group">
+          <label for="login-email">Email Address</label>
+          <input type="email" id="login-email" placeholder="your.email@mut.ac.za" required>
+        </div>
+        <div class="login-form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" required>
+        </div>
+        <div id="login-error" class="login-error"></div>
+        <button type="submit" class="login-btn">Sign In</button>
+      </form>
+      <div class="login-demo-credentials">
+        <p><strong>Demo Credentials:</strong></p>
+        <p><strong>Student:</strong> <code>student@mut.ac.za</code> / <code>student123</code></p>
+        <p><strong>Staff (All Roles):</strong> <code>staff@mut.ac.za</code> / <code>staff123</code></p>
+        <p style="font-size: 11px; color: var(--gray-600); margin-top: 8px;">
+          Alternative staff accounts:<br>
+          lecturer@mut.ac.za / lecturer123<br>
+          hod@mut.ac.za / hod123<br>
+          dean@mut.ac.za / dean123
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.login-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  z-index: 3000;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-modal-content {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.login-modal-header {
+  padding: 24px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.login-modal-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--crimson-dark);
+}
+
+.login-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--gray-400);
+}
+
+.login-modal-body {
+  padding: 32px;
+}
+
+.login-form-group {
+  margin-bottom: 16px;
+}
+
+.login-form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: var(--gray-800);
+  font-size: 13px;
+}
+
+.login-form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.login-form-group input:focus {
+  border-color: var(--crimson);
+}
+
+.login-error {
+  color: #dc2626;
+  font-size: 13px;
+  margin-bottom: 12px;
+  display: none;
+}
+
+.login-error:not(:empty) {
+  display: block;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--crimson);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 12px;
+}
+
+.login-btn:hover {
+  background: var(--crimson-dark);
+}
+
+.login-demo-credentials {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--gray-100);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--gray-600);
+}
+
+.login-demo-credentials p {
+  margin: 6px 0;
+}
+
+.login-demo-credentials code {
+  background: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  color: var(--crimson);
+}
+</style>
 </script>
 
   <!-- CHATBOT WIDGET -->

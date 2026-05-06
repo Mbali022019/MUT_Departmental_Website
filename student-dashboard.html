@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard - MUT ICT</title>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    :root {
+      --crimson: #7b1e2b;
+      --crimson-dark: #5a1320;
+      --gold: #f5c842;
+      --white: #ffffff;
+      --off-white: #faf9f7;
+      --gray-100: #f4f3f0;
+      --gray-200: #e8e6e1;
+      --gray-400: #9ca3af;
+      --gray-600: #6b7280;
+      --gray-800: #1f2937;
+      --black: #0d0d0d;
+      --glass-light: rgba(255,255,255,0.15);
+      --glass-border: rgba(255,255,255,0.2);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #faf9f7 0%, #f4f3f0 100%);
+      color: var(--gray-800);
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 64px;
+      background: linear-gradient(135deg, rgba(90,19,32,0.95) 0%, rgba(123,30,43,0.95) 100%);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(245,200,66,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 1000;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+
+    .navbar-left { display: flex; align-items: center; gap: 32px; }
+    .navbar-title { font-size: 18px; font-weight: 700; color: white; letter-spacing: 0.5px; }
+    .navbar-links { display: flex; gap: 4px; }
+    .navbar-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 8px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .navbar-links a:hover { color: white; background: rgba(245,200,66,0.15); }
+    .navbar-links a.active { background: var(--gold); color: var(--crimson-dark); font-weight: 700; }
+    
+    .navbar-right { display: flex; align-items: center; gap: 20px; }
+    .user-info { color: rgba(255,255,255,0.85); font-size: 13px; font-weight: 500; }
+    .logout-btn {
+      background: rgba(255,255,255,0.15);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+    }
+    .logout-btn:hover { 
+      background: var(--gold);
+      color: var(--crimson-dark);
+      border-color: var(--gold);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 100px 40px 60px;
+    }
+
+    /* Welcome Section */
+    .welcome-section {
+      background: linear-gradient(135deg, rgba(90,19,32,0.9) 0%, rgba(123,30,43,0.9) 100%);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 48px;
+      color: white;
+      margin-bottom: 48px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .welcome-section h1 { 
+      font-size: 2.2rem; 
+      margin-bottom: 12px; 
+      letter-spacing: -0.5px;
+      font-weight: 800;
+    }
+    .welcome-section p { 
+      font-size: 15px; 
+      color: rgba(255,255,255,0.8);
+      line-height: 1.6;
+    }
+
+    /* Grid Layout */
+    .dashboard-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+      gap: 28px; 
+      margin-bottom: 48px;
+    }
+
+    /* Card Styles with Glassmorphism */
+    .card {
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(245,200,66,0.05) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .card:hover { 
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+      border-color: rgba(245,200,66,0.3);
+      background: rgba(255,255,255,0.85);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid rgba(123,30,43,0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, rgba(123,30,43,0.15) 0%, rgba(245,200,66,0.1) 100%);
+      border: 1.5px solid rgba(123,30,43,0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--crimson);
+      flex-shrink: 0;
+    }
+
+    .card-title { 
+      font-size: 17px; 
+      font-weight: 700; 
+      color: var(--crimson-dark);
+      letter-spacing: -0.3px;
+    }
+    .card-body { 
+      font-size: 13px; 
+      color: var(--gray-600); 
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Form Styles */
+    .form-group { display: grid; gap: 6px; margin-bottom: 14px; }
+    .form-group label { 
+      font-size: 12px; 
+      font-weight: 700; 
+      color: var(--crimson-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px;
+      border: 1.5px solid rgba(123,30,43,0.15);
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.3s;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(10px);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { 
+      border-color: var(--crimson);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(123,30,43,0.1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--crimson) 0%, var(--crimson-dark) 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+      transition: all 0.3s;
+      box-shadow: 0 8px 24px rgba(123,30,43,0.2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .btn-primary:hover { 
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(123,30,43,0.3);
+    }
+
+    .alert {
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      border: 1px solid;
+      backdrop-filter: blur(10px);
+    }
+    .alert-success {
+      background: rgba(34,197,94,0.1);
+      border-color: rgba(34,197,94,0.3);
+      color: #166534;
+    }
+
+    /* Appointments List */
+    .appointments-list {
+      display: grid;
+      gap: 12px;
+      max-height: 350px;
+      overflow-y: auto;
+      margin-top: 16px;
+      padding-right: 8px;
+    }
+
+    .appointment-item {
+      padding: 14px;
+      background: linear-gradient(135deg, rgba(245,200,66,0.1) 0%, rgba(123,30,43,0.05) 100%);
+      border: 1px solid rgba(245,200,66,0.2);
+      border-radius: 10px;
+      border-left: 4px solid var(--gold);
+      font-size: 12px;
+      transition: all 0.3s;
+    }
+
+    .appointment-item:hover {
+      background: linear-gradient(135deg, rgba(245,200,66,0.15) 0%, rgba(123,30,43,0.08) 100%);
+      transform: translateX(4px);
+    }
+
+    .appointment-item-title { 
+      font-weight: 700; 
+      color: var(--crimson-dark); 
+      margin-bottom: 6px;
+    }
+    .appointment-item-detail { 
+      color: var(--gray-600); 
+      margin: 3px 0;
+    }
+
+    /* Library Hours */
+    .library-hours { display: grid; gap: 10px; }
+    .library-hour-item {
+      padding: 12px 14px;
+      background: rgba(123,30,43,0.05);
+      border-left: 3px solid var(--crimson);
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .library-hour-item:hover {
+      background: rgba(123,30,43,0.08);
+      transform: translateX(2px);
+    }
+
+    .library-notice {
+      padding: 14px;
+      background: linear-gradient(135deg, rgba(245,200,66,0.15) 0%, rgba(245,200,66,0.05) 100%);
+      border-left: 4px solid var(--gold);
+      border-radius: 10px;
+      color: #78350f;
+      font-size: 12px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(245,200,66,0.2);
+      font-weight: 500;
+    }
+
+    /* Wide Cards */
+    .card-full { grid-column: 1 / -1; }
+
+    /* Announcements Grid */
+    .announcements-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .announcement {
+      padding: 18px;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(123,30,43,0.1);
+      border-radius: 12px;
+      border-left: 4px solid var(--gold);
+      transition: all 0.3s;
+    }
+
+    .announcement:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+      border-color: rgba(245,200,66,0.3);
+    }
+
+    .announcement-title { 
+      font-weight: 700; 
+      color: var(--crimson-dark); 
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+    .announcement-date { 
+      font-size: 11px; 
+      color: var(--gold); 
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .announcement-content { 
+      font-size: 13px; 
+      color: var(--gray-700);
+      line-height: 1.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container { padding: 90px 20px 20px; }
+      .navbar { padding: 0 20px; }
+      .navbar-left { gap: 16px; }
+      .navbar-title { font-size: 16px; }
+      .navbar-links { gap: 0; }
+      .navbar-links a { padding: 6px 12px; font-size: 12px; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .welcome-section { padding: 32px 24px; }
+      .welcome-section h1 { font-size: 1.6rem; }
+    }
+
+    /* Scrollbar */
+    .appointments-list::-webkit-scrollbar { width: 6px; }
+    .appointments-list::-webkit-scrollbar-track { background: transparent; }
+    .appointments-list::-webkit-scrollbar-thumb { 
+      background: rgba(123,30,43,0.2);
+      border-radius: 3px;
+    }
+
+    /* Tab Content */
+    .alert-banner {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      background: rgba(245,200,66,0.15);
+      border: 1px solid rgba(245,200,66,0.35);
+      color: #5a1320;
+      padding: 16px 20px;
+      border-radius: 16px;
+      margin-bottom: 24px;
+      font-weight: 700;
+      box-shadow: 0 16px 28px rgba(123,30,43,0.08);
+    }
+    .alert-banner.visible {
+      display: flex;
+      animation: slideInBanner 0.5s ease forwards;
+    }
+    @keyframes slideInBanner {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .pulse-alert {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(245,200,66,0.2);
+      color: var(--crimson-dark);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      animation: pulseGlow 1.6s ease-in-out infinite;
+      border: 1px solid rgba(245,200,66,0.5);
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245,200,66,0.25); }
+      50% { box-shadow: 0 0 18px 6px rgba(245,200,66,0.18); }
+    }
+    .tab-content { animation: fadeIn 0.3s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .nav-link { cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+  <div class="navbar-left">
+    <div class="navbar-title">📚 ICT Student Portal</div>
+    <div class="navbar-links">
+      <a class="nav-link active" onclick="switchTab('dashboard'); return false;">Dashboard</a>
+      <a class="nav-link" onclick="switchTab('announcements'); return false;">Announcements</a>
+    </div>
+  </div>
+  <div class="navbar-right">
+    <div class="user-info" id="userInfo"></div>
+    <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div class="container">
+  <!-- Dashboard Tab -->
+  <div id="dashboardTab" class="tab-content" style="display: block;">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <h1 id="welcomeTitle"></h1>
+      <p>Manage your appointments, check library hours, and access all academic information in one place.</p>
+    </div>
+
+    <div id="loginNotification" class="alert-banner visible">
+      <span>🔔</span>
+      <span><strong>Next class in 3 hours.</strong> Prepare and review your course materials now.</span>
+    </div>
+
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
+      <!-- Quick Stats Card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i data-lucide="calendar" style="width:20px;height:20px;"></i></div>
+          <div class="card-title">My Schedule</div>
+        </div>
+        <div class="card-body">
+          <div id="scheduleReminder" class="pulse-alert">Next class in 3 hours</div>
+          <p>📚 <strong>Classes:</strong> Mon, Wed, Fri • 10:00 AM</p>
+          <p>💻 <strong>Labs:</strong> Tue, Thu • 2:00 PM</p>
+          <p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(123,30,43,0.1);">Stay ready for your next session and keep this notification visible.</p>
+        </div>
+      </div>
+
+      <!-- Upcoming Appointments Summary -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i data-lucide="clock" style="width:20px;height:20px;"></i></div>
+          <div class="card-title">Upcoming Appointments</div>
+        </div>
+        <div class="card-body">
+          <div id="appointmentsSummary" style="margin-bottom: 12px;">No appointments scheduled</div>
+          <button class="btn-primary" onclick="openAppointmentModal()" style="width: 100%;">+ Schedule Meeting</button>
+        </div>
+      </div>
+
+      <!-- Library Hours Card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i data-lucide="book-open" style="width:20px;height:20px;"></i></div>
+          <div class="card-title">Library Hours</div>
+        </div>
+        <div class="card-body">
+          <div id="libraryNotices" style="margin-bottom: 14px;"></div>
+          <div class="library-hours" id="libraryHours"></div>
+        </div>
+      </div>
+
+      <!-- My Appointments List (Full Width) -->
+      <div class="card card-full">
+        <div class="card-header">
+          <div class="card-icon"><i data-lucide="list-checks" style="width:20px;height:20px;"></i></div>
+          <div class="card-title">My Scheduled Appointments</div>
+        </div>
+        <div class="card-body">
+          <div id="appointmentAlert" class="alert" style="display: none; margin-bottom: 14px;"></div>
+          <div class="appointments-list" id="myAppointments" style="max-height: none;">
+            <p style="color: var(--gray-600); font-size: 13px;">No appointments booked yet. Click "Schedule Meeting" above to book your first appointment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Announcements Tab -->
+  <div id="announcementsTab" class="tab-content" style="display: none;">
+    <div class="welcome-section">
+      <h1>📢 Student Announcements</h1>
+      <p>Stay updated with the latest news and important information for students.</p>
+    </div>
+
+    <div class="announcements-grid" id="studentAnnouncements"></div>
+  </div>
+</div>
+
+<!-- Appointment Booking Modal -->
+<div id="appointmentModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px;">
+  <div style="background: white; border-radius: 12px; width: 100%; max-width: 500px; padding: 24px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2 style="font-size: 18px; color: var(--crimson-dark); margin: 0;">Book Appointment</h2>
+      <button onclick="closeAppointmentModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray-400);">&times;</button>
+    </div>
+    <form onsubmit="submitAppointment(event)" style="display: grid; gap: 12px;">
+      <div class="form-group">
+        <label>Lecturer</label>
+        <select id="lecturerSelect" required>
+          <option value="">Select a lecturer</option>
+          <option value="Dr. Mutanga">Dr. Mutanga (AI & Programming)</option>
+          <option value="Mrs. Naidoo">Mrs. Naidoo (Cybersecurity)</option>
+          <option value="Dr. Jugoo">Dr. Jugoo (Web Development)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Preferred Date</label>
+        <input type="date" id="appointmentDate" required>
+      </div>
+      <div class="form-group">
+        <label>Preferred Time (8 AM - 4 PM)</label>
+        <input type="time" id="appointmentTime" min="08:00" max="16:00" required>
+        <small style="font-size: 11px; color: var(--gray-600); margin-top: 4px;">Available during lecturer office hours</small>
+      </div>
+      <div class="form-group">
+        <label>Topic of Discussion</label>
+        <textarea id="appointmentTopic" placeholder="What would you like to discuss?" rows="3" required></textarea>
+      </div>
+      <button type="submit" class="btn-primary">Schedule Appointment</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Check authentication
+  function checkAuth() {
+    const user = localStorage.getItem('currentUser');
+    if (!user) {
+      window.location.href = 'index.html';
+      return null;
+    }
+    return JSON.parse(user);
+  }
+
+  const currentUser = checkAuth();
+
+  // Initialize dashboard
+  document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    initializeDashboard();
+  });
+
+  function switchTab(tabName) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+      tab.style.display = 'none';
+    });
+    
+    // Remove active class from all nav links
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.remove('active');
+    });
+
+    // Show selected tab
+    const tabElement = document.getElementById(tabName + 'Tab');
+    if (tabElement) {
+      tabElement.style.display = 'block';
+    }
+
+    // Add active class to clicked link
+    event.target.classList.add('active');
+  }
+
+  function initializeDashboard() {
+    // Set welcome message
+    document.getElementById('welcomeTitle').textContent = `Welcome, ${currentUser.name}!`;
+    document.getElementById('userInfo').textContent = currentUser.email;
+
+    // Initialize appointment storage
+    const appointments = JSON.parse(localStorage.getItem(`appointments_${currentUser.email}`) || '[]');
+    
+    // Display appointments
+    displayAppointments(appointments);
+
+    // Initialize library hours
+    initializeLibraryHours();
+
+    // Load announcements
+    loadStudentAnnouncements();
+    showScheduleReminder();
+
+    // Set default appointment date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('appointmentDate').min = today;
+  }
+
+  function showScheduleReminder() {
+    const banner = document.getElementById('loginNotification');
+    const reminder = document.getElementById('scheduleReminder');
+    if (banner) banner.classList.add('visible');
+    if (reminder) reminder.textContent = 'Next class in 3 hours';
+  }
+
+  function displayAppointments(appointments) {
+    const container = document.getElementById('myAppointments');
+    const summary = document.getElementById('appointmentsSummary');
+    
+    if (appointments.length === 0) {
+      container.innerHTML = '<p style="color: var(--gray-600); font-size: 13px;">No appointments booked yet. Click "Schedule Meeting" above to book your first appointment.</p>';
+      summary.textContent = 'No appointments scheduled';
+      return;
+    }
+
+    container.innerHTML = appointments.map(apt => `
+      <div class="appointment-item">
+        <div class="appointment-item-title">${apt.lecturer}</div>
+        <div class="appointment-item-detail">📅 ${apt.date} • ${apt.time}</div>
+        <div class="appointment-item-detail">📝 ${apt.topic}</div>
+        <div class="appointment-item-detail" style="color: #059669;">✓ Confirmation sent to your email</div>
+      </div>
+    `).join('');
+
+    const upcomingCount = appointments.length;
+    summary.innerHTML = `You have <strong>${upcomingCount}</strong> appointment${upcomingCount !== 1 ? 's' : ''} scheduled`;
+  }
+
+  function openAppointmentModal() {
+    document.getElementById('appointmentModal').style.display = 'flex';
+  }
+
+  function closeAppointmentModal() {
+    document.getElementById('appointmentModal').style.display = 'none';
+  }
+
+  function submitAppointment(event) {
+    event.preventDefault();
+    
+    const time = document.getElementById('appointmentTime').value;
+    const [hours, minutes] = time.split(':').map(Number);
+    
+    // Validate time is between 8 AM and 4 PM
+    if (hours < 8 || hours > 16) {
+      alert('Please select a time between 8:00 AM and 4:00 PM. These are the lecturer office hours.');
+      return;
+    }
+    
+    const appointment = {
+      lecturer: document.getElementById('lecturerSelect').value,
+      date: document.getElementById('appointmentDate').value,
+      time: document.getElementById('appointmentTime').value,
+      topic: document.getElementById('appointmentTopic').value,
+      bookedAt: new Date().toISOString()
+    };
+
+    // Save to localStorage
+    let appointments = JSON.parse(localStorage.getItem(`appointments_${currentUser.email}`) || '[]');
+    appointments.push(appointment);
+    localStorage.setItem(`appointments_${currentUser.email}`, JSON.stringify(appointments));
+
+    // Show success message
+    const alert = document.getElementById('appointmentAlert');
+    alert.className = 'alert alert-success';
+    alert.textContent = '✓ Appointment booked successfully! Confirmation email has been sent to ' + currentUser.email;
+    alert.style.display = 'block';
+
+    // Refresh display
+    displayAppointments(appointments);
+
+    // Close modal after 2 seconds
+    setTimeout(() => {
+      closeAppointmentModal();
+      document.getElementById('appointmentDate').value = '';
+      document.getElementById('appointmentTime').value = '';
+      document.getElementById('appointmentTopic').value = '';
+      alert.style.display = 'none';
+    }, 2000);
+  }
+
+  function initializeLibraryHours() {
+    const libraryHours = [
+      { day: 'Monday - Friday', hours: '8:00 AM - 6:00 PM' },
+      { day: 'Saturday', hours: '9:00 AM - 3:00 PM' },
+      { day: 'Sunday', hours: 'Closed' },
+    ];
+
+    const hoursHTML = libraryHours.map(item => `
+      <div class="library-hour-item">
+        <strong>${item.day}</strong>
+        <span>${item.hours}</span>
+      </div>
+    `).join('');
+
+    const notices = `
+      <div class="library-notice">
+        <strong>⚠️ Test Week Extension:</strong> Extended hours during test week: 7 AM - 8 PM (Mon-Fri), 10 AM - 5 PM (Sat)
+      </div>
+    `;
+
+    document.getElementById('libraryHours').innerHTML = hoursHTML;
+    document.getElementById('libraryNotices').innerHTML = notices;
+  }
+
+  function loadStudentAnnouncements() {
+    const announcements = [
+      {
+        title: 'Course Registration Now Open',
+        date: 'May 6, 2026',
+        message: 'Register for next semester courses on the student portal. Deadline: May 31. Early registration has priority access to courses.'
+      },
+      {
+        title: 'Tutoring Services Available',
+        date: 'May 4, 2026',
+        message: 'Free peer tutoring services are available for Programming, Networking, and Database modules. Sign up in the Student Services office.'
+      },
+      {
+        title: 'Bursary Information Session',
+        date: 'May 2, 2026',
+        message: 'Learn about available bursaries and financial aid. Join us for an information session on May 16 at 1 PM in the main auditorium.'
+      },
+      {
+        title: 'Exam Timetable Released',
+        date: 'May 1, 2026',
+        message: 'Your examination timetable is now available on the student portal. Download your personalized exam schedule and plan accordingly.'
+      },
+      {
+        title: 'Library Resources Update',
+        date: 'April 28, 2026',
+        message: 'New online databases and e-journals are now available for ICT students. Visit the library website for access credentials.'
+      }
+    ];
+
+    const container = document.getElementById('studentAnnouncements');
+    container.innerHTML = announcements.map(ann => `
+      <div class="announcement">
+        <div class="announcement-title">${ann.title}</div>
+        <div class="announcement-date">${ann.date}</div>
+        <div class="announcement-content">${ann.message}</div>
+      </div>
+    `).join('');
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'index.html';
+  }
+</script>
+
+</body>
+</html>
