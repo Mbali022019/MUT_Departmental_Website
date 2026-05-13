@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff Dashboard - MUT ICT</title>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    :root {
+      --crimson: #7b1e2b;
+      --crimson-dark: #5a1320;
+      --gold: #f5c842;
+      --white: #ffffff;
+      --off-white: #faf9f7;
+      --gray-100: #f4f3f0;
+      --gray-200: #e8e6e1;
+      --gray-400: #9ca3af;
+      --gray-600: #6b7280;
+      --gray-800: #1f2937;
+      --black: #0d0d0d;
+      --glass-light: rgba(255,255,255,0.15);
+      --glass-border: rgba(255,255,255,0.2);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #faf9f7 0%, #f4f3f0 100%);
+      color: var(--gray-800);
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 64px;
+      background: linear-gradient(135deg, rgba(90,19,32,0.95) 0%, rgba(123,30,43,0.95) 100%);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(245,200,66,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 1000;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+
+    .navbar-left { display: flex; align-items: center; gap: 32px; }
+    .navbar-title { font-size: 18px; font-weight: 700; color: white; letter-spacing: 0.5px; }
+    .navbar-links { display: flex; gap: 4px; }
+    .navbar-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 8px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .navbar-links a:hover { color: white; background: rgba(245,200,66,0.15); }
+    .navbar-links a.active { background: var(--gold); color: var(--crimson-dark); font-weight: 700; }
+    
+    .navbar-right { display: flex; align-items: center; gap: 20px; }
+    .user-info { color: rgba(255,255,255,0.85); font-size: 13px; font-weight: 500; }
+    .logout-btn {
+      background: rgba(255,255,255,0.15);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+    }
+    .logout-btn:hover { 
+      background: var(--gold);
+      color: var(--crimson-dark);
+      border-color: var(--gold);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 100px 40px 60px;
+    }
+
+    /* Welcome Section */
+    .welcome-section {
+      background: linear-gradient(135deg, rgba(90,19,32,0.9) 0%, rgba(123,30,43,0.9) 100%);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 48px;
+      color: white;
+      margin-bottom: 48px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .welcome-section h1 { 
+      font-size: 2.2rem; 
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+      font-weight: 800;
+    }
+    .welcome-section p { 
+      font-size: 15px; 
+      color: rgba(255,255,255,0.8);
+      line-height: 1.6;
+    }
+
+    .position-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--crimson-dark);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 12px;
+      letter-spacing: 0.3px;
+    }
+
+    /* Grid Layout */
+    .dashboard-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+      gap: 28px; 
+      margin-bottom: 48px;
+    }
+
+    /* Card Styles with Glassmorphism */
+    .card {
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(245,200,66,0.05) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .card:hover { 
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+      border-color: rgba(245,200,66,0.3);
+      background: rgba(255,255,255,0.85);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid rgba(123,30,43,0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, rgba(123,30,43,0.15) 0%, rgba(245,200,66,0.1) 100%);
+      border: 1.5px solid rgba(123,30,43,0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--crimson);
+      flex-shrink: 0;
+    }
+
+    .card-title { 
+      font-size: 17px; 
+      font-weight: 700; 
+      color: var(--crimson-dark);
+      letter-spacing: -0.3px;
+    }
+
+    .card-body { 
+      font-size: 13px; 
+      color: var(--gray-600); 
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Item Lists */
+    .item-list { display: grid; gap: 16px; }
+    .list-item {
+      padding: 18px 22px;
+      background: rgba(255,255,255,0.95);
+      border: 1px solid rgba(123,30,43,0.12);
+      border-radius: 18px;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: grid;
+      gap: 8px;
+    }
+    .list-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 30px rgba(0,0,0,0.08);
+    }
+    .list-item-title { font-weight: 700; color: var(--crimson-dark); font-size: 15px; }
+    .list-item-time { font-size: 13px; color: var(--gray-600); display: flex; align-items: center; gap: 8px; }
+    .list-item-note { font-size: 13px; color: var(--gray-600); line-height: 1.7; }
+
+    .stat-box {
+      background: linear-gradient(135deg, rgba(123,30,43,0.07), rgba(245,200,66,0.1));
+      border: 1px solid rgba(123,30,43,0.14);
+      border-radius: 18px;
+      padding: 24px;
+      text-align: center;
+      display: grid;
+      gap: 10px;
+      min-height: 128px;
+      align-items: center;
+      justify-content: center;
+    }
+    .stat-number { font-size: 2rem; font-weight: 800; color: var(--crimson-dark); }
+    .stat-label { font-size: 13px; color: var(--gray-600); letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* Progress Bar */
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(123,30,43,0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--crimson) 0%, var(--gold) 100%);
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+
+    /* Download Button */
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(123,30,43,0.1) 0%, rgba(245,200,66,0.1) 100%);
+      border: 1.5px solid rgba(123,30,43,0.15);
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--crimson-dark);
+      transition: all 0.3s;
+    }
+    .btn-download:hover {
+      background: linear-gradient(135deg, rgba(123,30,43,0.15) 0%, rgba(245,200,66,0.15) 100%);
+      border-color: var(--crimson);
+      transform: translateY(-2px);
+    }
+
+    /* Full-width card */
+    .card-full { grid-column: 1 / -1; }
+
+    /* Wide Card Grid */
+    .wide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .wide-card {
+      padding: 16px;
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(123,30,43,0.1);
+      border-radius: 12px;
+      transition: all 0.3s;
+    }
+    .wide-card:hover { 
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+    }
+
+    /* Announcement Card */
+    .announcement-card {
+      padding: 16px;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(123,30,43,0.1);
+      border-left: 4px solid var(--gold);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      transition: all 0.3s;
+    }
+    .announcement-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    .announcement-title { font-weight: 700; color: var(--crimson-dark); margin-bottom: 4px; font-size: 14px; }
+    .announcement-date { font-size: 11px; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .announcement-content { font-size: 13px; color: var(--gray-600); line-height: 1.6; }
+
+    /* Tab Content */
+    .tab-content { animation: fadeIn 0.3s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .nav-link { cursor: pointer; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container { padding: 90px 20px 20px; }
+      .navbar { padding: 0 20px; }
+      .navbar-left { gap: 16px; }
+      .navbar-title { font-size: 16px; }
+      .navbar-links { gap: 0; }
+      .navbar-links a { padding: 6px 12px; font-size: 12px; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .welcome-section { padding: 32px 24px; }
+      .welcome-section h1 { font-size: 1.6rem; }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { 
+      background: rgba(123,30,43,0.2);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+  <div class="navbar-left">
+    <div class="navbar-title">👔 ICT Staff Portal</div>
+    <div class="navbar-links">
+      <a class="nav-link active" onclick="switchTab('dashboard'); return false;">Dashboard</a>
+      <a class="nav-link" onclick="switchTab('resources'); return false;">Resources</a>
+      <a class="nav-link" onclick="switchTab('announcements'); return false;">Announcements</a>
+      <a class="nav-link" onclick="switchTab('statistics'); return false;">Statistics</a>
+    </div>
+  </div>
+  <div class="navbar-right">
+    <div class="user-info" id="userInfo"></div>
+    <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
+  </div>
+</div>
+
+<!-- Main Container -->
+<div class="container">
+  <!-- Dashboard Tab -->
+  <div id="dashboardTab" class="tab-content" style="display: block;">
+    <div class="welcome-section">
+      <h1 id="welcomeTitle"></h1>
+      <div id="positionTitle"></div>
+      <p style="margin-top: 14px;">🔒 Internal departmental portal for staff members only. This portal contains confidential departmental information.</p>
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- Key Department Updates -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i data-lucide="bell" style="width:20px;height:20px;"></i></div>
+          <div class="card-title">Key Updates</div>
+        </div>
+        <div id="keyUpdates" class="item-list"></div>
+      </div>
+
+      <!-- Upcoming Internal Meetings -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i data-lucide="calendar" style="width:20px;height:20px;"></i></div>
+          <div class="card-title">Upcoming Meetings</div>
+        </div>
+        <div id="internalMeetings" class="item-list"></div>
+      </div>
+
+      <!-- Workshop Schedule -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i data-lucide="code" style="width:20px;height:20px;"></i></div>
+          <div class="card-title">Workshop Schedule</div>
+        </div>
+        <div id="workshopDates" class="item-list"></div>
+      </div>
+
+      <!-- Lecturer Appointment Requests -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i data-lucide="mail" style="width:20px;height:20px;"></i></div>
+          <div class="card-title">Appointment Requests</div>
+        </div>
+        <div class="card-body">
+          <div id="staffAppointmentList" class="item-list">
+            <p style="color: var(--gray-600); font-size: 13px; margin:0;">Loading appointment requests for Mr. Xolisa Phillip Piyose...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resources Tab -->
+  <div id="resourcesTab" class="tab-content" style="display: none;">
+    <div class="welcome-section">
+      <h1>📄 Downloadable Resources</h1>
+      <p>Access official university and departmental documents for staff reference and distribution.</p>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="card card-full">
+        <div class="card-header">
+          <div class="card-icon"><i data-lucide="download" style="width:20px;height:20px;"></i></div>
+          <div class="card-title">Official Documents</div>
+        </div>
+        <div id="downloadableFiles"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Announcements Tab -->
+  <div id="announcementsTab" class="tab-content" style="display: none;">
+    <div class="welcome-section">
+      <h1>📢 Internal Announcements</h1>
+      <p>Important news and updates for all departmental staff.</p>
+    </div>
+
+    <div id="staffAnnouncements"></div>
+  </div>
+
+  <!-- Statistics Tab -->
+  <div id="statisticsTab" class="tab-content" style="display: none;">
+    <div class="welcome-section">
+      <h1>📊 Department Statistics</h1>
+      <p>Overview of staff allocation, module distribution, and student enrollment.</p>
+    </div>
+
+    <div class="dashboard-grid">
+      <!-- Staff Allocation -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i data-lucide="users" style="width:20px;height:20px;"></i></div>
+          <div class="card-title">Staff Allocation</div>
+        </div>
+        <div class="card-body">
+          <p class="item-detail" style="margin-bottom: 16px;">A compact and professional breakdown of our departmental team structure.</p>
+          <div class="wide-grid" id="staffStats"></div>
+        </div>
+      </div>
+
+      <!-- Module Distribution -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i data-lucide="layers" style="width:20px;height:20px;"></i></div>
+          <div class="card-title">Module Distribution</div>
+        </div>
+        <div id="moduleDistribution"></div>
+      </div>
+
+      <!-- Student Enrollment -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon"><i data-lucide="activity" style="width:20px;height:20px;"></i></div>
+          <div class="card-title">Student Enrollment</div>
+        </div>
+        <div id="studentEnrollment"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Tab switching function
+  function switchTab(tabName) {
+    // Hide all tabs
+    document.querySelectorAll('.tab-content').forEach(tab => {
+      tab.style.display = 'none';
+    });
+    
+    // Remove active class from all nav links
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.remove('active');
+    });
+
+    // Show selected tab
+    const tabElement = document.getElementById(tabName + 'Tab');
+    if (tabElement) {
+      tabElement.style.display = 'block';
+    }
+
+    // Add active class to clicked link
+    event.target.classList.add('active');
+  }
+
+  // Check authentication
+  function checkAuth() {
+    const user = localStorage.getItem('currentUser');
+    if (!user) {
+      window.location.href = 'index.html';
+      return null;
+    }
+    const userData = JSON.parse(user);
+    if (userData.role !== 'staff') {
+      window.location.href = 'student-dashboard.html';
+      return null;
+    }
+    return userData;
+  }
+
+  const currentUser = checkAuth();
+
+  // Initialize dashboard
+  document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    initializeDashboard();
+  });
+
+  function initializeDashboard() {
+    // Set welcome message
+    document.getElementById('welcomeTitle').textContent = `Welcome, ${currentUser.name}`;
+    document.getElementById('positionTitle').innerHTML = `<span class="position-badge">${currentUser.position || 'Lecturer'}</span>`;
+    document.getElementById('userInfo').textContent = currentUser.email;
+
+    // Load all content
+    loadKeyUpdates();
+    loadInternalMeetings();
+    loadWorkshopDates();
+    loadStaffAppointments();
+    loadStaffStats();
+    loadModuleDistribution();
+    loadStudentEnrollment();
+    loadStaffAnnouncements();
+    loadDownloadableFiles();
+  }
+
+  function loadKeyUpdates() {
+    const updates = [
+      { title: 'Academic Calendar Released', date: 'May 1, 2026', info: 'Next semester dates available - check staff email.' },
+      { title: 'New Lab Equipment Installed', date: 'Apr 28, 2026', info: 'Cybersecurity lab upgraded with latest threat simulation tools.' },
+      { title: 'Student Project Expo Confirmed', date: 'Apr 25, 2026', info: 'Final year projects showcased May 15. Judges needed!' }
+    ];
+
+    const container = document.getElementById('keyUpdates');
+    container.innerHTML = updates.map(u => `
+      <div class="list-item">
+        <div class="list-item-title">${u.title}</div>
+        <div class="list-item-time">🗓 ${u.date}</div>
+        <div class="list-item-note">${u.info}</div>
+      </div>
+    `).join('');
+  }
+
+  function loadInternalMeetings() {
+    const meetings = [
+      { title: 'Department Heads Meeting', date: 'May 12, 2026', time: '10:00 AM', location: 'Conference Room A' },
+      { title: 'Curriculum Review Session', date: 'May 19, 2026', time: '2:00 PM', location: 'ICT Building, Room 201' },
+      { title: 'Staff Development Workshop', date: 'May 26, 2026', time: '9:00 AM', location: 'Main Campus' }
+    ];
+
+    const container = document.getElementById('internalMeetings');
+    container.innerHTML = meetings.map(m => `
+      <div class="list-item">
+        <div class="list-item-title">${m.title}</div>
+        <div class="list-item-time">📅 ${m.date} • ${m.time}</div>
+        <div class="list-item-note">📍 ${m.location}</div>
+      </div>
+    `).join('');
+  }
+
+  function loadWorkshopDates() {
+    const workshops = [
+      { title: 'Python Advancement for Educators', date: 'May 8, 2026', facilitator: 'Prof. Nkosi' },
+      { title: 'Cybersecurity Research Methods', date: 'May 15, 2026', facilitator: 'Dr. Mthembu' },
+      { title: 'Cloud Technologies Deep Dive', date: 'May 22, 2026', facilitator: 'Mrs. Khubone' }
+    ];
+
+    const container = document.getElementById('workshopDates');
+    container.innerHTML = workshops.map(w => `
+      <div class="list-item">
+        <div class="list-item-title">${w.title}</div>
+        <div class="list-item-time">📅 ${w.date}</div>
+        <div class="list-item-note">👨‍🏫 Facilitator: ${w.facilitator}</div>
+      </div>
+    `).join('');
+  }
+
+  async function loadStaffAppointments() {
+    const lecturerName = encodeURIComponent('Mr. Xolisa Phillip Piyose');
+    const listContainer = document.getElementById('staffAppointmentList');
+    try {
+      const response = await fetch(`http://localhost:3000/api/appointments?lecturerName=${lecturerName}`);
+      const data = await response.json();
+      if (!data.success) {
+        listContainer.innerHTML = `<p style="color: var(--gray-600);">${data.message || 'Unable to load appointment summary.'}</p>`;
+        return;
+      }
+      const appointments = data.appointments || [];
+      if (appointments.length === 0) {
+        listContainer.innerHTML = '<p style="color: var(--gray-600); margin:0;">No appointment requests currently booked with Mr. Xolisa Phillip Piyose.</p>';
+        return;
+      }
+      listContainer.innerHTML = appointments.map(apt => `
+        <div class="list-item">
+          <div class="list-item-title">${apt.student_name}</div>
+          <div class="list-item-time">📅 ${apt.date} • ${formatTime(apt.time)}</div>
+          <div class="list-item-note">Minimal summary only. Full details were emailed to the lecturer.</div>
+          <a class="btn-secondary" href="https://outlook.office.com/mail/inbox" target="_blank" rel="noreferrer">View Email</a>
+        </div>
+      `).join('');
+    } catch (error) {
+      console.error('Load staff appointments error:', error);
+      listContainer.innerHTML = '<p style="color: var(--gray-600); margin:0;">Unable to connect to the server.</p>';
+    }
+  }
+
+  function loadStaffStats() {
+    const stats = [
+      { label: 'Total Staff', value: '12' },
+      { label: 'Lecturers', value: '8' },
+      { label: 'HOD + Admin', value: '2' },
+      { label: 'Technicians', value: '2' }
+    ];
+
+    const container = document.getElementById('staffStats');
+    container.innerHTML = stats.map(s => `
+      <div class="stat-box">
+        <div class="stat-number">${s.value}</div>
+        <div class="stat-label">${s.label}</div>
+      </div>
+    `).join('');
+  }
+
+  function loadModuleDistribution() {
+    const modules = [
+      { name: 'Programming I', lecturer: 'Dr. Mutanga', students: 45 },
+      { name: 'Networking Fundamentals', lecturer: 'Mrs. Naidoo', students: 38 },
+      { name: 'Web Development', lecturer: 'Dr. Jugoo', students: 42 },
+      { name: 'Databases', lecturer: 'Prof. Khumalo', students: 40 },
+      { name: 'Cybersecurity Basics', lecturer: 'Mrs. Naidoo', students: 35 }
+    ];
+
+    const container = document.getElementById('moduleDistribution');
+    const html = modules.map(m => `
+      <div style="padding: 12px; background: var(--gray-100); border-radius: 8px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="font-weight: 600; color: var(--crimson-dark);">${m.name}</div>
+          <div style="font-size: 12px; color: var(--gray-600);">Lecturer: ${m.lecturer}</div>
+        </div>
+        <div style="font-size: 14px; font-weight: 700; color: var(--gold);">${m.students} 👥</div>
+      </div>
+    `).join('');
+    container.innerHTML = html;
+  }
+
+  function loadStudentEnrollment() {
+    const enrollment = [
+      { programme: 'Diploma in ICT (Standard)', total: 120, enrolled: 115 },
+      { programme: 'Diploma in ICT (Extended)', total: 60, enrolled: 58 },
+      { programme: 'Advanced Diploma', total: 30, enrolled: 28 }
+    ];
+
+    const container = document.getElementById('studentEnrollment');
+    const html = enrollment.map(e => {
+      const percentage = Math.round((e.enrolled / e.total) * 100);
+      return `
+        <div style="margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span style="font-weight: 600; font-size: 13px;">${e.programme}</span>
+            <span style="font-size: 12px; color: var(--gray-600);">${e.enrolled}/${e.total}</span>
+          </div>
+          <div style="background: var(--gray-200); height: 8px; border-radius: 4px; overflow: hidden;">
+            <div style="background: var(--gold); height: 100%; width: ${percentage}%; transition: width 0.3s;"></div>
+          </div>
+          <div style="font-size: 11px; color: var(--gray-600); margin-top: 2px;">${percentage}% enrolled</div>
+        </div>
+      `;
+    }).join('');
+    container.innerHTML = html;
+  }
+
+  function loadStaffAnnouncements() {
+    const announcements = [
+      {
+        title: 'Important: Staff Meeting on Curriculum Changes',
+        date: 'May 10, 2026',
+        content: 'There will be a mandatory staff meeting to discuss upcoming curriculum changes aligned with industry needs. Attendance is required. Meeting will be held in Conference Room A at 10:00 AM.'
+      },
+      {
+        title: '🕯️ Tribute: Remembering Dr. James Mkhize',
+        date: 'May 5, 2026',
+        content: 'Our esteemed colleague Dr. James Mkhize, who taught here for 15 years, recently passed away. A memorial service will be held on Thursday at 2 PM in the main hall. All staff are invited to participate in celebrating his legacy and supporting his family.'
+      },
+      {
+        title: 'Professional Development Grants Open',
+        date: 'May 1, 2026',
+        content: 'Applications are now open for staff professional development grants. Deadline: May 31. Support for conference attendance, certifications, and research. Apply through the HR portal.'
+      }
+    ];
+
+    const container = document.getElementById('staffAnnouncements');
+    container.innerHTML = announcements.map(a => `
+      <div class="announcement-card">
+        <div class="announcement-title">${a.title}</div>
+        <div class="announcement-date">${a.date}</div>
+        <div class="announcement-content">${a.content}</div>
+      </div>
+    `).join('');
+  }
+
+  function loadDownloadableFiles() {
+    const mockDocuments = {
+      'University Policies & Guidelines (2026)': `MANGOSUTHU UNIVERSITY OF TECHNOLOGY
+UNIVERSITY POLICIES & GUIDELINES
+Effective: January 1, 2026
+
+TABLE OF CONTENTS
+1. Academic Policies
+2. Code of Conduct
+3. Attendance Requirements
+4. Assessment Policies
+5. Appeal Procedures
+6. Health & Safety
+
+1. ACADEMIC POLICIES
+- All students must meet minimum attendance requirements
+- Coursework must be submitted by advertised deadlines
+- Late submissions incur a 5% deduction per day
+- Academic honesty is paramount; plagiarism results in automatic failure
+
+2. CODE OF CONDUCT
+Students, staff and all members of the university community are expected to:
+- Treat all individuals with respect
+- Maintain professional conduct at all times
+- Comply with all university regulations
+- Report violations immediately
+
+3. ATTENDANCE REQUIREMENTS
+- Minimum 80% attendance required for assessment eligibility
+- Medical certifications required for sick leave
+- Three consecutive absences result in academic warning
+
+4. ASSESSMENT POLICIES
+- Tests and exams are conducted per academic calendar
+- Results released within 5 working days
+- Supplementary assessments available for failed modules
+- Academic appeals must be filed within 7 days of result release
+
+5. APPEAL PROCEDURES
+- Submit appeal in writing to department head
+- Include supporting documentation
+- Appeals reviewed within 14 days
+- Outcome communicated in writing
+
+6. HEALTH & SAFETY
+- All laboratory work requires compliance with safety protocols
+- Personal protective equipment (PPE) mandatory in labs
+- Report all incidents to Safety Officer immediately
+- Annual safety training mandatory for all staff
+
+Approved by: Senate
+Date: January 1, 2026
+Next Review: January 1, 2027`,
+
+      'Staff Handbook': `MUT ICT DEPARTMENT - STAFF HANDBOOK
+Revised: May 2026
+
+WELCOME
+Welcome to the Faculty of Applied Sciences, ICT Department. This handbook provides essential information for all staff members.
+
+ADMINISTRATIVE PROCEDURES
+- Office hours: 8:00 AM - 4:00 PM, Monday to Friday
+- Staff meetings: First Tuesday of each month at 10:00 AM
+- Leave requests: Submit 2 weeks in advance to Department Head
+- Professional development: Applications open annually in March
+
+TEACHING EXPECTATIONS
+- Lesson plans must be submitted weekly
+- Student feedback collected mid-semester
+- Office hours: Minimum 10 hours per week
+- Assessment moderation: All assignments moderated by peer
+
+PROFESSIONAL DEVELOPMENT
+- Annual conference allowance: Available upon application
+- In-house workshops: Monthly training sessions
+- Mentorship program: Pair senior and junior staff
+- Publication support: Data available for research
+
+STUDENT SUPPORT
+- Academic advising: Available to all students
+- Counseling referrals: Available through Student Services
+- Grade appeals: Follow formal procedure
+- Accommodations: Contact Disability Services
+
+TECHNOLOGY & RESOURCES
+- Email support: IT Office (ext. 2500)
+- Software licenses: Submit requests to Department Head
+- Lab access: Login credentials in staff office
+- Classroom bookings: Reserve via online portal
+
+COMMUNICATION PROTOCOLS
+- All official correspondence via university email
+- Urgent matters: Phone Department Head
+- Confidentiality: All student information protected
+- Social media: Follow university social media policy
+
+Questions? Contact Department Head or Human Resources.`,
+
+      'Code of Conduct': `MUT CODE OF PROFESSIONAL CONDUCT
+Academic Year 2026
+
+PREAMBLE
+The Mangosuthu University of Technology is committed to fostering an environment of respect, integrity, and professionalism.
+
+EXPECTATIONS FOR ALL STAFF
+1. Professional Behavior
+   - Treat colleagues and students with dignity and respect
+   - Maintain confidentiality of sensitive information
+   - Arrive on time for all commitments
+   - Present professional appearance
+
+2. Academic Integrity
+   - Do not fabricate research data
+   - Properly cite all sources
+   - Acknowledge collaborative work
+   - Maintain objectivity in assessment
+
+3. Conflict of Interest
+   - Declare any conflicts when grading/assessing
+   - Avoid favoritism in student interactions
+   - Recuse yourself from decisions affecting family
+   - Report potential conflicts to management
+
+4. Communication
+   - Respond to emails within 24 hours
+   - Use professional language in all communications
+   - Respect confidentiality in conversations
+   - Address concerns through proper channels
+
+5. Prohibited Conduct
+   - Discrimination of any kind
+   - Sexual harassment or workplace bullying
+   - Misuse of university resources
+   - Under the influence of substances at work
+
+VIOLATIONS & CONSEQUENCES
+- Minor violations: Verbal warning
+- Moderate violations: Written warning and counseling
+- Serious violations: Suspension or termination
+
+For concerns or violations, contact Human Resources immediately.`,
+
+      'Department Strategic Plan 2026-2030': `MUT ICT DEPARTMENT
+STRATEGIC PLAN 2026-2030
+
+VISION
+To be a leading ICT department producing industry-ready graduates and conducting impactful research.
+
+MISSION
+To provide high-quality ICT education, foster innovation, and serve industry and community needs.
+
+STRATEGIC OBJECTIVES
+
+1. ACADEMIC EXCELLENCE (2026-2027)
+   - Update curriculum to include AI/ML modules
+   - Increase industry partnerships from 5 to 15
+   - Achieve 85%+ pass rate in core modules
+   - Implement continuous assessment model
+
+2. STUDENT SUPPORT (2027-2028)
+   - Launch peer tutoring program
+   - Develop student mentorship scheme
+   - Create student technology club
+   - Establish internship placement office
+
+3. STAFF DEVELOPMENT (2028-2029)
+   - Provide annual professional development for all staff
+   - Support PhD studies for 3 lecturers
+   - Establish research clusters
+   - Promote international collaborations
+
+4. INFRASTRUCTURE (2025-2026, Ongoing)
+   - Upgrade all computer labs (Completed)
+   - Establish AI research laboratory
+   - Install high-speed server infrastructure
+   - Create collaborative learning spaces
+
+5. RESEARCH & INNOVATION (2026-2030)
+   - Generate minimum 10 research publications annually
+   - Secure research funding of R2+ million
+   - File 2 patents for innovations
+   - Establish research center for cybersecurity
+
+KEY PERFORMANCE INDICATORS
+- Graduate employment rate: 85%+
+- Student satisfaction: 4.2/5.0+
+- Pass rates: 80%+
+- Research publications: 10+ per year
+
+BUDGET ALLOCATION
+Academic programs: 50%
+Research support: 25%
+Student services: 15%
+Infrastructure: 10%
+
+Approved by: Faculty Management
+Date: January 15, 2026
+Review Date: January 15, 2027`,
+
+      'Staff Important Dates Calendar': `MUT ICT DEPARTMENT
+STAFF IMPORTANT DATES CALENDAR 2026
+
+MONTHLY STAFF HIGHLIGHTS
+- May 8: Python Advancement for Educators workshop
+- May 12: Department Heads Meeting
+- May 15: Cybersecurity Research Methods training
+- May 19: Curriculum Review Session
+- May 22: Cloud Technologies Deep Dive
+- May 26: Staff Development Workshop
+
+PAYROLL & ADMIN
+- May 25: Payroll finalisation deadline
+- June 2: Leave applications due for June
+- July 5: Mid-year performance review summaries due
+
+KEY INTERNAL DEADLINES
+- June 10: Semester 2 teaching plan submission
+- July 18: Assignment moderation reports due
+- August 1: Annual research proposal intake opens
+
+EMPLOYEE SUPPORT EVENTS
+- June 16: Wellbeing session for staff
+- July 20: Career development session
+- August 22: IT systems update training
+
+REMINDERS
+- Keep all meeting minutes filed in the department portal.
+- Review the internal calendar monthly for updates.
+- Contact Department Admin for any schedule changes.
+`,
+
+      'Curriculum Documents': `MUT ICT DEPARTMENT - CURRICULUM OVERVIEW
+Academic Year 2026
+
+==== DIPLOMA IN ICT (Standard) - 3 YEARS ====
+
+YEAR 1
+- Programming Fundamentals
+- Database Concepts
+- Web Development I
+- Networking Basics
+- IT Support & Service Management
+- Mathematics for IT
+
+YEAR 2
+- Advanced Programming
+- Database Administration
+- Web Development II
+- Network Administration
+- Cybersecurity Fundamentals
+- IT Project Management
+
+YEAR 3 (Choose specialization)
+Software Development Stream:
+- Software Engineering
+- Mobile Application Development
+- Advanced Web Technologies
+- Software Testing & QA
+- Capstone Project-Software
+
+Networking Stream:
+- Advanced Networking
+- Network Security
+- Cloud Infrastructure
+- IT Operations Management
+- Capstone Project-Networking
+
+Work Integrated Learning (6 months) - Industry Placement
+
+==== EXTENDED DIPLOMA - 4 YEARS ====
+Year 0: Foundational Studies
+- Academic Writing
+- Mathematics Bridging
+- Introduction to IT
+- Learning Skills
+- Digital Literacy
+
+Years 1-3: Same as Standard Diploma
+
+==== ADVANCED DIPLOMA - 1 YEAR ====
+Admission: Diploma holders or equivalent
+- Software Architecture
+- Enterprise Systems
+- Advanced Cybersecurity
+- Cloud Computing & DevOps
+- Emerging Technologies
+- Capstone Project
+
+ASSESSMENT BREAKDOWN
+- Coursework: 40%
+- Assignments: 30%
+- Tests: 20%
+- Final Examination: 10%
+
+LEARNING OUTCOMES
+Students will be able to:
+1. Design and implement software solutions
+2. Manage network infrastructure
+3. Apply security best practices
+4. Lead IT projects
+5. Adapt to emerging technologies`
+    };
+
+    const files = [
+      {
+        name: 'University Policies & Guidelines',
+        icon: '📋',
+        type: 'PDF',
+        size: '2.4 MB',
+        docName: 'University Policies & Guidelines (2026)',
+        preview: 'Academic policies, conduct standards, attendance requirements, and appeal procedures.'
+      },
+      {
+        name: 'Staff Handbook',
+        icon: '📖',
+        type: 'PDF',
+        size: '1.8 MB',
+        docName: 'Staff Handbook',
+        preview: 'Administrative procedures, teaching expectations, professional development, and support services.'
+      },
+      {
+        name: 'Code of Professional Conduct',
+        icon: '⚖️',
+        type: 'PDF',
+        size: '956 KB',
+        docName: 'Code of Conduct',
+        preview: 'Professional standards, ethical guidelines, and conflict resolution for departmental staff.'
+      },
+      {
+        name: 'Strategic Development Plan',
+        icon: '🎯',
+        type: 'PDF',
+        size: '3.2 MB',
+        docName: 'Department Strategic Plan 2026-2030',
+        preview: 'Five-year vision for academic excellence, student support, research, and infrastructure.'
+      },
+      {
+        name: 'Staff Important Dates Calendar',
+        icon: '📅',
+        type: 'PDF',
+        size: '480 KB',
+        docName: 'Staff Important Dates Calendar',
+        preview: 'Internal staff deadlines, meeting cycles, payroll dates, and essential department events.'
+      },
+      {
+        name: 'Curriculum & Qualifications',
+        icon: '🎓',
+        type: 'ZIP',
+        size: '5.6 MB',
+        docName: 'Curriculum Documents',
+        preview: 'Comprehensive program outlines for Diploma, Extended Diploma, and Advanced Diploma qualifications.'
+      }
+    ];
+
+    const container = document.getElementById('downloadableFiles');
+    container.innerHTML = files.map(f => `
+      <div class="wide-card" style="display: grid; grid-template-columns: 60px 1fr auto; gap: 16px; align-items: start; padding: 20px; border: 1.5px solid rgba(123,30,43,0.1);">
+        <div style="font-size: 40px; text-align: center; line-height: 1;">${f.icon}</div>
+        <div style="min-width: 0;">
+          <div class="item-title" style="font-size: 15px; margin-bottom: 6px;">${f.name}</div>
+          <div class="item-detail" style="margin-bottom: 8px; font-size: 12px;">${f.type} • ${f.size}</div>
+          <div style="font-size: 13px; color: var(--gray-600); line-height: 1.5;">${f.preview}</div>
+        </div>
+        <button onclick="downloadFile('${f.docName}')" class="btn-download" style="white-space: nowrap; height: fit-content;">
+          ⬇️ Download
+        </button>
+      </div>
+    `).join('');
+    lucide.createIcons();
+  }
+
+  function downloadFile(docName) {
+    const mockDocuments = {
+      'University Policies & Guidelines (2026)': `MANGOSUTHU UNIVERSITY OF TECHNOLOGY\nUNIVERSITY POLICIES & GUIDELINES\nEffective: January 1, 2026\n\nTABLE OF CONTENTS\n1. Academic Policies\n2. Code of Conduct\n3. Attendance Requirements\n4. Assessment Policies\n5. Appeal Procedures\n6. Health & Safety\n\n1. ACADEMIC POLICIES\n- All students must meet minimum attendance requirements\n- Coursework must be submitted by advertised deadlines\n- Late submissions incur a 5% deduction per day\n- Academic honesty is paramount; plagiarism results in automatic failure\n\n2. CODE OF CONDUCT\nStudents, staff and all members of the university community are expected to:\n- Treat all individuals with respect\n- Maintain professional conduct at all times\n- Comply with all university regulations\n- Report violations immediately\n\n3. ATTENDANCE REQUIREMENTS\n- Minimum 80% attendance required for assessment eligibility\n- Medical certifications required for sick leave\n- Three consecutive absences result in academic warning\n\n4. ASSESSMENT POLICIES\n- Tests and exams are conducted per academic calendar\n- Results released within 5 working days\n- Supplementary assessments available for failed modules\n- Academic appeals must be filed within 7 days of result release\n\n5. APPEAL PROCEDURES\n- Submit appeal in writing to department head\n- Include supporting documentation\n- Appeals reviewed within 14 days\n- Outcome communicated in writing\n\n6. HEALTH & SAFETY\n- All laboratory work requires compliance with safety protocols\n- Personal protective equipment (PPE) mandatory in labs\n- Report all incidents to Safety Officer immediately\n- Annual safety training mandatory for all staff\n\nApproved by: Senate\nDate: January 1, 2026\nNext Review: January 1, 2027`,
+      'Staff Handbook': `MUT ICT DEPARTMENT - STAFF HANDBOOK\nRevised: May 2026\n\nWELCOME\nWelcome to the Faculty of Applied Sciences, ICT Department. This handbook provides essential information for all staff members.\n\nADMINISTRATIVE PROCEDURES\n- Office hours: 8:00 AM - 4:00 PM, Monday to Friday\n- Staff meetings: First Tuesday of each month at 10:00 AM\n- Leave requests: Submit 2 weeks in advance to Department Head\n- Professional development: Applications open annually in March\n\nTEACHING EXPECTATIONS\n- Lesson plans must be submitted weekly\n- Student feedback collected mid-semester\n- Office hours: Minimum 10 hours per week\n- Assessment moderation: All assignments moderated by peer\n\nPROFESSIONAL DEVELOPMENT\n- Annual conference allowance: Available upon application\n- In-house workshops: Monthly training sessions\n- Mentorship program: Pair senior and junior staff\n- Publication support: Data available for research\n\nSTUDENT SUPPORT\n- Academic advising: Available to all students\n- Counseling referrals: Available through Student Services\n- Grade appeals: Follow formal procedure\n- Accommodations: Contact Disability Services\n\nTECHNOLOGY & RESOURCES\n- Email support: IT Office (ext. 2500)\n- Software licenses: Submit requests to Department Head\n- Lab access: Login credentials in staff office\n- Classroom bookings: Reserve via online portal\n\nCOMMUNICATION PROTOCOLS\n- All official correspondence via university email\n- Urgent matters: Phone Department Head\n- Confidentiality: All student information protected\n- Social media: Follow university social media policy\n\nQuestions? Contact Department Head or Human Resources.`,
+      'Code of Conduct': `MUT CODE OF PROFESSIONAL CONDUCT\nAcademic Year 2026\n\nPREAMBLE\nThe Mangosuthu University of Technology is committed to fostering an environment of respect, integrity, and professionalism.\n\nEXPECTATIONS FOR ALL STAFF\n1. Professional Behavior\n   - Treat colleagues and students with dignity and respect\n   - Maintain confidentiality of sensitive information\n   - Arrive on time for all commitments\n   - Present professional appearance\n\n2. Academic Integrity\n   - Do not fabricate research data\n   - Properly cite all sources\n   - Acknowledge collaborative work\n   - Maintain objectivity in assessment\n\n3. Conflict of Interest\n   - Declare any conflicts when grading/assessing\n   - Avoid favoritism in student interactions\n   - Recuse yourself from decisions affecting family\n   - Report potential conflicts to management\n\n4. Communication\n   - Respond to emails within 24 hours\n   - Use professional language in all communications\n   - Respect confidentiality in conversations\n   - Address concerns through proper channels\n\n5. Prohibited Conduct\n   - Discrimination of any kind\n   - Sexual harassment or workplace bullying\n   - Misuse of university resources\n   - Under the influence of substances at work\n\nVIOLATIONS & CONSEQUENCES\n- Minor violations: Verbal warning\n- Moderate violations: Written warning and counseling\n- Serious violations: Suspension or termination\n\nFor concerns or violations, contact Human Resources immediately.`,
+      'Department Strategic Plan 2026-2030': `MUT ICT DEPARTMENT\nSTRATEGIC PLAN 2026-2030\n\nVISION\nTo be a leading ICT department producing industry-ready graduates and conducting impactful research.\n\nMISSION\nTo provide high-quality ICT education, foster innovation, and serve industry and community needs.\n\nSTRATEGIC OBJECTIVES\n\n1. ACADEMIC EXCELLENCE (2026-2027)\n   - Update curriculum to include AI/ML modules\n   - Increase industry partnerships from 5 to 15\n   - Achieve 85%+ pass rate in core modules\n   - Implement continuous assessment model\n\n2. STUDENT SUPPORT (2027-2028)\n   - Launch peer tutoring program\n   - Develop student mentorship scheme\n   - Create student technology club\n   - Establish internship placement office\n\n3. STAFF DEVELOPMENT (2028-2029)\n   - Provide annual professional development for all staff\n   - Support PhD studies for 3 lecturers\n   - Establish research clusters\n   - Promote international collaborations\n\n4. INFRASTRUCTURE (2025-2026, Ongoing)\n   - Upgrade all computer labs (Completed)\n   - Establish AI research laboratory\n   - Install high-speed server infrastructure\n   - Create collaborative learning spaces\n\n5. RESEARCH & INNOVATION (2026-2030)\n   - Generate minimum 10 research publications annually\n   - Secure research funding of R2+ million\n   - File 2 patents for innovations\n   - Establish research center for cybersecurity\n\nKEY PERFORMANCE INDICATORS\n- Graduate employment rate: 85%+\n- Student satisfaction: 4.2/5.0+\n- Pass rates: 80%+\n- Research publications: 10+ per year\n\nBUDGET ALLOCATION\nAcademic programs: 50%\nResearch support: 25%\nStudent services: 15%\nInfrastructure: 10%\n\nApproved by: Faculty Management\nDate: January 15, 2026\nReview Date: January 15, 2027`,
+      'Academic Calendar 2026': `MANGOSUTHU UNIVERSITY OF TECHNOLOGY\nACADEMIC CALENDAR 2026\n\nSEMESTER 1: January - May 2026\n- First Lectures: January 19, 2026\n- Mid-semester Break: March 16-22, 2026\n- Study Week: April 20-24, 2026\n- Test Week: April 27 - May 8, 2026\n- Examination Week: May 11-22, 2026\n- Recess: May 23 - June 4, 2026\n\nSEMESTER 2: June - October 2026\n- First Lectures: June 8, 2026\n- Mid-semester Break: August 10-16, 2026\n- Study Week: September 14-18, 2026\n- Test Week: September 21 - October 2, 2026\n- Examination Week: October 5-16, 2026\n- Recess: October 17-29, 2026\n\nSTAFF CALENDAR\n- Registration Week: January 12-18, 2026\n- Curriculum Review: August 1-7, 2026\n- Year-end Planning: November 2-6, 2026\n- Staff Development Week: December 1-5, 2026\n\nIMPORTANT DATES\n- Application Closing: August 31, 2025 (for 2026)\n- Central Processing: September-October 2025\n- Student Confirmations: November 2025\n- Placement of New Students: December 2025\n\nHOLIDAY PERIODS\n- New Year: January 1-3, 2026\n- Good Friday: April 17, 2026\n- Easter Monday: April 20, 2026\n- Workers' Day: May 1, 2026\n- Youth Day: June 16, 2026\n- Heritage Day: September 24, 2026\n- Christmas Period: December 16, 2026 - January 3, 2027\n\nNOTE: This calendar is subject to change at university's discretion.\nCheck website for updates: www.mut.ac.za`,
+      'Curriculum Documents': `MUT ICT DEPARTMENT - CURRICULUM OVERVIEW\nAcademic Year 2026\n\n==== DIPLOMA IN ICT (Standard) - 3 YEARS ====\n\nYEAR 1\n- Programming Fundamentals\n- Database Concepts\n- Web Development I\n- Networking Basics\n- IT Support & Service Management\n- Mathematics for IT\n\nYEAR 2\n- Advanced Programming\n- Database Administration\n- Web Development II\n- Network Administration\n- Cybersecurity Fundamentals\n- IT Project Management\n\nYEAR 3 (Choose specialization)\nSoftware Development Stream:\n- Software Engineering\n- Mobile Application Development\n- Advanced Web Technologies\n- Software Testing & QA\n- Capstone Project-Software\n\nNetworking Stream:\n- Advanced Networking\n- Network Security\n- Cloud Infrastructure\n- IT Operations Management\n- Capstone Project-Networking\n\nWork Integrated Learning (6 months) - Industry Placement\n\n==== EXTENDED DIPLOMA - 4 YEARS ====\nYear 0: Foundational Studies\n- Academic Writing\n- Mathematics Bridging\n- Introduction to IT\n- Learning Skills\n- Digital Literacy\n\nYears 1-3: Same as Standard Diploma\n\n==== ADVANCED DIPLOMA - 1 YEAR ====\nAdmission: Diploma holders or equivalent\n- Software Architecture\n- Enterprise Systems\n- Advanced Cybersecurity\n- Cloud Computing & DevOps\n- Emerging Technologies\n- Capstone Project\n\nASSESSMENT BREAKDOWN\n- Coursework: 40%\n- Assignments: 30%\n- Tests: 20%\n- Final Examination: 10%\n\nLEARNING OUTCOMES\nStudents will be able to:\n1. Design and implement software solutions\n2. Manage network infrastructure\n3. Apply security best practices\n4. Lead IT projects\n5. Adapt to emerging technologies`
+    };
+
+    const content = mockDocuments[docName] || `Downloaded: ${docName}\n\nThis is a mock document for demonstration purposes.`;
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = docName.replace(/\s+/g, '-').toLowerCase() + '.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function formatTime(value) {
+    if (!value) return '';
+    const [hour, minute] = value.split(':');
+    return `${hour}:${minute}`;
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('currentUser');
+    window.location.href = 'index.html';
+  }
+</script>
+
+</body>
+</html>

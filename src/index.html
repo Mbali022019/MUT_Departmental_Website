@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MUT ICT Department</title>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">
+    <img class="nav-logo-img"
+      src="https://www.mut.ac.za/wp-content/uploads/2023/05/mutlogo-ignite2030.png"
+      alt="MUT Logo"
+      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+    <div class="nav-logo-fallback">ICT</div>
+    <div class="nav-logo-text">
+      <strong>MUT ICT</strong>
+      <span>Department</span>
+    </div>
+  </a>
+  <div class="nav-search-wrapper">
+    <input id="nav-search-input" type="search" placeholder="Search programmes, skills, projects..." autocomplete="off" />
+    <div id="nav-search-results" class="nav-search-results hidden" aria-live="polite"></div>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#home">Home</a>
+    <a href="#about-tab">About</a>
+    <a href="#programmes-tab">Programmes</a>
+    <a href="#people-tab">People</a>
+    <a href="#campus-tab">Campus</a>
+    <a href="#contact-section">Contact</a>
+    <button id="cao-open" class="btn-apply">Apply Now</button>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- CAO MODAL -->
+<div id="cao-modal" class="cao-modal" style="display:none; position:fixed; inset:0; background:rgba(8,8,11,0.92); z-index:1200; align-items:flex-start; justify-content:flex-start; padding:0;">
+  <div class="cao-modal-inner" style="width:100%; height:100%; max-width:none; background:#111; border-radius:0; overflow:hidden; box-shadow:none; display:flex; flex-direction:column;">
+    <div class="cao-modal-header" style="display:flex; align-items:center; justify-content:space-between; padding:18px 24px; background:rgba(20,20,28,0.98); border-bottom:1px solid rgba(255,255,255,0.08);">
+      <div style="color:#fff; font-weight:700; font-size:16px;">CAO Application</div>
+      <div>
+        <button id="cao-close" style="background:rgba(245,200,66,0.16); border:none; color:#fff; padding:10px 18px; border-radius:999px; cursor:pointer; font-weight:600;">Back to MUT ICT</button>
+      </div>
+    </div>
+    <div class="cao-modal-body" style="flex:1; position:relative; background:#000;">
+      <iframe id="cao-iframe" src="https://www.cao.ac.za" style="width:100%; height:100%; border:none; min-height:100%;" title="CAO application page"></iframe>
+      <div class="cao-fallback" style="position:absolute; left:0; top:0; width:100%; height:100%; display:none; align-items:center; justify-content:center; color:#fff; text-align:center; padding:24px; backdrop-filter: blur(4px); background:rgba(0,0,0,0.72);">
+        <div>
+          <p style="font-size:18px; font-weight:600; margin-bottom:12px;">CAO page could not be embedded.</p>
+          <p style="margin-bottom:18px; color:rgba(255,255,255,0.82);">Click the button below to open it in a separate tab, then use your browser back button to return.</p>
+          <a href="https://www.cao.ac.za" target="_blank" rel="noreferrer" style="display:inline-flex; align-items:center; justify-content:center; padding:12px 20px; background:var(--gold); color:#111; border-radius:999px; font-weight:700; text-decoration:none;">Open CAO in new tab</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-eyebrow"><span></span>Mangosuthu University of Technology</div>
+      <h1>Department of <em>Information &amp;</em> Communication Technology</h1>
+      <p class="hero-sub">Shape and own the future. Empowering the next generation of technology innovators and leaders through world-class education.</p>
+      <div class="hero-cta">
+        <button id="addLoginBtn" class="btn-hero-primary" onclick="openLoginModal()">
+          <i data-lucide="log-in" style="width:16px;height:16px;"></i>
+          Login
+        </button>
+        <a href="#contact-section" class="btn-hero-secondary">
+          <i data-lucide="mail" style="width:16px;height:16px;"></i>
+          Get In Touch
+        </a>
+      </div>
+    </div>
+    <div class="hero-stats-card">
+      <div class="hero-stats-grid">
+        <div class="hero-stat"><div class="big">8+</div><div class="lbl">Computer Labs</div></div>
+        <div class="hero-stat"><div class="big">600+</div><div class="lbl">Students</div></div>
+        <div class="hero-stat"><div class="big">20+</div><div class="lbl">Years</div></div>
+        <div class="hero-stat"><div class="big">85%</div><div class="lbl">Employment Rate</div></div>
+      </div>
+      <div class="hero-partners-row">
+        <div class="hero-partners-label">Industry Partners</div>
+        <div class="hero-partner-logos">
+          <img class="hero-partner-logo" src="https://tse3.mm.bing.net/th/id/OIP.7IgX6OczyQrC3djWBE8xnwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Microsoft" />
+          <img class="hero-partner-logo" src="https://1000logos.net/wp-content/uploads/2016/11/Colors-Cisco-Logo.jpg" alt="Cisco" />
+          <img class="hero-partner-logo" src="https://media.licdn.com/dms/image/v2/C4E22AQFxweEqVCHeeA/feedshare-shrink_800/feedshare-shrink_800/0/1610390462030?e=2147483647&v=beta&t=63l2A8p8LxelKEOMDzU-vnuZQgn069qoTCoDxCsnfAg" alt="Oracle" />
+          <img class="hero-partner-logo" src="https://tse2.mm.bing.net/th/id/OIP.Rz5RGwG8iwyb0S0rUhTV7wHaC8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="SAP" />
+          <img class="hero-partner-logo" src="https://static.vecteezy.com/system/resources/previews/020/190/713/original/huawei-logo-huawei-icon-free-free-vector.jpg" alt="Huawei" />
+          <img class="hero-partner-logo" src="https://www.pngplay.com/wp-content/uploads/3/Amazon-Web-Services-AWS-Logo-Transparent-PNG.png" alt="AWS" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT & PROGRAMMES TAB BLOCK -->
+<div class="panel-section" style="padding-top:36px;" id="about-tab">
+  <div class="panel-wrap">
+    <div class="tab-block" id="tab-about">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-about" data-pane="about-about">
+          <i data-lucide="info" style="width:14px;height:14px;"></i> About
+        </button>
+        <button class="tab-btn" data-tab="tab-about" data-pane="about-programmes" id="programmes-tab">
+          <i data-lucide="graduation-cap" style="width:14px;height:14px;"></i> Programmes
+        </button>
+        <button class="tab-btn" data-tab="tab-about" data-pane="about-skills">
+          <i data-lucide="code-2" style="width:14px;height:14px;"></i> WIL
+        </button>
+      </div>
+
+      <!-- About Pane -->
+      <div class="tab-pane active" id="about-about">
+        <div class="about-grid">
+          <div class="about-visual">
+            <img src="https://tse4.mm.bing.net/th/id/OIP.4R2alKzXohfpGCztwL6ckQHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3" alt="MUT ICT Department" />
+            <div class="about-visual-inner">
+              <div class="about-img-label">Faculty of Applied &amp; Health Sciences</div>
+              <div class="about-img-sub">511 Mangosuthu Highway, Umlazi, Durban</div>
+            </div>
+            <div class="about-badge">
+              <div class="badge-num">20+</div>
+              <div class="badge-lbl">Years</div>
+            </div>
+          </div>
+          <div class="about-text">
+            <div class="section-label">About the Department</div>
+            <h2 class="section-title">Shaping Tomorrow's Tech Innovators</h2>
+            <p>The Department of Information &amp; Communication Technology at Mangosuthu University of Technology is committed to delivering high-quality, industry-relevant education in ICT — rooted in community, driven by innovation.</p>
+            <p>Our programmes combine rigorous theoretical foundations with immersive practical training, preparing graduates who are immediately workforce-ready. Students gain expertise across the full spectrum of modern technology disciplines.</p>
+            <p>Located in the heart of Umlazi, MUT has a proud legacy of producing graduates who serve and uplift their communities. Our ICT graduates are found across South Africa's most prominent tech companies, banks, telecoms, and government institutions.</p>
+            <div class="about-pills">
+              <span class="pill">SAQA Accredited</span>
+              <span class="pill">Work Integrated Learning</span>
+              <span class="pill">Industry Partnerships</span>
+              <span class="pill">Research Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Programmes Pane -->
+      <div class="tab-pane" id="about-programmes">
+        <div class="section-label">Academic Offerings</div>
+        <h2 class="section-title">Programmes Offered</h2>
+        <p class="section-sub">Three clear pathways delivering practical ICT learning, strong industry connections, and support to help every student succeed.</p>
+        <div class="programmes-grid">
+
+          <!-- Standard -->
+          <div class="prog-card" data-program="standard">
+            <div class="prog-card-top">
+              <div class="prog-card-header">
+                <span class="prog-badge popular">Popular</span>
+                <span class="prog-code">DICT</span>
+              </div>
+              <div class="prog-icon"><i data-lucide="laptop" style="width:20px;height:20px;"></i></div>
+              <h3 class="prog-title">Diploma in ICT</h3>
+              <div class="prog-subtitle">Standard Programme</div>
+              <div class="prog-duration">3 Years • Full-time</div>
+              <p class="prog-desc">A comprehensive programme covering programming, networking, databases, web development, cybersecurity, and mobile platforms. Includes a Work Integrated Learning placement to connect theory with industry.</p>
+            </div>
+            <div class="prog-meta">
+              <span><i data-lucide="clock" style="width:16px;height:16px;"></i> 3 Years</span>
+              <span><i data-lucide="book-open" style="width:16px;height:16px;"></i> Full-time</span>
+            </div>
+            <div class="prog-card-bottom">
+              <button type="button" class="btn-outline prog-requirements-toggle" data-target="standard">Entry Requirements</button>
+              <button type="button" class="btn-solid download-brochure" data-program="standard">Download Brochure</button>
+            </div>
+            <div class="prog-details" id="requirements-standard">
+              <div class="prog-details-inner">
+                <h4>Diploma in Information Technology</h4>
+                <p><strong>NQF Level:</strong> 6<br><strong>HEQSF Qualification Type:</strong> 63<br><strong>SAQA Credits:</strong> 360<br><strong>SAQA Qualification ID:</strong> 96862<br><strong>CESM Code:</strong> 06</p>
+                <p><strong>Admission Requirements</strong><br>NSC (Diploma or higher) with English FAL (3) or HL (3) and Mathematics (3) or Mathematical Literacy (5). Minimum 24 points in best six subjects excluding Life Orientation.</p>
+                <p><strong>Duration of Study</strong><br>3-years full-time</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Extended -->
+          <div class="prog-card" data-program="extended">
+            <div class="prog-card-top">
+              <div class="prog-card-header">
+                <span class="prog-badge extended">Extended</span>
+                <span class="prog-code">DICT</span>
+              </div>
+              <div class="prog-icon"><i data-lucide="book" style="width:20px;height:20px;"></i></div>
+              <h3 class="prog-title">Diploma in ICT (Extended)</h3>
+              <div class="prog-subtitle">Extended Curriculum Programme</div>
+              <div class="prog-duration">4 Years • Full-time</div>
+              <p class="prog-desc">A foundational programme designed for students who need additional academic support. The first year strengthens core skills before advancing into the standard ICT curriculum.</p>
+            </div>
+            <div class="prog-meta">
+              <span><i data-lucide="clock" style="width:16px;height:16px;"></i> 4 Years</span>
+              <span><i data-lucide="book-open" style="width:16px;height:16px;"></i> Full-time</span>
+            </div>
+            <div class="prog-card-bottom">
+              <button type="button" class="btn-outline prog-requirements-toggle" data-target="extended">Entry Requirements</button>
+              <button type="button" class="btn-solid download-brochure" data-program="extended">Download Brochure</button>
+            </div>
+            <div class="prog-details" id="requirements-extended">
+              <div class="prog-details-inner">
+                <h4>Diploma in ICT: Extended Curriculum Programme</h4>
+                <p><strong>NQF Level:</strong> 6<br><strong>SAQA Qualification ID:</strong> 96862<br><strong>SAQA Credits:</strong> Minimum 480</p>
+                <p><strong>Admission Requirements</strong><br>NSC (Diploma or higher) with English FAL (3) or HL (3) and Mathematics (2) or Mathematical Literacy (3). Minimum 23 points in best six subjects excluding Life Orientation.</p>
+                <p><strong>Duration of Study</strong><br>4-years full-time</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Advanced -->
+          <div class="prog-card" data-program="advanced">
+            <div class="prog-card-top">
+              <div class="prog-card-header">
+                <span class="prog-badge advanced">Advanced</span>
+                <span class="prog-code">ADICT</span>
+              </div>
+              <div class="prog-icon"><i data-lucide="award" style="width:20px;height:20px;"></i></div>
+              <h3 class="prog-title">Advanced Diploma in ICT</h3>
+              <div class="prog-subtitle">Applications Development</div>
+              <div class="prog-duration">1 Year • Full-time</div>
+              <p class="prog-desc">An advanced qualification for Diploma holders seeking specialization in software engineering, network security, or applications development. Ideal for career growth or postgraduate entry.</p>
+            </div>
+            <div class="prog-meta">
+              <span><i data-lucide="clock" style="width:16px;height:16px;"></i> 1 Year</span>
+              <span><i data-lucide="book-open" style="width:16px;height:16px;"></i> Full-time</span>
+            </div>
+            <div class="prog-card-bottom">
+              <button type="button" class="btn-outline prog-requirements-toggle" data-target="advanced">Entry Requirements</button>
+              <button type="button" class="btn-solid download-brochure" data-program="advanced">Download Brochure</button>
+            </div>
+            <div class="prog-details" id="requirements-advanced">
+              <div class="prog-details-inner">
+                <h4>Advanced Diploma in ICT in Applications Development</h4>
+                <p><strong>NQF Level:</strong> 7<br><strong>SAQA ID:</strong> 117974<br><strong>SAQA Credits:</strong> 120</p>
+                <p><strong>Minimum Admission Requirements</strong><br>A 360-credit Diploma or National Diploma in ICT (Level 6), a Bachelor's Degree in a related IT field, or equivalent qualification evaluated by SAQA. RPL entry also available.</p>
+                <p><strong>Duration of Study</strong><br>Full-time: 1 year | Part-time: 2 years</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- WIL Pane -->
+      <div class="tab-pane" id="about-skills">
+        <div class="tab-block dark" style="margin:0; padding: 32px;">
+          <div class="section-label" style="color:var(--gold);">Work Integrated Learning</div>
+          <h2 class="section-title" style="color:white; margin-bottom:20px;">Six-Month Final-Year In-Service Training</h2>
+          <div class="skills-grid">
+            <div class="skill-card">
+              <div class="skill-icon-wrap"><i data-lucide="briefcase" style="width:22px;height:22px;"></i></div>
+              <div class="skill-title">WIL Placement</div>
+              <div class="skill-desc">Students complete a compulsory six-month in-service placement during the final semester of their final year. This placement is assessed for credit and helps students translate classroom learning into real workplace performance.</div>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon-wrap"><i data-lucide="users" style="width:22px;height:22px;"></i></div>
+              <div class="skill-title">Industry Mentorship</div>
+              <div class="skill-desc">Learners are paired with industry supervisors who guide project work, professional communication, and workplace standards while building a network of ICT contacts.</div>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon-wrap"><i data-lucide="wifi" style="width:22px;height:22px;"></i></div>
+              <div class="skill-title">Networking</div>
+              <div class="skill-desc">Students build strong networking foundations covering routing, switching, protocols and secure communication for modern enterprise and campus environments.</div>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon-wrap"><i data-lucide="award" style="width:22px;height:22px;"></i></div>
+              <div class="skill-title">Practical Experience</div>
+              <div class="skill-desc">The training emphasizes real projects, problem-solving, teamwork, and exposure to tools and processes used in software development, networking, cybersecurity, and systems support.</div>
+            </div>
+            <div class="skill-card">
+              <div class="skill-icon-wrap"><i data-lucide="check-circle" style="width:22px;height:22px;"></i></div>
+              <div class="skill-title">Professional Readiness</div>
+              <div class="skill-desc">WIL builds career-ready skills like workplace communication, time management, ethical conduct, reporting, and the ability to contribute to ICT teams from day one.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PEOPLE TAB BLOCK -->
+    <div id="people-tab"></div>
+    <div class="tab-block" id="tab-people">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-people" data-pane="people-lecturers">
+          <i data-lucide="users" style="width:14px;height:14px;"></i> Lecturers
+        </button>
+        <button class="tab-btn" data-tab="tab-people" data-pane="people-testimonials">
+          <i data-lucide="message-square" style="width:14px;height:14px;"></i> Alumni Voices
+        </button>
+        <button class="tab-btn" data-tab="tab-people" data-pane="people-projects">
+          <i data-lucide="layers" style="width:14px;height:14px;"></i> Student Projects
+        </button>
+      </div>
+
+      <!-- Lecturers -->
+      <div class="tab-pane active" id="people-lecturers">
+        <div class="section-label">Our Team</div>
+        <h2 class="section-title">Meet Our Lecturers</h2>
+        <div class="lecturers-grid">
+          <div class="lecturer-card">
+            <div class="lecturer-avatar-wrap">
+              <img src="https://media.licdn.com/dms/image/v2/C4D03AQEXph71Z5F4Zg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1570997399109?e=1780531200&v=beta&t=lbk2wbyoDO0dmc53xI4A2dhUsXPg2rEAHWwVWyyWVCU" alt="Dr. Mutanga" />
+            </div>
+            <div class="lecturer-name">Dr. Mutanga</div>
+            <div class="lecturer-qual">PhD in Computer Science</div>
+            <div class="lecturer-spec">Specialisation: Artificial Intelligence</div>
+            <a href="mailto:mutanga@mut.ac.za" class="lecturer-email"><i data-lucide="mail" style="width:12px;height:12px;"></i> mutanga@mut.ac.za</a>
+            <a href="tel:+27312345677" class="lecturer-email" style="margin-top: 8px;"><i data-lucide="phone" style="width:12px;height:12px;"></i> 031 234 5677</a>
+          </div>
+          
+          <div class="lecturer-card">
+            <div class="lecturer-avatar-wrap">
+              <img src="https://media.licdn.com/dms/image/v2/D4D03AQHJcbJ45oRNPg/profile-displayphoto-crop_800_800/B4DZfuyuU7GsAI-/0/1752057964962?e=1779321600&v=beta&t=AazYP-U1NMzgXyZLfyV4HlBOTAQC68V_C7MpBqj8fVA" alt="Prof. Alfred Msomi" />
+            </div>
+            <div class="lecturer-name">Prof.Alfred Msomi</div>
+            <div class="lecturer-qual">PhD in Mathematics</div>
+            <div class="lecturer-spec">Dean of ICT</div>
+            <a href="mailto:naidoo@mut.ac.za" class="lecturer-email"><i data-lucide="mail" style="width:12px;height:12px;"></i> naidoo@mut.ac.za</a>
+            <a href="tel:+273312342382" class="lecturer-email" style="margin-top: 8px;"><i data-lucide="phone" style="width:12px;height:12px;"></i> 031 234 2382</a>
+          </div>
+          
+          <div class="lecturer-card">
+            <div class="lecturer-avatar-wrap">
+              <img src="https://media.licdn.com/dms/image/v2/C4D03AQGA9HQFuh6ySg/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1516519581406?e=1779321600&v=beta&t=aeQXiH6QuJjViRionpYsUNO3lbXrSzbEQbNuY_MFkUA" alt="Dr. Jugoo" />
+            </div>
+            <div class="lecturer-name">Dr. Jugoo</div>
+            <div class="lecturer-qual">PhD in Software Engineering</div>
+            <div class="lecturer-spec">Head of Department</div>
+            <a href="mailto:jugoo@mut.ac.za" class="lecturer-email"><i data-lucide="mail" style="width:12px;height:12px;"></i> jugoo@mut.ac.za</a>
+            <a href="tel:+27312552683" class="lecturer-email" style="margin-top: 8px;"><i data-lucide="phone" style="width:12px;height:12px;"></i> 031 255 2683</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="tab-pane" id="people-testimonials">
+        <div class="section-label">Alumni Voices</div>
+        <h2 class="section-title">What Our Graduates Say</h2>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="testimonial-quote-mark">"</div>
+            <p class="testimonial-text">The ICT programme at MUT gave me practical skills that landed me a junior developer role at FNB right after graduation. The lecturers are genuinely invested in your success.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avi"><img src="https://scontent.fdur5-1.fna.fbcdn.net/v/t51.82787-15/673781142_18584349793041443_9039122720554242490_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=13d280&_nc_ohc=Sj5ma4zvKbgQ7kNvwEAOZni&_nc_oc=AdqHlwJ51qjKtdpBHWQT7yiO_dyc4j7FemOKG1fLZqe9s3nbFbqO8Ms4ZkkyoH0ZDtY&_nc_zt=23&_nc_ht=scontent.fdur5-1.fna&_nc_gid=xzR8LVNP4zlEvq8XnLpzuA&_nc_ss=7b2a8&oh=00_Af0kkpYTCaKdFKuMxJgIyV9Jff8MLnHyr7CXWGdnKsh4sQ&oe=69F2BD57" alt="Sipho Nkosi" /></div>
+              <div><div class="testimonial-name">Sipho Nkosi</div><div class="testimonial-role">Junior Developer, FNB · Class of 2023</div></div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-quote-mark">"</div>
+            <p class="testimonial-text">Hands-on cybersecurity projects prepared me for real-world threats. MUT's ICT department is ahead of the curve — I came into my job ready on day one.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avi"><img src="https://scontent.fdur5-1.fna.fbcdn.net/v/t51.82787-15/681717158_18584525422041443_8886310914264002886_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=13d280&_nc_ohc=HRcGeoB6e9AQ7kNvwFSDhOT&_nc_oc=Ado_R2xwgP_LXKcZ5BrWhZXUqIxT4Y-j6ORMSZpuPwhoPXphn6hO9g4OpXelAWKBtV4&_nc_zt=23&_nc_ht=scontent.fdur5-1.fna&_nc_gid=pt1CM_Plx4W4lww9zNTrYw&_nc_ss=7b2a8&oh=00_Af3U5aes_8Z-XC_7kvbQbcR7bBkivdbg394trzOzSdjafg&oe=69F2B56D" alt="Thandi Mthembu" /></div>
+              <div><div class="testimonial-name">Thandi Mthembu</div><div class="testimonial-role">Security Analyst, MTN · Class of 2022</div></div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-quote-mark">"</div>
+            <p class="testimonial-text">The networking courses opened doors I didn't know existed. Three years later, I'm managing infrastructure for one of South Africa's largest telecoms.</p>
+            <div class="testimonial-author">
+              <div class="testimonial-avi"><img src="https://scontent.fdur5-1.fna.fbcdn.net/v/t51.82787-15/658834790_18584525410041443_3142635129853663890_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=13d280&_nc_ohc=reZFOIfuhesQ7kNvwGM3nI_&_nc_oc=AdqR_eCINNzMiiZ07LSgBQYMiUw6IAulM57U80JuQu6EvxtkT9EKjn6YLISS96Q_YLM&_nc_zt=23&_nc_ht=scontent.fdur5-1.fna&_nc_gid=h1WVMyxjCm1MNohoUlP-bw&_nc_ss=7b2a8&oh=00_Af3RCAR2L2F93r_xToYSozUh2OeiwALPh-wqO9kaQYm7Gw&oe=69F2B95E" alt="Zanele Dlamini" /></div>
+              <div><div class="testimonial-name">Zanele Dlamini</div><div class="testimonial-role">Network Engineer, Telkom · Class of 2021</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Projects -->
+      <div class="tab-pane" id="people-projects">
+        <div class="section-label">Final Year Work</div>
+        <h2 class="section-title">Student Projects</h2>
+        <div class="projects-grid">
+          <div class="project-card" data-project-demo="https://mut-ict-connect.vercel.app">
+            <div class="project-thumb" style="background:linear-gradient(135deg,var(--crimson-dark),var(--crimson-light));"><i data-lucide="smartphone" style="width:36px;height:36px;opacity:0.6;"></i></div>
+            <div class="project-body">
+              <span class="project-cat">Mobile App</span>
+              <div class="project-title">MUT Connect App</div>
+              <div class="project-desc">Social platform for MUT students to share resources and form study groups across departments.</div>
+              <div class="project-students">Sipho Nkosi &amp; Thandi Mthembu</div>
+              <div class="project-demo-link">View Live Demo →</div>
+            </div>
+          </div>
+          <div class="project-card" data-project-demo="https://netmonitor-demo.vercel.app">
+            <div class="project-thumb" style="background:linear-gradient(135deg,#1e3a5f,#2563eb);"><i data-lucide="activity" style="width:36px;height:36px;opacity:0.6;"></i></div>
+            <div class="project-body">
+              <span class="project-cat">Network Tool</span>
+              <div class="project-title">NetMonitor</div>
+              <div class="project-desc">Real-time network diagnostics dashboard with traffic analysis and automated alerting.</div>
+              <div class="project-students">Zanele Dlamini &amp; Lungelo Zulu</div>
+              <div class="project-demo-link">View Live Demo →</div>
+            </div>
+          </div>
+          <div class="project-card" data-project-demo="https://smartlib-demo.vercel.app">
+            <div class="project-thumb" style="background:linear-gradient(135deg,#064e3b,#10b981);"><i data-lucide="book" style="width:36px;height:36px;opacity:0.6;"></i></div>
+            <div class="project-body">
+              <span class="project-cat">Web App</span>
+              <div class="project-title">SmartLib</div>
+              <div class="project-desc">Digital library system with AI-powered recommendations and QR-code borrowing.</div>
+              <div class="project-students">Nomsa Khumalo &amp; Bheki Mkhize</div>
+              <div class="project-demo-link">View Live Demo →</div>
+            </div>
+          </div>
+          <div class="project-card" data-project-demo="https://uni-vote-c669a.web.app/home">
+            <div class="project-thumb" style="background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.12)), url('https://img.freepik.com/premium-photo/data-analysis-dashboard-laptop-screen-modern-design-with-vibrant-graphics_923559-24247.jpg') center/cover no-repeat;"></div>
+            <div class="project-body">
+              <span class="project-cat">Web App</span>
+              <div class="project-title">UniVote</div>
+              <div class="project-desc">Secure blockchain-backed online voting for SRC elections with full audit trails.</div>
+              <div class="project-students">Thabo Molefe &amp; Lerato Ndlovu</div>
+              <div class="project-demo-link">View Live Demo →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAMPUS LIFE TAB BLOCK -->
+    <div id="campus-tab"></div>
+    <div class="tab-block" id="tab-campus">
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="tab-campus" data-pane="campus-news">
+          <i data-lucide="newspaper" style="width:14px;height:14px;"></i> Departmental News
+        </button>
+        <button class="tab-btn" data-tab="tab-campus" data-pane="campus-partners">
+          <i data-lucide="handshake" style="width:14px;height:14px;"></i> Partners
+        </button>
+      </div>
+
+      <!-- News Pane -->
+      <div class="tab-pane active" id="campus-news">
+        <div class="section-label">Updates &amp; Events</div>
+        <h2 class="section-title">Departmental News</h2>
+        <div class="news-grid">
+          <div class="news-card" data-news-id="lab-upgrade">
+            <div class="news-card-img" style="background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://th.bing.com/th/id/R.d68968279de9490e1df092af7ca2e8f8?rik=pavjIiBWqd1dgQ&pid=ImgRaw&r=0') center/cover no-repeat;"></div>
+            <div class="news-card-body">
+              <div class="news-card-title">ICT Lab Upgrade</div>
+              <div class="news-card-desc">Our computer labs have been fully upgraded with the latest hardware, new servers, and modern workstations for hands-on learning.</div>
+              <div class="news-card-date">April 15, 2026</div>
+              <div class="news-card-read-more">Read More →</div>
+            </div>
+          </div>
+          <div class="news-card" data-news-id="project-expo">
+            <div class="news-card-img" style="background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.18)), url('https://tse2.mm.bing.net/th/id/OIP.8YjLaxz91NahjBS-Eh4oEQHaJQ?rs=1&pid=ImgDetMain&o=7&rm=3') center/cover no-repeat;"></div>
+            <div class="news-card-body">
+              <div class="news-card-title">Final Year Project Expo</div>
+              <div class="news-card-desc">Annual showcase of student projects featuring innovative ICT solutions. Join us to see the future of technology!</div>
+              <div class="news-card-date">10:00 AM – 4:00 PM • ICT Building Auditorium</div>
+              <div class="news-card-read-more">Learn More →</div>
+            </div>
+          </div>
+          <div class="news-card" data-news-id="partnership-day">
+            <div class="news-card-img" style="background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.18)), url('https://www.etaps.org/2024/industry-day/etaps-industry.jpg') center/cover no-repeat;"></div>
+            <div class="news-card-body">
+              <div class="news-card-title">Industry Day</div>
+              <div class="news-card-desc">Connect with leading tech companies and explore internship and job opportunities in the ICT industry.</div>
+              <div class="news-card-date">9:00 AM – 1:00 PM • MUT Conference Centre</div>
+              <div class="news-card-read-more">Learn More →</div>
+            </div>
+          </div>
+          <div class="news-card" data-news-id="cyber-workshop">
+            <div class="news-card-img" style="background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.18)), url('https://redsquid.co.uk/wp-content/plugins/phastpress/phast.php/c2VydmljZT1pbWFnZXMmc3JjPWh0dHBzJTNBJTJGJTJGcmVkc3F1aWQuY28udWslMkZ3cC1jb250ZW50JTJGdXBsb2FkcyUyRjIwMjMlMkYwMyUyRkhvdy1Uby1Qcm9tb3RlLUN5YmVyLVNlY3VyaXR5LUF3YXJlbmVzcy0xLmpwZyZjYWNoZU1hcmtlcj0xNjgwMDk1MjExLTM2NzA0MCZ0b2tlbj00YTY1MjM2ODNlODZiZDA3.q.jpg') center/cover no-repeat;"></div>
+            <div class="news-card-body">
+              <div class="news-card-title">Cybersecurity Awareness Workshop</div>
+              <div class="news-card-desc">Learn essential cybersecurity practices and protect yourself from digital threats in today's connected world.</div>
+              <div class="news-card-date">2:00 PM – 5:00 PM • Lab B, ICT Block</div>
+              <div class="news-card-read-more">Learn More →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Modal -->
+      <div class="news-modal" id="news-modal">
+        <div class="news-modal-content">
+          <div class="news-modal-header">
+            <h3 class="news-modal-title" id="modal-title"></h3>
+            <button class="news-modal-close" id="modal-close">&times;</button>
+          </div>
+          <div class="news-modal-body">
+            <div class="news-modal-meta" id="modal-meta"></div>
+            <div class="news-modal-text" id="modal-content"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Partners Pane -->
+      <div class="tab-pane" id="campus-partners">
+        <div class="section-label">Industry Partners</div>
+        <h2 class="section-title">Our Partners &amp; Sponsors</h2>
+        <p class="section-sub">We collaborate with leading technology companies to ensure our students are equipped for the industry they'll enter.</p>
+        <div class="partners-grid">
+          <div class="partner-card"><div class="partner-logo"><img src="https://tse3.mm.bing.net/th/id/OIP.7IgX6OczyQrC3djWBE8xnwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Microsoft" /></div><div class="partner-name">Microsoft</div></div>
+          <div class="partner-card"><div class="partner-logo"><img src="https://1000logos.net/wp-content/uploads/2016/11/Colors-Cisco-Logo.jpg" alt="Cisco" /></div><div class="partner-name">Cisco</div></div>
+          <div class="partner-card"><div class="partner-logo"><img src="https://media.licdn.com/dms/image/v2/C4E22AQFxweEqVCHeeA/feedshare-shrink_800/feedshare-shrink_800/0/1610390462030?e=2147483647&v=beta&t=63l2A8p8LxelKEOMDzU-vnuZQgn069qoTCoDxCsnfAg" alt="Oracle" /></div><div class="partner-name">Oracle</div></div>
+          <div class="partner-card"><div class="partner-logo"><img src="https://tse2.mm.bing.net/th/id/OIP.Rz5RGwG8iwyb0S0rUhTV7wHaC8?rs=1&pid=ImgDetMain&o=7&rm=3" alt="SAP" /></div><div class="partner-name">SAP</div></div>
+          <div class="partner-card"><div class="partner-logo"><img src="https://static.vecteezy.com/system/resources/previews/020/190/713/original/huawei-logo-huawei-icon-free-free-vector.jpg" alt="Huawei" /></div><div class="partner-name">Huawei</div></div>
+          <div class="partner-card"><div class="partner-logo"><img src="https://www.pngplay.com/wp-content/uploads/3/Amazon-Web-Services-AWS-Logo-Transparent-PNG.png" alt="AWS" /></div><div class="partner-name">AWS</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ACADEMIC CALENDAR -->
+<div class="panel-section" style="padding-top:36px; background: white; padding-bottom: 60px;">
+  <div class="panel-wrap">
+    <div class="section-label">Key Dates</div>
+    <h2 class="section-title">Academic Calendar 2026</h2>
+    <p class="section-sub">Mark your calendar with important academic dates and deadlines.</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 32px;">
+      <div style="background: rgba(123, 30, 43, 0.08); border-left: 4px solid var(--crimson); border-radius: 12px; padding: 24px;">
+        <h3 style="font-size: 1.1rem; color: var(--crimson-dark); margin-bottom: 16px; font-family: 'Syne', sans-serif;">📅 Semester 1: January - May 2026</h3>
+        <div style="display: grid; gap: 12px; font-size: 13px; color: var(--gray-700);">
+          <div><strong>First Lectures:</strong> January 19, 2026</div>
+          <div><strong>Mid-semester Break:</strong> March 16-22, 2026</div>
+          <div><strong>Study Week:</strong> April 20-24, 2026</div>
+          <div><strong>Test Week:</strong> April 27 - May 8, 2026</div>
+          <div><strong>Examination Week:</strong> May 11-22, 2026</div>
+          <div><strong>Recess:</strong> May 23 - June 4, 2026</div>
+        </div>
+      </div>
+      <div style="background: rgba(245, 200, 66, 0.12); border-left: 4px solid var(--gold); border-radius: 12px; padding: 24px;">
+        <h3 style="font-size: 1.1rem; color: var(--crimson-dark); margin-bottom: 16px; font-family: 'Syne', sans-serif;">📅 Semester 2: June - October 2026</h3>
+        <div style="display: grid; gap: 12px; font-size: 13px; color: var(--gray-700);">
+          <div><strong>First Lectures:</strong> June 8, 2026</div>
+          <div><strong>Mid-semester Break:</strong> August 10-16, 2026</div>
+          <div><strong>Study Week:</strong> September 14-18, 2026</div>
+          <div><strong>Test Week:</strong> September 21 - October 2, 2026</div>
+          <div><strong>Examination Week:</strong> October 5-16, 2026</div>
+          <div><strong>Recess:</strong> October 17-29, 2026</div>
+        </div>
+      </div>
+      <div style="background: rgba(123, 30, 43, 0.08); border-left: 4px solid var(--crimson); border-radius: 12px; padding: 24px;">
+        <h3 style="font-size: 1.1rem; color: var(--crimson-dark); margin-bottom: 16px; font-family: 'Syne', sans-serif;">⚠️ Important Dates</h3>
+        <div style="display: grid; gap: 12px; font-size: 13px; color: var(--gray-700);">
+          <div><strong>2025 Closing:</strong> August 31, 2025</div>
+          <div><strong>Central Processing:</strong> September-October 2025</div>
+          <div><strong>Student Confirmations:</strong> November 2025</div>
+          <div><strong>Placements:</strong> December 2025</div>
+        </div>
+      </div>
+      <div style="background: rgba(245, 200, 66, 0.12); border-left: 4px solid var(--gold); border-radius: 12px; padding: 24px;">
+        <h3 style="font-size: 1.1rem; color: var(--crimson-dark); margin-bottom: 16px; font-family: 'Syne', sans-serif;">🎉 Public Holidays 2026</h3>
+        <div style="display: grid; gap: 12px; font-size: 13px; color: var(--gray-700);">
+          <div><strong>New Year:</strong> January 1-3</div>
+          <div><strong>Good Friday:</strong> April 17</div>
+          <div><strong>Easter Monday:</strong> April 20</div>
+          <div><strong>Workers' Day:</strong> May 1</div>
+          <div><strong>Youth Day:</strong> June 16</div>
+          <div><strong>Heritage Day:</strong> September 24</div>
+        </div>
+      </div>
+    </div>
+    <div style="background: #fffbeb; border: 1px solid rgba(245, 200, 66, 0.3); border-radius: 12px; padding: 20px; margin-top: 24px; text-align: center;">
+      <p style="font-size: 13px; color: #78350f; margin: 0;">
+        <strong>📋 Download Full Academic Calendar:</strong> The complete staff-only calendar with detailed schedules is available to logged-in staff members in their portal.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact-section" id="contact-section">
+  <div class="contact-inner">
+    <div class="contact-header">
+      <span class="section-label">Reach Out</span>
+      <h2>Contact Us</h2>
+      <p>Have questions? Our department is happy to assist prospective and current students alike.</p>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i data-lucide="mail" style="width:18px;height:18px;"></i></div>
+          <div><div class="contact-info-label">Email</div><div class="contact-info-value"><a href="mailto:ict@mut.ac.za">ict@mut.ac.za</a></div></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i data-lucide="phone" style="width:18px;height:18px;"></i></div>
+          <div><div class="contact-info-label">Phone</div><div class="contact-info-value"><a href="tel:+27319077111">+27 31 907 7111</a></div></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i data-lucide="map-pin" style="width:18px;height:18px;"></i></div>
+          <div><div class="contact-info-label">Address</div><div class="contact-info-value">511 Mangosuthu Highway, Umlazi, Durban, 4031</div></div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i data-lucide="clock" style="width:18px;height:18px;"></i></div>
+          <div><div class="contact-info-label">Office Hours</div><div class="contact-info-value">Mon–Fri, 08:00–16:30</div></div>
+        </div>
+      </div>
+      <div>
+        <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <input type="text" id="cf-name" placeholder="Full Name" required />
+            <input type="email" id="cf-email" placeholder="Email Address" required />
+          </div>
+          <input type="text" id="cf-subject" placeholder="Subject" required style="margin-top:12px;" />
+          <textarea id="cf-message" placeholder="Your Message" required></textarea>
+          <button type="submit" class="btn-submit">Send Message</button>
+        </form>
+        <p class="form-note">Prefer direct email? Write to <a href="mailto:ict@mut.ac.za">ict@mut.ac.za</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="https://www.mut.ac.za/wp-content/uploads/2023/05/mutlogo-ignite2030.png" alt="MUT Logo" onerror="this.style.display='none';" />
+          <div class="footer-logo-text">MUT ICT Department</div>
+        </div>
+        <p>Empowering the next generation of technology leaders through innovative education, research, and community engagement.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about-tab">About</a></li>
+          <li><a href="#programmes-tab">Programmes</a></li>
+          <li><a href="#campus-tab">Departmental News</a></li>
+          <li><a href="#contact-section">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Student Resources</h5>
+        <ul>
+          <li><a href="https://mutelearn.mut.ac.za/" target="_blank">Blackboard</a></li>
+          <li><a href="https://ienabler1.mut.ac.za/pls/prodi41/w99pkg.mi_login" target="_blank">iEnabler</a></li>
+          <li><a href="https://www.mut.ac.za/library-services/" target="_blank">Library</a></li>
+          <li><a href="https://www.mut.ac.za/fees-and-funding/bursaries/" target="_blank">Bursaries</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>MUT</h5>
+        <ul>
+          <li><a href="https://www.mut.ac.za/" target="_blank">Main Website</a></li>
+          <li><a href="https://www.cao.ac.za" target="_blank">Apply via CAO</a></li>
+          <li><a href="https://www.mut.ac.za/vacancies/" target="_blank">Vacancies</a></li>
+          <li><a href="https://www.mut.ac.za/alumni/" target="_blank">Alumni</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 <span>Mangosuthu University of Technology</span> — ICT Department. All rights reserved.</div>
+      <div>511 Mangosuthu Highway, Umlazi, Durban</div>
+    </div>
+  </div>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div id="login-modal" class="login-modal">
+  <div class="login-modal-content">
+    <div class="login-modal-header">
+      <h2>Department Portal Login</h2>
+      <button class="login-modal-close" onclick="closeLoginModal()">&times;</button>
+    </div>
+    <div class="login-modal-body">
+      <form onsubmit="handleLoginSubmit(event)">
+        <div class="login-form-group">
+          <label for="login-email">Email Address</label>
+          <input type="email" id="login-email" placeholder="your.email@mut.ac.za" required>
+        </div>
+        <div class="login-form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" required>
+        </div>
+        <div id="login-error" class="login-error"></div>
+        <button type="submit" class="login-btn">Sign In</button>
+      </form>
+      <div class="login-demo-credentials">
+        <p><strong>Demo Credentials:</strong></p>
+        <p><strong>Student:</strong> <code>student@mut.ac.za</code> / <code>student123</code></p>
+        <p><strong>Staff (All Roles):</strong> <code>staff@mut.ac.za</code> / <code>staff123</code></p>
+        <p style="font-size: 11px; color: var(--gray-600); margin-top: 8px;">
+          Alternative staff accounts:<br>
+          lecturer@mut.ac.za / lecturer123<br>
+          hod@mut.ac.za / hod123<br>
+          dean@mut.ac.za / dean123
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHATBOT -->
+<div id="chatbot-btn" class="chatbot-btn" title="Chat with us">
+  <span class="bot-emoji">🤖</span>
+</div>
+
+<div id="chatbot-widget" class="chatbot-widget">
+  <div class="chatbot-header">
+    <div class="chatbot-avatar">🤖</div>
+    <div>
+      <h3>MUT Bot</h3>
+      <p class="chatbot-status">Always here to help! 💙</p>
+    </div>
+    <button id="chatbot-close">
+      <i data-lucide="x" style="width:20px;height:20px;"></i>
+    </button>
+  </div>
+  <div id="chatbot-messages" class="chatbot-messages"></div>
+  <div class="chatbot-input-area">
+    <input id="chatbot-input" type="text" placeholder="Ask me anything..." />
+    <button id="chatbot-mic-toggle" class="mic-button" title="Voice recorder">
+      <i data-lucide="mic" style="width:20px;height:20px;"></i>
+    </button>
+    <button id="chatbot-send" class="send-button" title="Send">
+      <i data-lucide="send" style="width:18px;height:18px;"></i>
+    </button>
+  </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
